@@ -13,8 +13,7 @@ CLONETMPDIR=.common_makefiles.tmp$$
 TARGET=.common_makefiles
 
 # some tests
-"${GIT}" --help >/dev/null 2>&1
-if [ $? -ne 0; ]; then
+if ! ${GIT} --help >/dev/null 2>&1; then
     echo "ERROR: git not available"
     exit 1
 fi
@@ -23,7 +22,7 @@ fi
 rm -Rf "${CLONETMPDIR}"
 mkdir "${CLONETMPDIR}"
 cd "${CLONETMPDIR}"
-"${GIT_CLONE_DEPTH_1}" "${COMMON_MAKEFILES_GIT_URL}" 
+${GIT_CLONE_DEPTH_1} "${COMMON_MAKEFILES_GIT_URL}" 
 rm -Rf "../${TARGET}"
 cp -Rf common_makefiles/dist "../${TARGET}"
 cd ..

@@ -27,6 +27,12 @@ APP_DIRS={your app directory name}
 TEST_DIRS={your tests directory name}
 ```
 
+### Pour un projet shell
+
+```Makefile
+include .common_makefiles/shell_makefile.mk
+```
+
 ### Pour un projet générique (probablement peu utile)
 
 ```Makefile
