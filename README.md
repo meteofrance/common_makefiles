@@ -63,7 +63,7 @@ COMMON_MAKEFILES_GIT_URL
 ```
 
 La documentation de chaque variable est lisible dans [`.common_makefiles/common_makefile.mk`](dist/common_makefile.mk). **Les variables non documentées
-ne doivent pas être overridées.**
+ou commençant par un underscore ne doivent pas être overridées.**
 
 Exemple :
 
@@ -87,10 +87,10 @@ SHELLCHECK_FILES
 ```
 
 La documentation de chaque variable est lisible dans [`.common_makefiles/shell_makefile.mk`](dist/shell_makefile.mk). **Les variables non documentées
-ne doivent pas être overridées.**
+ou commençant par un underscore ne doivent pas être overridées.**
 
 ```Makefile
-SHELLCHECK=/opt/shellcheck/bin/myshellcheck
+SHELLCHECK=/opt/shellcheck/bin/myshellcheck # celle ci doit etre impérativement placée AVANT l'include
 include .common_makefiles/shell_makefile.mk
 
 GIT=/usr/local/bin/mygit

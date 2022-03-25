@@ -1,18 +1,30 @@
 include .common_makefiles/common_makefile.mk
 
+# shellcheck linter configuration:
+# AUTO    => auto-download shellcheck tool
+# (empty) => disable shellcheck linter
+# (path)  => disable auto-download and use this binary
 SHELLCHECK=AUTO
+
 _SHELLCHECK_BIN=
+
+# shellcheck linter extra options 
 SHELLCHECK_ARGS=
+
+# shellcheck download url
 SHELLCHECK_URL=https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz
+
+# shellcheck files to check
+# (by default, all *.sh files are checked)
 SHELLCHECK_FILES=$(shell find "$(ROOT_DIR)" -type f -name "*.sh" |xargs)
+
+_SHELLCHECK_REQ=
 ifeq ($(SHELLCHECK),AUTO)
-	SHELLCHECK_REQ=$(ROOT_TOOLS)/shellcheck
+	_SHELLCHECK_REQ=$(ROOT_TOOLS)/shellcheck
 	_SHELLCHECK_BIN=$(ROOT_TOOLS)/shellcheck
 else ifeq ($(SHELLCHECK),)
-	SHELLCHECK_REQ=
 	_SHELLCHECK_BIN=
 else
-	SHELLCHECK_REQ=
 	_SHELLCHECK_BIN=$(shell which shellcheck)
 endif
 
@@ -23,7 +35,7 @@ $(ROOT_TOOLS)/shellcheck:
 	cd "$(ROOT_TMP)" && cat shellcheck-stable.linux.x86_64.tar.xz |tar xfJ - && cp -f shellcheck-stable/shellcheck $(ROOT_TOOLS)/shellcheck && rm -Rf shellcheck-stable shellcheck-stable.linux.x86_64.tar.xz
 
 .PHONY: lint_shellcheck
-lint_shellcheck: $(SHELLCHECK_REQ)
+lint_shellcheck: $(_SHELLCHECK_REQ)
 	@echo "Linting with shellcheck..."
 	"$(_SHELLCHECK_BIN)" $(SHELLCHECK_ARGS) $(SHELLCHECK_FILES)
 
