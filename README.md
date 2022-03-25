@@ -50,6 +50,10 @@ make refresh_common_makefiles
 
 Sinon, vous pouvez supprimer le répertoire `.common_makefiles` et recommencer la procédure d'installation.
 
+## Comment utiliser ?
+
+`make help` pour voir la liste des possibilités
+
 ## Comment configurer ?
 
 ### Dans tous les cas
