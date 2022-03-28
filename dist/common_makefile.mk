@@ -29,8 +29,11 @@ _make_help_banner:
 	@echo "Executing default all target (use 'make help' to show other targets/options)"
 
 .PHONY: all before_all
-# FIXME auto runenv/devenv
-all:: before_all runenv
+_ALL_PREREQ=runenv
+ifneq ("$(wildcard $(DEVENV_FILE))","")
+    _ALL_PREREQ=devenv
+endif
+all:: before_all $(_ALL_PREREQ)
 before_all::
 
 .PHONY: clean before_clean
