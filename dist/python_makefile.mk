@@ -399,16 +399,16 @@ coverage_sonar_pytest:
 	$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(PYTEST) $(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_SONAR_OPTIONS) $(TEST_DIRS)
 
 check::
-	@test -n "$(PYTEST)" && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) check_pytest
+	@test -n "$(PYTEST)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) check_pytest
 
 coverage_console::
-	@test -n "$(PYTEST)" && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) coverage_console_pytest
+	@test -n "$(PYTEST)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) coverage_console_pytest
 
 coverage_html::
-	@test -n "$(PYTEST)" && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) coverage_html_pytest
+	@test -n "$(PYTEST)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) coverage_html_pytest
 
 coverage_sonar::
-	@test -n "$(PYTEST)" && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) coverage_sonar_pytest
+	@test -n "$(PYTEST)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) coverage_sonar_pytest
 
 #####################
 ##### packaging #####
