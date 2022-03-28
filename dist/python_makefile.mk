@@ -347,11 +347,11 @@ lint_safety_dev:
 	$(ENTER_VENV) && $(SAFETY) $(SAFETY_CHECK_OPTIONS) -r "$(REQS_DIR)/devrequirements.txt"
 
 lint::
-	@test -n "$(BLACK)" && $(ENTER_VENV) && $(BLACK) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_black
-	@test -n "$(ISORT)" && $(ENTER_VENV) && $(ISORT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_isort
-	test -n "$(FLAKE8)" && $(ENTER_VENV) && $(FLAKE8) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_flake8
-	@test -n "$(PYLINT)" && $(ENTER_VENV) && $(PYLINT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_pylint
-	@test -n "$(BANDIT)" && $(ENTER_VENV) && $(BANDIT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_bandit
+	@test -n "$(BLACK)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(BLACK) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_black
+	@test -n "$(ISORT)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(ISORT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_isort
+	@test -n "$(FLAKE8)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(FLAKE8) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_flake8
+	@test -n "$(PYLINT)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(PYLINT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_pylint
+	@test -n "$(BANDIT)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(BANDIT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_bandit
 	@test -n "$(LINTIMPORTS)" && $(ENTER_VENV) && $(LINTIMPORTS) --help >/dev/null 2>&1 || exit 0 ; if test -f "$(LINTIMPORTS_CONF_FILE)"; then $(MAKE) lint_imports; fi
 	@test -n "$(SAFETY)" && $(ENTER_VENV) && $(SAFETY) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_safety_run
 	@test -n "$(SAFETY)" && $(ENTER_VENV) && $(SAFETY) --help >/dev/null 2>&1 || exit 0 ; if test "$(SAFETY_ON_DEV_DEPS)" = "1"; then $(MAKE) lint_safety_dev; fi
@@ -372,8 +372,8 @@ reformat_isort:
 	@$(ENTER_VENV) && $(ISORT) $(ISORT_REFORMAT_OPTIONS) $(_APP_AND_TEST_DIRS)
 
 reformat::
-	@test -n "$(BLACK)" && $(ENTER_VENV) && $(BLACK) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) reformat_black
-	@test -n "$(ISORT)" && $(ENTER_VENV) && $(ISORT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) reformat_isort
+	@test -n "$(BLACK)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(BLACK) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) reformat_black
+	@test -n "$(ISORT)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(ISORT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) reformat_isort
 
 ############################
 ##### tests / coverage #####
@@ -399,16 +399,16 @@ coverage_sonar_pytest:
 	$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(PYTEST) $(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_SONAR_OPTIONS) $(TEST_DIRS)
 
 check::
-	@test -n "$(PYTEST)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) check_pytest
+	@test -n "$(PYTEST)" && test -n "$(TEST_DIRS)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) check_pytest
 
 coverage_console::
-	@test -n "$(PYTEST)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) coverage_console_pytest
+	@test -n "$(PYTEST)" && test -n "$(TEST_DIRS)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) coverage_console_pytest
 
 coverage_html::
-	@test -n "$(PYTEST)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) coverage_html_pytest
+	@test -n "$(PYTEST)" && test -n "$(TEST_DIRS)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) coverage_html_pytest
 
 coverage_sonar::
-	@test -n "$(PYTEST)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) coverage_sonar_pytest
+	@test -n "$(PYTEST)" && test -n "$(TEST_DIRS)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) coverage_sonar_pytest
 
 #####################
 ##### packaging #####
