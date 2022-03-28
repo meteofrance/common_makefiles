@@ -160,7 +160,8 @@ REMOVE_BUILD?=1
 
 APP_DIRS?=
 TEST_DIRS?=
-_APP_AND_TEST_DIRS=$(APP_DIRS) $(TEST_DIRS) $(wildcard setup.py)
+EXTRA_PYTHON_FILES?=
+_APP_AND_TEST_DIRS=$(APP_DIRS) $(TEST_DIRS) $(wildcard setup.py) $(EXTRA_PYTHON_FILES)
 
 ###############################
 ##### python auto-install #####
@@ -208,6 +209,7 @@ $(ROOT_TOOLS)/python/bin/python3.10:
 ########################################
 ##### venv/requirements management #####
 ########################################
+_PIP=pip3
 _MAKE_VIRTUALENV=$(_PYTHON_BIN) -m venv
 ENTER_TEMP_VENV=. $(VENV_DIR).temp/bin/activate
 ENTER_VENV=. $(VENV_DIR)/bin/activate
@@ -215,8 +217,8 @@ SETUP_DEVELOP=$(PYTHON) setup.py develop
 _PIP_INDEX_URL_OPT=$(if $(PIP_INDEX_URL),--index-url $(PIP_INDEX_URL),)
 _PIP_EXTRA_INDEX_URL_OPT=$(if $(PIP_EXTRA_INDEX_URL),--extra-index-url $(PIP_EXTRA_INDEX_URL),)
 _PIP_TRUSTED_OPT=$(addprefix --trusted-host ,$(PIP_TRUSTED_HOSTS))
-_PIP_INSTALL=pip3 $(PIP_COMMON_OPTIONS) install $(_PIP_INDEX_URL_OPT) $(_PIP_EXTRA_INDEX_URL_OPT) $(_PIP_TRUSTED_OPT)
-_PIP_FREEZE=pip3 $(PIP_COMMON_OPTIONS) freeze
+_PIP_INSTALL=$(_PIP) $(PIP_COMMON_OPTIONS) install $(_PIP_INDEX_URL_OPT) $(_PIP_EXTRA_INDEX_URL_OPT) $(_PIP_TRUSTED_OPT)
+_PIP_FREEZE=$(_PIP) $(PIP_COMMON_OPTIONS) freeze
 _PREREQ=
 _PREDEVREQ=
 ifneq ($(wildcard $(REQS_DIR)/prerequirements-notfreezed.txt),)
@@ -370,8 +372,8 @@ reformat_isort:
 	@$(ENTER_VENV) && $(ISORT) $(ISORT_REFORMAT_OPTIONS) $(_APP_AND_TEST_DIRS)
 
 reformat::
-	@test -n "$(BLACK)" && $(BLACK) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) reformat_black
-	@test -n "$(ISORT)" && $(ISORT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) reformat_isort
+	@test -n "$(BLACK)" && $(ENTER_VENV) && $(BLACK) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) reformat_black
+	@test -n "$(ISORT)" && $(ENTER_VENV) && $(ISORT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) reformat_isort
 
 ############################
 ##### tests / coverage #####

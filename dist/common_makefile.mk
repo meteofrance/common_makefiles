@@ -36,6 +36,7 @@ before_all::
 .PHONY: clean before_clean
 clean:: before_clean ## Clean build and temporary files
 	rm -Rf .refresh_makefiles.tmp "$(ROOT_TMP)" "$(ROOT_TOOLS)"
+	rm -f "$(DEVENV_FILE)" "$(RUNENV_FILE)"
 before_clean::
 
 .PHONY: refresh before_refresh

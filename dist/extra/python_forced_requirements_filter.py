@@ -1,6 +1,7 @@
 import os
 import sys
 
+
 if len(sys.argv) != 2:
     print("ERROR: you have to provide a forced-requirements.txt file as argument")
     sys.exit(1)

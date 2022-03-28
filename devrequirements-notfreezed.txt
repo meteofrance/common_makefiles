@@ -1,3 +1,6 @@
 -f requirements.txt
 flake8
 black
+pylint
+mypy
+isort
