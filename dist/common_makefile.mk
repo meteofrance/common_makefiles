@@ -93,16 +93,16 @@ before_check:: devenv
 tests: check ## Simple alias for "check" target
 
 .PHONY: coverage_console before_coverage_console
-coverage_console:: before_coverage_console
-before_coverage_console:: devenv ## Execute unit-tests and show coverage in console
+coverage_console:: before_coverage_console ## Execute unit-tests and show coverage in console
+before_coverage_console:: devenv
 
 .PHONY: coverage_html before_coverage_html
-coverage_html:: before_coverage_html
-before_coverage_html:: devenv ## Execute unit-tests and show coverage in html
+coverage_html:: before_coverage_html ## Execute unit-tests and show coverage in html
+before_coverage_html:: devenv
 
 .PHONY: coverage_sonar before_coverage_sonar
-coverage_sonar:: before_coverage_sonar
-before_coverage_sonar:: devenv ## Execute unit-tests and build coverage file for sonarqube
+coverage_sonar:: before_coverage_sonar ## Execute unit-tests and build coverage file for sonarqube
+before_coverage_sonar:: devenv
 
 .PHONY: _debug
 _debug:: ## Dump common_makefiles configuration
