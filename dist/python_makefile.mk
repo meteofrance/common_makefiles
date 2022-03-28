@@ -134,10 +134,6 @@ SAFETY_ON_DEV_DEPS?=0
 # safety check options
 SAFETY_CHECK_OPTIONS?=
 
-# pip binary to use
-# (will be overriden automatically if PYTHON=AUTO_X_Y)
-PIP?=pip3
-
 # pip common options
 PIP_COMMON_OPTIONS?=--disable-pip-version-check
 
@@ -151,10 +147,16 @@ PIP_EXTRA_INDEX_URL?=
 PIP_TRUSTED_HOSTS?=pypi.org files.pythonhosted.org pypi.fury.io
 
 # virtualenv directory
-VENV_DIR?=venv
+VENV_DIR?=$(ROOT_DIR)/venv
 
 # requirements dir
 REQS_DIR?=$(ROOT_DIR)
+
+# remove "dist" directory during clean
+REMOVE_DIST?=1
+
+# remove "build" directory during clean
+REMOVE_BUILD?=1
 
 APP_DIRS?=
 TEST_DIRS?=
@@ -168,29 +170,25 @@ ifeq ($(PYTHON),AUTO_3_8)
 	RUNENV_PREREQ+=$(ROOT_TOOLS)/python/bin/python3.8
 	DEVENV_PREREQ+=$(ROOT_TOOLS)/python/bin/python3.8
 	_PYTHON_BIN=$(ROOT_TOOLS)/python/bin/python3.8
-	_PIP_BIN=$(ROOT_TOOLS)/python/bin/pip3
 	_PYTHON_URL=$(PYTHON_3_8_URL)
 else ifeq ($(PYTHON),AUTO_3_9)
 	RUNENV_PREREQ+=$(ROOT_TOOLS)/python/bin/python3.9
 	DEVENV_PREREQ+=$(ROOT_TOOLS)/python/bin/python3.9
 	_PYTHON_BIN=$(ROOT_TOOLS)/python/bin/python3.9
-	_PIP_BIN=$(ROOT_TOOLS)/python/bin/pip3
 	_PYTHON_URL=$(PYTHON_3_9_URL)
 else ifeq ($($PYTHON), AUTO_3_10)
 	RUNENV_PREREQ+=$(ROOT_TOOLS)/python/bin/python3.10
 	DEVENV_PREREQ+=$(ROOT_TOOLS)/python/bin/python3.10
 	_PYTHON_BIN=$(ROOT_TOOLS)/python/bin/python3.10
-	_PIP_BIN=$(ROOT_TOOLS)/python/bin/pip3
 	_PYTHON_URL=$(PYTHON_3_10_URL)
 else
 	_PYTHON_BIN=$(shell which $(PYTHON))
-	_PIP_BIN=$(shell which $(PIP))
 endif
 
 $(ROOT_TOOLS)/python/bin/python3:
 	@mkdir -p "$(ROOT_TOOLS)"
 	@mkdir -p "$(ROOT_TMP)"
-	@rm -Rf $(ROOT_TOOLS)/python
+	@rm -Rf "$(ROOT_TOOLS)/python"
 	$(WGET) -O "$(ROOT_TMP)/python.tar.gz" "$(_PYTHON_URL)"
 	cd "$(ROOT_TOOLS)" && zcat "$(ROOT_TMP)/python.tar.gz" |tar xf -
 
@@ -217,8 +215,8 @@ SETUP_DEVELOP=$(PYTHON) setup.py develop
 _PIP_INDEX_URL_OPT=$(if $(PIP_INDEX_URL),--index-url $(PIP_INDEX_URL),)
 _PIP_EXTRA_INDEX_URL_OPT=$(if $(PIP_EXTRA_INDEX_URL),--extra-index-url $(PIP_EXTRA_INDEX_URL),)
 _PIP_TRUSTED_OPT=$(addprefix --trusted-host ,$(PIP_TRUSTED_HOSTS))
-_PIP_INSTALL=$(_PIP_BIN) $(PIP_COMMON_OPTIONS) install $(_PIP_INDEX_URL_OPT) $(_PIP_EXTRA_INDEX_URL_OPT) $(_PIP_TRUSTED_OPT)
-_PIP_FREEZE=$(_PIP_BIN) $(PIP_COMMON_OPTIONS) freeze
+_PIP_INSTALL=pip3 $(PIP_COMMON_OPTIONS) install $(_PIP_INDEX_URL_OPT) $(_PIP_EXTRA_INDEX_URL_OPT) $(_PIP_TRUSTED_OPT)
+_PIP_FREEZE=pip3 $(PIP_COMMON_OPTIONS) freeze
 _PREREQ=
 _PREDEVREQ=
 ifneq ($(wildcard $(REQS_DIR)/prerequirements-notfreezed.txt),)
@@ -303,71 +301,71 @@ remove_runenv::
 ################
 .PHONY: lint_black
 lint_black:
-	echo "Linting with black...
+	echo "Linting with black..."
 	echo "$(BLACK) $(BLACK_LINT_OPTIONS) $(_APP_AND_TEST_DIRS)"
 	@$(ENTER_VENV) && $(BLACK) $(BLACK_LINT_OPTIONS) $(_APP_AND_TEST_DIRS) || ( echo "ERROR: lint errors with black => maybe you can try 'make reformat' to fix this" ; exit 1)
 
 .PHONY: lint_isort
 lint_isort:
-	echo "Linting with isort...
+	echo "Linting with isort..."
 	echo "$(ISORT) $(ISORT_LINT_OPTIONS) $(_APP_AND_TEST_DIRS)"
 	@$(ENTER_VENV) && $(ISORT) $(ISORT_LINT_OPTIONS) $(_APP_AND_TEST_DIRS) || ( echo "ERROR: lint errors with isort => maybe you can try 'make reformat' to fix this" ; exit 1)
 
 .PHONY: lint_flake8
 lint_flake8:
-	echo "Linting with flake8...
+	echo "Linting with flake8..."
 	$(ENTER_VENV) && $(FLAKE8) $(FLAKE8_LINT_OPTIONS) $(_APP_AND_TEST_DIRS)
 
 .PHONY: lint_pylint
 lint_pylint:
-	echo "Linting with pylint...
+	echo "Linting with pylint..."
 	$(ENTER_VENV) && $(PYLINT) $(PYLINT_LINT_OPTIONS) $(_APP_AND_TEST_DIRS)
 
 .PHONY: lint_mypy
 lint_mypy:
-	echo "Linting with mypy...
+	echo "Linting with mypy..."
 	$(ENTER_VENV) && $(MYPY) $(MYPY_LINT_OPTIONS) $(_APP_AND_TEST_DIRS)
 
 .PHONY: lint_bandit
 lint_bandit:
-	echo "Linting with bandit...
+	echo "Linting with bandit..."
 	$(ENTER_VENV) && $(BANDIT) $(BANDIT_LINT_OPTIONS) $(_APP_AND_TEST_DIRS)
 
 .PHONY: lint_imports
 lint_imports:
-	echo "Linting with lint-imports...
+	echo "Linting with lint-imports..."
 	$(ENTER_VENV) && $(LINTIMPORTS) --config $(LINTIMPORTS_CONF_FILE)
 
 .PHONY: lint_safety_run lint_safety_dev
 lint_safety_run:
-	echo "Linting with safety (runtime deps)...
+	echo "Linting with safety (runtime deps)..."
 	$(ENTER_VENV) && $(SAFETY) $(SAFETY_CHECK_OPTIONS) -r "$(REQS_DIR)/requirements.txt"
 lint_safety_dev:
-	echo "Linting with safety (dev deps)...
+	echo "Linting with safety (dev deps)..."
 	$(ENTER_VENV) && $(SAFETY) $(SAFETY_CHECK_OPTIONS) -r "$(REQS_DIR)/devrequirements.txt"
 
 lint::
-	@test -n "$(BLACK)" && $(BLACK) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_black
-	@test -n "$(ISORT)" && $(ISORT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_isort
-	@test -n "$(FLAKE8)" && $(FLAKE8) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_flake8
-	@test -n "$(PYLINT)" && $(PYLINT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_pylint
-	@test -n "$(BANDIT)" && $(BANDIT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_bandit
-	@test -n "$(LINTIMPORTS)" && $(LINTIMPORTS) --help >/dev/null 2>&1 || exit 0 ; if test -f "$(LINTIMPORTS_CONF_FILE)"; then $(MAKE) lint_imports; fi
-	@test -n "$(SAFETY)" && $(SAFETY) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_safety_run
-	@test -n "$(SAFETY)" && $(SAFETY) --help >/dev/null 2>&1 || exit 0 ; if test "$(SAFETY_ON_DEV_DEPS)" = "1"; then $(MAKE) lint_safety_dev; fi
+	@test -n "$(BLACK)" && $(ENTER_VENV) && $(BLACK) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_black
+	@test -n "$(ISORT)" && $(ENTER_VENV) && $(ISORT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_isort
+	test -n "$(FLAKE8)" && $(ENTER_VENV) && $(FLAKE8) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_flake8
+	@test -n "$(PYLINT)" && $(ENTER_VENV) && $(PYLINT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_pylint
+	@test -n "$(BANDIT)" && $(ENTER_VENV) && $(BANDIT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_bandit
+	@test -n "$(LINTIMPORTS)" && $(ENTER_VENV) && $(LINTIMPORTS) --help >/dev/null 2>&1 || exit 0 ; if test -f "$(LINTIMPORTS_CONF_FILE)"; then $(MAKE) lint_imports; fi
+	@test -n "$(SAFETY)" && $(ENTER_VENV) && $(SAFETY) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_safety_run
+	@test -n "$(SAFETY)" && $(ENTER_VENV) && $(SAFETY) --help >/dev/null 2>&1 || exit 0 ; if test "$(SAFETY_ON_DEV_DEPS)" = "1"; then $(MAKE) lint_safety_dev; fi
 
 ####################
 ##### reformat #####
 ####################
 .PHONY: reformat_black
 reformat_black:
-	echo "Reformat with black...
+	echo "Reformat with black..."
 	echo "$(BLACK) $(BLACK_REFORMAT_OPTIONS) $(_APP_AND_TEST_DIRS)"
 	@$(ENTER_VENV) && $(BLACK) $(BLACK_REFORMAT_OPTIONS) $(_APP_AND_TEST_DIRS)
 
 .PHONY: reformat_isort
 reformat_isort:
-	echo "Reformat with isort...
+	echo "Reformat with isort..."
 	echo "$(ISORT) $(ISORT_REFORMAT_OPTIONS) $(_APP_AND_TEST_DIRS)"
 	@$(ENTER_VENV) && $(ISORT) $(ISORT_REFORMAT_OPTIONS) $(_APP_AND_TEST_DIRS)
 
@@ -380,22 +378,22 @@ reformat::
 ############################
 .PHONY: check_pytest
 check_pytest:
-	echo "Testing with pytest...
+	echo "Testing with pytest..."
 	$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(PYTEST) $(PYTEST_CHECK_OPTIONS) $(TEST_DIRS)
 
 .PHONY: coverage_console_pytest
 coverage_console_pytest:
-	echo "Coveraging with pytest (console)...
+	echo "Coveraging with pytest (console)..."
 	$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(PYTEST) $(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_CONSOLE_OPTIONS) $(TEST_DIRS)
 
 .PHONY: coverage_html_pytest
 coverage_html_pytest:
-	echo "Coveraging with pytest (html)...
+	echo "Coveraging with pytest (html)..."
 	$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(PYTEST) $(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_HTML_OPTIONS) $(TEST_DIRS)
 
 .PHONY: coverage_sonar_pytest
 coverage_sonar_pytest:
-	echo "Coveraging with pytest (sonar)...
+	echo "Coveraging with pytest (sonar)..."
 	$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(PYTEST) $(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_SONAR_OPTIONS) $(TEST_DIRS)
 
 check::
@@ -440,5 +438,7 @@ _debug::
 	@echo "REQS_DIR=$(REQS_DIR)"
 
 clean:: remove_devenv remove_runenv
-	rm -Rf $(VENV_DIR).temp htmlcov *.egg-info .mypy_cache .pytest_cache build dist coverage.xml .coverage
+	rm -Rf $(VENV_DIR).temp htmlcov *.egg-info .mypy_cache .pytest_cache coverage.xml .coverage
+	if test "$(REMOVE_DIST)" = "1"; then rm -Rf dist; fi
+	if test "$(REMOVE_BUILD)" = "1"; then rm -Rf build; fi
 	find . -type d -name __pycache__ -exec rm -Rf {} \; >/dev/null 2>&1 || true

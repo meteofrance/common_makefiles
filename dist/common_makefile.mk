@@ -59,7 +59,7 @@ help::
 .PHONY: devenv before_devenv _devenv remove_devenv
 devenv: $(DEVENV_FILE) ## Prepare dev environment
 $(DEVENV_FILE): $$(DEVENV_PREREQ)
-	if [ -f "$(RUNENV_FILE)"]; then $(MAKE) remove_runenv; fi
+	if test -f "$(RUNENV_FILE)"; then $(MAKE) remove_runenv; fi
 	$(MAKE) _devenv
 	touch "$@"
 _devenv:: before_devenv
