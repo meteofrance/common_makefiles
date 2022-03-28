@@ -1,1 +1,6 @@
 /.tools
+/.tmp
+/venv
+/.vscode
+/.devenv
+/.runenv
