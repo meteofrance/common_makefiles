@@ -85,81 +85,89 @@ LINTIMPORTS?=lint-imports
 #+ lint-imports configuration file
 LINTIMPORTS_CONF_FILE?=$(ROOT_DIR)/.importlinter
 
-# pytest binary to use
-# (binary name or path) => use this binary name/path (if exists)
-# (empty)               => disable usage
+#+ pytest binary to use
+#+ (binary name or path) => use this binary name/path (if exists)
+#+ (empty)               => disable usage
 PYTEST=pytest
 
-# pytest options (for unit testing)
+#+ pytest options (for unit testing)
 PYTEST_CHECK_OPTIONS?=
 
-# pytest options (for coverage)
+#+ pytest options (for coverage)
 PYTEST_COVERAGE_OPTIONS?=--cov=$(APP_DIRS)
 
-# pytest options (for coverage html)
+#+ pytest options (for coverage html)
 PYTEST_COVERAGE_HTML_OPTIONS?=--cov-report=html
 
-# pytest options (for coverage html)
+#+ pytest options (for coverage html)
 PYTEST_COVERAGE_CONSOLE_OPTIONS?=
 
-# pytest options (for coverage sonarqube)
+#+ pytest options (for coverage sonarqube)
 PYTEST_COVERAGE_SONAR_OPTIONS?=--cov-report=xml
 
-# twine binary to use
-# (binary name or path) => use this binary name/path (if exists)
-# (empty)               => disable usage
+#+ twine binary to use
+#+ (binary name or path) => use this binary name/path (if exists)
+#+ (empty)               => disable usage
 TWINE=twine
 
-# twine repository
+#+ twine repository
 TWINE_REPOSITORY?=
 
-# twine username
+#+ twine username
 TWINE_USERNAME?=
 
-# twine password
+#+ twine password
 TWINE_PASSWORD?=
 
-# twine extra options
+#+ twine extra options
 TWINE_UPLOAD_EXTRA_OPTIONS?=
 
-# safety binary to use
-# (binary name or path) => use this binary name/path (if exists)
-# (empty)               => disable usage
+#+ safety binary to use
+#+ (binary name or path) => use this binary name/path (if exists)
+#+ (empty)               => disable usage
 SAFETY?=safety
 
-# if set to 1, run also safety on dev dependencies
-# if set to 0 (default), safety will be run only on runtime dependencies
+#+ if set to 1, run also safety on dev dependencies
+#+ if set to 0 (default), safety will be run only on runtime dependencies
 SAFETY_ON_DEV_DEPS?=0
 
-# safety check options
+#+ safety check options
 SAFETY_CHECK_OPTIONS?=
 
-# pip common options
+#+ pip common options
 PIP_COMMON_OPTIONS?=--disable-pip-version-check
 
-# pip index url
+#+ pip index url
 PIP_INDEX_URL?=
 
-# pip extra index url
+#+ pip extra index url
 PIP_EXTRA_INDEX_URL?=
 
-# pip trusted hosts
-PIP_TRUSTED_HOSTS?=pypi.org files.pythonhosted.org pypi.fury.io
+#+ pip trusted hosts
+#+ (override it with += to add some trusted hosts)
+PIP_TRUSTED_HOSTS+=pypi.org files.pythonhosted.org
 
-# virtualenv directory
+#+ virtualenv directory
 VENV_DIR?=$(ROOT_DIR)/venv
 
-# requirements dir
+#+ requirements dir
 REQS_DIR?=$(ROOT_DIR)
 
-# remove "dist" directory during clean
+#+ remove "dist" directory during clean
 REMOVE_DIST?=1
 
-# remove "build" directory during clean
+#+ remove "build" directory during clean
 REMOVE_BUILD?=1
 
+#+ python application dirs (space separated)
 APP_DIRS?=
+
+#+ tests application dirs (space separated)
 TEST_DIRS?=
+
+#+ extra python files to lint/reformat
+#+ (if they are outside of APP_DIRS/TEST_DIRS)
+#+ (space separated paths)
 EXTRA_PYTHON_FILES?=
 _APP_AND_TEST_DIRS=$(APP_DIRS) $(TEST_DIRS) $(wildcard setup.py) $(EXTRA_PYTHON_FILES)
 
@@ -212,8 +220,10 @@ $(ROOT_TOOLS)/python/bin/python3.10:
 _PIP=pip3
 _MAKE_VIRTUALENV=$(_PYTHON_BIN) -m venv
 ENTER_TEMP_VENV=. $(VENV_DIR).temp/bin/activate
+## "enter virtualenv" variable
+## you can use it in your Makefile scripts, for example:
+## $(ENTER_VENV) && pip freeze
 ENTER_VENV=. $(VENV_DIR)/bin/activate
-SETUP_DEVELOP=$(PYTHON) setup.py develop
 _PIP_INDEX_URL_OPT=$(if $(PIP_INDEX_URL),--index-url $(PIP_INDEX_URL),)
 _PIP_EXTRA_INDEX_URL_OPT=$(if $(PIP_EXTRA_INDEX_URL),--extra-index-url $(PIP_EXTRA_INDEX_URL),)
 _PIP_TRUSTED_OPT=$(addprefix --trusted-host ,$(PIP_TRUSTED_HOSTS))
@@ -234,6 +244,8 @@ DEVENV_PREREQ+=$(REQS_DIR)/devrequirements.txt
 RUNENV_PREREQ+=$(REQS_DIR)/requirements.txt
 
 .PHONY: devvenv
+
+## simple alias of devenv target
 devvenv: devenv
 
 $(REQS_DIR)/prerequirements.txt: $(REQS_DIR)/prerequirements-notfreezed.txt
@@ -293,9 +305,15 @@ _runenv:: $(REQS_DIR)/requirements.txt
 	if test -f "$(REQS_DIR)/prerequirements.txt"; then $(ENTER_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/prerequirements.txt"; fi
 	$(ENTER_VENV) && $(_PIP_INSTALL) -r "$<"
 
+#+ target to remove the "dev env"
+#+ you can add some specific things in this target
+#+ (of course by default we remove completly the virtualenv)
 remove_devenv::
 	rm -Rf "$(VENV_DIR)"
 
+#+ target to remove the "run env"
+#+ you can add some specific things in this target
+#+ (of course by default we remove completly the virtualenv)
 remove_runenv::
 	rm -Rf "$(VENV_DIR)"
 

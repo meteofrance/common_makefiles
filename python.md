@@ -11,12 +11,42 @@
 
 
 
+## Targets ready to use
+
+*Note: you can't override these targets but you can use them!*
+
+
+    
+        
+### devvenv
+
+
+```
+simple alias of devenv target
+```
+
+
+- Dependencies: `devenv`
+
+    
+
+    
+
+    
+
+    
+
+
+
+
 
 
 ## Extendable targets
 
 *Note: you can extend these targets in your own `Makefile` with `target_name::` syntax*
 
+
+    
 
     
         
@@ -61,6 +91,126 @@ Upload to Pypi
     
 
 
+
+
+
+
+## Read-only variables
+
+*Note: NEVER try to override these variables*
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        
+### ENTER_VENV
+
+
+
+
+```
+"enter virtualenv" variable
+you can use it in your Makefile scripts, for example:
+$(ENTER_VENV) && pip freeze
+```
+
+
+
+- Default: `. $(VENV_DIR)/bin/activate`
+
+
+    
 
 
 
@@ -467,6 +617,468 @@ lint-imports configuration file
 
 - Default: `$(ROOT_DIR)/.importlinter`
 
+
+    
+
+    
+        
+### PYTEST
+
+
+
+
+```
+pytest binary to use
+(binary name or path) => use this binary name/path (if exists)
+(empty)               => disable usage
+```
+
+
+
+- Default: `pytest`
+
+
+    
+
+    
+        
+### PYTEST_CHECK_OPTIONS
+
+
+
+
+```
+pytest options (for unit testing)
+```
+
+
+
+- Default: `(empty)`
+
+
+    
+
+    
+        
+### PYTEST_COVERAGE_OPTIONS
+
+
+
+
+```
+pytest options (for coverage)
+```
+
+
+
+- Default: `$(APP_DIRS)`
+
+
+    
+
+    
+        
+### PYTEST_COVERAGE_HTML_OPTIONS
+
+
+
+
+```
+pytest options (for coverage html)
+```
+
+
+
+- Default: `html`
+
+
+    
+
+    
+        
+### PYTEST_COVERAGE_CONSOLE_OPTIONS
+
+
+
+
+```
+pytest options (for coverage html)
+```
+
+
+
+- Default: `(empty)`
+
+
+    
+
+    
+        
+### PYTEST_COVERAGE_SONAR_OPTIONS
+
+
+
+
+```
+pytest options (for coverage sonarqube)
+```
+
+
+
+- Default: `xml`
+
+
+    
+
+    
+        
+### TWINE
+
+
+
+
+```
+twine binary to use
+(binary name or path) => use this binary name/path (if exists)
+(empty)               => disable usage
+```
+
+
+
+- Default: `twine`
+
+
+    
+
+    
+        
+### TWINE_REPOSITORY
+
+
+
+
+```
+twine repository
+```
+
+
+
+- Default: `(empty)`
+
+
+    
+
+    
+        
+### TWINE_USERNAME
+
+
+
+
+```
+twine username
+```
+
+
+
+- Default: `(empty)`
+
+
+    
+
+    
+        
+### TWINE_PASSWORD
+
+
+
+
+```
+twine password
+```
+
+
+
+- Default: `(empty)`
+
+
+    
+
+    
+        
+### TWINE_UPLOAD_EXTRA_OPTIONS
+
+
+
+
+```
+twine extra options
+```
+
+
+
+- Default: `(empty)`
+
+
+    
+
+    
+        
+### SAFETY
+
+
+
+
+```
+safety binary to use
+(binary name or path) => use this binary name/path (if exists)
+(empty)               => disable usage
+```
+
+
+
+- Default: `safety`
+
+
+    
+
+    
+        
+### SAFETY_ON_DEV_DEPS
+
+
+
+
+```
+if set to 1, run also safety on dev dependencies
+if set to 0 (default), safety will be run only on runtime dependencies
+```
+
+
+
+- Default: `0`
+
+
+    
+
+    
+        
+### SAFETY_CHECK_OPTIONS
+
+
+
+
+```
+safety check options
+```
+
+
+
+- Default: `(empty)`
+
+
+    
+
+    
+        
+### PIP_COMMON_OPTIONS
+
+
+
+
+```
+pip common options
+```
+
+
+
+- Default: `--disable-pip-version-check`
+
+
+    
+
+    
+        
+### PIP_INDEX_URL
+
+
+
+
+```
+pip index url
+```
+
+
+
+- Default: `(empty)`
+
+
+    
+
+    
+        
+### PIP_EXTRA_INDEX_URL
+
+
+
+
+```
+pip extra index url
+```
+
+
+
+- Default: `(empty)`
+
+
+    
+
+    
+        
+### PIP_TRUSTED_HOSTS
+
+
+
+
+```
+pip trusted hosts
+(override it with += to add some trusted hosts)
+```
+
+
+
+- Default: `pypi.org files.pythonhosted.org`
+
+
+    
+
+    
+        
+### VENV_DIR
+
+
+
+
+```
+virtualenv directory
+```
+
+
+
+- Default: `$(ROOT_DIR)/venv`
+
+
+    
+
+    
+        
+### REQS_DIR
+
+
+
+
+```
+requirements dir
+```
+
+
+
+- Default: `$(ROOT_DIR)`
+
+
+    
+
+    
+        
+### REMOVE_DIST
+
+
+
+
+```
+remove "dist" directory during clean
+```
+
+
+
+- Default: `1`
+
+
+    
+
+    
+        
+### REMOVE_BUILD
+
+
+
+
+```
+remove "build" directory during clean
+```
+
+
+
+- Default: `1`
+
+
+    
+
+    
+        
+### APP_DIRS
+
+
+
+
+```
+python application dirs (space separated)
+```
+
+
+
+- Default: `(empty)`
+
+
+    
+
+    
+        
+### TEST_DIRS
+
+
+
+
+```
+tests application dirs (space separated)
+```
+
+
+
+- Default: `(empty)`
+
+
+    
+
+    
+        
+### EXTRA_PYTHON_FILES
+
+
+
+
+```
+extra python files to lint/reformat
+(if they are outside of APP_DIRS/TEST_DIRS)
+(space separated paths)
+```
+
+
+
+- Default: `(empty)`
+
+
+    
 
     
 

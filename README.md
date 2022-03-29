@@ -60,6 +60,6 @@ Sinon, vous pouvez supprimer le répertoire `.common_makefiles` et recommencer l
 
 ## Comment configurer ?
 
-- [Variables et cibles communes](common.mk)
-- [Variables et cibles pour le shell](shell.mk)
-- [Variables et cibles pour python](python.mk)
+- [Variables et cibles communes](common.md)
+- [Variables et cibles pour le shell](shell.md)
+- [Variables et cibles pour python](python.md)
