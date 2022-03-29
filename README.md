@@ -15,7 +15,7 @@ bash -c "$(curl -fsSLk https://raw.githubusercontent.com/meteofrance/common_make
 ```
 
 Si vous n'avez pas confiance dans cette dernière commande (ou si vous préférez maitriser exactement ce qui est fait),
-vous pouvez simplement cloner ce repository et copier le sous-répertoire `dist` à la racine de votre projet sous le 
+vous pouvez simplement cloner ce repository et copier le sous-répertoire `dist` à la racine de votre projet sous le
 nom `.common_makefiles`.
 
 Ensuite, créez (ou modifiez s'il existe déjà) un fichier `Makefile` à la racine de votre projet contenant :
@@ -23,6 +23,7 @@ Ensuite, créez (ou modifiez s'il existe déjà) un fichier `Makefile` à la rac
 ### Pour un projet Python
 
 ```Makefile
+include .common_makefiles/common_makefile.mk
 include .common_makefiles/python_makefile.mk
 
 APP_DIRS={your app directory name}
@@ -32,6 +33,7 @@ TEST_DIRS={your tests directory name}
 ### Pour un projet shell
 
 ```Makefile
+include .common_makefiles/common_makefile.mk
 include .common_makefiles/shell_makefile.mk
 ```
 

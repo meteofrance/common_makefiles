@@ -4,3 +4,4 @@ black
 pylint
 mypy
 isort
+-e git+https://github.com/metwork-framework/envtpl.git#egg=envtpl

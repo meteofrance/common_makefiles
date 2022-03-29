@@ -1,0 +1,71 @@
+{% set CMD = "python makefile_to_json.py dist/" + VAR + "_makefile.mk" %}
+{% set C = CMD|shell()|from_json() %}
+
+{% macro target_macro(name, sep, deps, docs) %}
+### {{name}}
+
+```
+{% for doc in docs %}{{doc}}
+{% endfor %}
+```
+
+- Dependencies: `{{deps}}`
+{% endmacro %}
+
+{% macro var_macro(name, type, default, docs) %}
+### {{name}}
+
+```
+{% for doc in docs %}{{doc}}
+{% endfor %}
+```
+
+{% if default == "" %}
+- Default: `(empty)`
+{% else %}
+- Default: `{{default}}`
+{% endif %}
+{% endmacro %}
+
+# Doc
+
+## Targets ready to use
+
+*Note: you can't override these targets but you can use them!*
+
+{% for name, sep, deps, docs in C["targets"] %}
+    {% if sep == ":" %}
+        {{ target_macro(name, sep, deps, docs) }}
+    {% endif %}
+{% endfor %}
+
+## Extendable targets
+
+*Note: you can extend these targets in your own `Makefile` with `target_name::` syntax*
+
+{% for name, sep, deps, docs in C["targets"] %}
+    {% if sep == "::" %}
+        {{ target_macro(name, sep, deps, docs) }}
+    {% endif %}
+{% endfor %}
+
+## Read-only variables
+
+*Note: NEVER try to override these variables*
+
+{% for name, type, default, docs in C["variables"] %}
+    {% if type == "readonly" %}
+        {{ var_macro(name, type, default, docs) }}
+    {% endif %}
+{% endfor %}
+
+## Overridable variables
+
+*Note: you can override/extend these variables in your own `Makefile`*
+
+{% for name, type, default, docs in C["variables"] %}
+    {% if type == "overridable" %}
+        {{ var_macro(name, type, default, docs) }}
+    {% endif %}
+{% endfor %}
+

@@ -285,6 +285,7 @@ _devenv:: $(REQS_DIR)/devrequirements.txt
 	$(_MAKE_VIRTUALENV) "$(VENV_DIR)"
 	if test -f "$(REQS_DIR)/predevrequirements.txt"; then $(ENTER_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/predevrequirements.txt"; fi
 	$(ENTER_VENV) && $(_PIP_INSTALL) -r "$<"
+	if test -f setup.py; then $(_PIP_INSTALL) -e .; fi
 
 _runenv:: $(REQS_DIR)/requirements.txt
 	rm -Rf "$(VENV_DIR)"
@@ -444,3 +445,8 @@ clean:: remove_devenv remove_runenv
 	if test "$(REMOVE_DIST)" = "1"; then rm -Rf dist; fi
 	if test "$(REMOVE_BUILD)" = "1"; then rm -Rf build; fi
 	find . -type d -name __pycache__ -exec rm -Rf {} \; >/dev/null 2>&1 || true
+
+
+fab2:
+	echo $(COUCOU)
+	$(MAKE) fab
