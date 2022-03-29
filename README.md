@@ -60,49 +60,6 @@ Sinon, vous pouvez supprimer le répertoire `.common_makefiles` et recommencer l
 
 ## Comment configurer ?
 
-### Dans tous les cas
-
-Au niveau de votre `Makefile`, vous pouvez overrider les variables suivantes :
-
-```
-GIT
-WGET
-COMMON_MAKEFILES_GIT_URL
-```
-
-La documentation de chaque variable est lisible dans [`.common_makefiles/common_makefile.mk`](dist/common_makefile.mk). **Les variables non documentées
-ou commençant par un underscore ne doivent pas être overridées.**
-
-Exemple :
-
-```Makefile
-include .common_makefiles/common_makefile.mk
-
-GIT=/usr/local/bin/mygit
-
-# [...]
-```
-
-### Pour un projet shell
-
-Au niveau de votre `Makefile`, vous pouvez overrider (en outre) les variables suivantes :
-
-```
-SHELLCHECK (à overrider AVANT l'include)
-SHELLCHECK_ARGS
-SHELLCHECK_URL
-SHELLCHECK_FILES
-```
-
-La documentation de chaque variable est lisible dans [`.common_makefiles/shell_makefile.mk`](dist/shell_makefile.mk). **Les variables non documentées
-ou commençant par un underscore ne doivent pas être overridées.**
-
-```Makefile
-SHELLCHECK=/opt/shellcheck/bin/myshellcheck # celle ci doit etre impérativement placée AVANT l'include
-include .common_makefiles/shell_makefile.mk
-
-GIT=/usr/local/bin/mygit
-SHELLCHECK_FILES=myshell.sh myshell2.sh
-
-# [...]
-```
+- [Variables et cibles communes](common.mk)
+- [Variables et cibles pour le shell](shell.mk)
+- [Variables et cibles pour python](python.mk)
