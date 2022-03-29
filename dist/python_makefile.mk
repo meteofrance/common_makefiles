@@ -297,7 +297,7 @@ _devenv:: $(REQS_DIR)/devrequirements.txt
 	$(_MAKE_VIRTUALENV) "$(VENV_DIR)"
 	if test -f "$(REQS_DIR)/predevrequirements.txt"; then $(ENTER_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/predevrequirements.txt"; fi
 	$(ENTER_VENV) && $(_PIP_INSTALL) -r "$<"
-	if test -f setup.py; then $(_PIP_INSTALL) -e .; fi
+	if test -f setup.py; then $(ENTER_VENV) && $(_PIP_INSTALL) -e .; fi
 
 _runenv:: $(REQS_DIR)/requirements.txt
 	rm -Rf "$(VENV_DIR)"
