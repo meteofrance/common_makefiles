@@ -143,8 +143,3 @@ _debug:: ## Dump common_makefiles configuration
 	@echo "ROOL_TOOLS=$(ROOT_TOOLS)"
 	@echo "DEVENV_PREREQ=$(DEVENV_PREREQ)"
 	@echo "RUNENV_PREREQ=$(RUNENV_PREREQ)"
-
-
-COUCOU?=common
-fab:
-	echo $(COUCOU)

@@ -22,6 +22,9 @@ for line in lines:
     if line.startswith("#+ "):
         buffer.append(line[3:])
         mode = "overridable"
+    elif line.startswith("#* "):
+        buffer.append(line[3:])
+        mode = "overridable_before"
     elif line.startswith("## "):
         buffer.append(line[3:])
         mode = "readonly"
@@ -34,6 +37,8 @@ for line in lines:
             default = mo.group(2).strip()
             if mode == "overridable":
                 variables.append((var, "overridable", default, buffer))
+            elif mode == "overridable_before":
+                variables.append((var, "overridable_before", default, buffer))
             elif mode == "readonly":
                 variables.append((var, "readonly", default, buffer))
             buffer = []
@@ -73,5 +78,9 @@ for line in lines:
 res = {
     "variables": variables,
     "targets": targets,
+    "has_targets_ready_to_use": len([x for x in targets if x[1] == ":"]) > 0,
+    "has_targets_overridable": len([x for x in targets if x[1] == "::"]) > 0,
+    "has_variables_readonly": len([x for x in variables if x[1] == "readonly"]) > 0,
+    "has_variables_overridable": len([x for x in variables if x[1] != "readonly"]) > 0,
 }
 print(json.dumps(res, indent=4))

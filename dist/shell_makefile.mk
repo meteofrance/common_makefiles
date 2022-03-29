@@ -1,19 +1,19 @@
-# shellcheck linter configuration:
-# AUTO    => auto-download shellcheck tool
-# (empty) => disable shellcheck linter
-# (path)  => disable auto-download and use this binary
+#* shellcheck linter configuration:
+#* AUTO    => auto-download shellcheck tool
+#* (empty) => disable shellcheck linter
+#* (path)  => disable auto-download and use this binary
 SHELLCHECK?=AUTO
 
 _SHELLCHECK_BIN=
 
-# shellcheck linter extra options
+#+ shellcheck linter extra options
 SHELLCHECK_ARGS?=
 
-# shellcheck download url
+#+ shellcheck download url
 SHELLCHECK_URL?=https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz
 
-# shellcheck files to check
-# (by default, all *.sh files are checked)
+#+ shellcheck files to check
+#+ (by default, all *.sh files are checked)
 SHELLCHECK_FILES?=$(shell find "$(ROOT_DIR)" -type f -name "*.sh" |grep -v "^$(ROOT_DIR)/\.tools/" |grep -v "^$(ROOT_DIR)/\.tmp/" |grep "[a-zA-Z0-9]" |xargs)
 
 ifeq ($(SHELLCHECK),AUTO)

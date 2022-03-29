@@ -2,87 +2,87 @@
 ##### configuration ######
 ##########################
 
-# python interpreter configuration:
-# AUTO_3_8    => auto-download python 3.8
-# AUTO_3_9    => auto-download python 3.9
-# AUTO_3_10   => auto-download python 3.10
-# (path)      => use this binary
+#* python interpreter configuration:
+#* AUTO_3_8    => auto-download python 3.8
+#* AUTO_3_9    => auto-download python 3.9
+#* AUTO_3_10   => auto-download python 3.10
+#* (path)      => use this binary
 PYTHON?=AUTO_3_9
 
-# python 3.8 download url
+#+ python 3.8 download url
 PYTHON_3_8_URL?=https://github.com/indygreg/python-build-standalone/releases/download/20220318/cpython-3.8.13+20220318-x86_64-unknown-linux-gnu-install_only.tar.gz
 
-# python 3.9 download url
+#+ python 3.9 download url
 PYTHON_3_9_URL?=https://github.com/indygreg/python-build-standalone/releases/download/20220318/cpython-3.9.11+20220318-x86_64-unknown-linux-gnu-install_only.tar.gz
 
-# python 3.10 download url
+#+ python 3.10 download url
 PYTHON_3_10_URL?=https://github.com/indygreg/python-build-standalone/releases/download/20220318/cpython-3.10.3+20220318-x86_64-unknown-linux-gnu-install_only.tar.gz
 
-# black binary to use
-# (binary name or path) => use this binary name/path (if exists)
-# (empty)               => disable usage
+#+ black binary to use
+#+ (binary name or path) => use this binary name/path (if exists)
+#+ (empty)               => disable usage
 BLACK?=black
 
-# black reformat options
+#+ black reformat options
 BLACK_REFORMAT_OPTIONS?=--line-length=$(_MAX_LINE_LENGTH_MINUS_1)
 
-# black lint options
+#+ black lint options
 BLACK_LINT_OPTIONS?=$(BLACK_REFORMAT_OPTIONS) --quiet
 
-# isort binary to use
-# (binary name or path) => use this binary name/path (if exists)
-# (empty)               => disable usage
+#+ isort binary to use
+#+ (binary name or path) => use this binary name/path (if exists)
+#+ (empty)               => disable usage
 ISORT?=isort
 
-# isort reformat options
+#+ isort reformat options
 ISORT_REFORMAT_OPTIONS?=--profile=black --lines-after-imports=2 --virtual-env=$(VENV_DIR)
 
-# isort lint options
+#+ isort lint options
 ISORT_LINT_OPTIONS?=$(ISORT_REFORMAT_OPTIONS) --check-only
 
-# max line length (for linting/reformating)
+#+ max line length (for linting/reformating)
 MAX_LINE_LENGTH?=89
 
 _MAX_LINE_LENGTH_MINUS_1=$(shell echo $$(($(MAX_LINE_LENGTH) - 1)))
 
-# flake8 binary to use
-# (binary name or path) => use this binary name/path (if exists)
-# (empty)               => disable usage
+#+ flake8 binary to use
+#+ (binary name or path) => use this binary name/path (if exists)
+#+ (empty)               => disable usage
 FLAKE8?=flake8
 
-# flake8 lint options
+#+ flake8 lint options
 FLAKE8_LINT_OPTIONS?=--ignore=W503,E501 --max-line-length=$(MAX_LINE_LENGTH)
 
-# pylint binary to use
-# (binary name or path) => use this binary name/path (if exists)
-# (empty)               => disable usage
+#+ pylint binary to use
+#+ (binary name or path) => use this binary name/path (if exists)
+#+ (empty)               => disable usage
 PYLINT?=pylint
 
-# pylint lint options
+#+ pylint lint options
 PYLINT_LINT_OPTIONS?=--errors-only --extension-pkg-whitelist=pydantic,_ldap
 
-# mypy binary to use
-# (binary name or path) => use this binary name/path (if exists)
-# (empty)               => disable usage
+#+ mypy binary to use
+#+ (binary name or path) => use this binary name/path (if exists)
+#+ (empty)               => disable usage
 MYPY?=mypy
 
-# mypy lint options
+#+ mypy lint options
 MYPY_LINT_OPTIONS?=--ignore-missing-imports
 
-# bandit binary to use
-# (binary name or path) => use this binary name/path (if exists)
-# (empty)               => disable usage
+#+ bandit binary to use
+#+ (binary name or path) => use this binary name/path (if exists)
+#+ (empty)               => disable usage
 BANDIT?=bandit
 
-# bandit lint options
+#+ bandit lint options
 BANDIT_LINT_OPTIONS?=-ll -r
 
-# lint-imports binary to use
-# (binary name or path) => use this binary name/path (if exists)
-# (empty)               => disable usage
+#+ lint-imports binary to use
+#+ (binary name or path) => use this binary name/path (if exists)
+#+ (empty)               => disable usage
 LINTIMPORTS?=lint-imports
 
-# lint-imports configuration file
+#+ lint-imports configuration file
 LINTIMPORTS_CONF_FILE?=$(ROOT_DIR)/.importlinter
 
 # pytest binary to use
@@ -445,8 +445,3 @@ clean:: remove_devenv remove_runenv
 	if test "$(REMOVE_DIST)" = "1"; then rm -Rf dist; fi
 	if test "$(REMOVE_BUILD)" = "1"; then rm -Rf build; fi
 	find . -type d -name __pycache__ -exec rm -Rf {} \; >/dev/null 2>&1 || true
-
-
-fab2:
-	echo $(COUCOU)
-	$(MAKE) fab

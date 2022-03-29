@@ -5,7 +5,11 @@
 
 
 
+
+
 # Doc
+
+
 
 ## Targets ready to use
 
@@ -20,10 +24,11 @@
         
 ### devenv
 
-```
-Prepare dev environment
 
 ```
+Prepare dev environment
+```
+
 
 - Dependencies: `$(DEVENV_FILE)`
 
@@ -33,10 +38,11 @@ Prepare dev environment
         
 ### runenv
 
-```
-Prepare run environment
 
 ```
+Prepare run environment
+```
+
 
 - Dependencies: `$(RUNENV_FILE)`
 
@@ -50,14 +56,19 @@ Prepare run environment
         
 ### tests
 
-```
-Simple alias for "check" target
 
 ```
+Simple alias for "check" target
+```
+
 
 - Dependencies: `check`
 
     
+
+
+
+
 
 
 ## Extendable targets
@@ -69,10 +80,11 @@ Simple alias for "check" target
         
 ### clean
 
-```
-Clean build and temporary files
 
 ```
+Clean build and temporary files
+```
+
 
 - Dependencies: `before_clean`
 
@@ -82,10 +94,11 @@ Clean build and temporary files
         
 ### refresh
 
-```
-Refresh all things
 
 ```
+Refresh all things
+```
+
 
 - Dependencies: `before_refresh refresh_common_makefiles`
 
@@ -99,10 +112,11 @@ Refresh all things
         
 ### lint
 
-```
-Lint the code
 
 ```
+Lint the code
+```
+
 
 - Dependencies: `before_lint`
 
@@ -112,16 +126,21 @@ Lint the code
         
 ### reformat
 
-```
-Reformat sources and tests
 
 ```
+Reformat sources and tests
+```
+
 
 - Dependencies: `before_reformat`
 
     
 
     
+
+
+
+
 
 
 ## Read-only variables
@@ -141,10 +160,13 @@ Reformat sources and tests
         
 ### ROOT_DIR
 
-```
-Directory containing the "Makefile" (probably the root directory of the project)
+
+
 
 ```
+Directory containing the "Makefile" (probably the root directory of the project)
+```
+
 
 
 - Default: `$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))`
@@ -156,10 +178,13 @@ Directory containing the "Makefile" (probably the root directory of the project)
         
 ### ROOT_TMP
 
-```
-Temporary directory (local to the project)
+
+
 
 ```
+Temporary directory (local to the project)
+```
+
 
 
 - Default: `$(ROOT_DIR)/.tmp`
@@ -171,10 +196,13 @@ Temporary directory (local to the project)
         
 ### ROOT_TOOLS
 
-```
-Tools directory (local to the project)
+
+
 
 ```
+Tools directory (local to the project)
+```
+
 
 
 - Default: `$(ROOT_DIR)/.tools`
@@ -186,10 +214,13 @@ Tools directory (local to the project)
         
 ### ROOT_COMMON
 
-```
-Common makefiles directory
+
+
 
 ```
+Common makefiles directory
+```
+
 
 
 - Default: `$(ROOT_DIR)/.common_makefiles`
@@ -206,6 +237,10 @@ Common makefiles directory
     
 
 
+
+
+
+
 ## Overridable variables
 
 *Note: you can override/extend these variables in your own `Makefile`*
@@ -215,10 +250,13 @@ Common makefiles directory
         
 ### GIT
 
-```
-Binary to use for git
+
+
 
 ```
+Binary to use for git
+```
+
 
 
 - Default: `git`
@@ -230,10 +268,13 @@ Binary to use for git
         
 ### WGET
 
-```
-Binary to use for wget
+
+
 
 ```
+Binary to use for wget
+```
+
 
 
 - Default: `wget`
@@ -245,10 +286,13 @@ Binary to use for wget
         
 ### COMMON_MAKEFILES_GIT_URL
 
-```
-Common makefiles git url (for refresh_makefiles target)
+
+
 
 ```
+Common makefiles git url (for refresh_makefiles target)
+```
+
 
 
 - Default: `http://github.com/meteofrance/common_makefiles.git`
@@ -260,10 +304,13 @@ Common makefiles git url (for refresh_makefiles target)
         
 ### COMMON_MAKEFILES_GIT_BRANCH
 
-```
-Common makefiles git branch (for refresh_makefiles target)
+
+
 
 ```
+Common makefiles git branch (for refresh_makefiles target)
+```
+
 
 
 - Default: `main`
@@ -283,10 +330,13 @@ Common makefiles git branch (for refresh_makefiles target)
         
 ### DEVENV_FILE
 
-```
-Devenv flag file (if it exists, the dev env is set up)
+
+
 
 ```
+Devenv flag file (if it exists, the dev env is set up)
+```
+
 
 
 - Default: `$(ROOT_DIR)/.devenv`
@@ -298,10 +348,13 @@ Devenv flag file (if it exists, the dev env is set up)
         
 ### RUNENV_FILE
 
-```
-Runenv flag file (if it exists, the run env is set up)
+
+
 
 ```
+Runenv flag file (if it exists, the run env is set up)
+```
+
 
 
 - Default: `$(ROOT_DIR)/.runenv`
@@ -313,10 +366,13 @@ Runenv flag file (if it exists, the run env is set up)
         
 ### DEVENV_PREREQ
 
-```
-Devenv prerequisite list (use += to add some targets)
+
+
 
 ```
+Devenv prerequisite list (use += to add some targets)
+```
+
 
 
 - Default: `(empty)`
@@ -328,14 +384,19 @@ Devenv prerequisite list (use += to add some targets)
         
 ### RUNENV_PREREQ
 
-```
-Runenv prerequisite list (use += to add some targets)
+
+
 
 ```
+Runenv prerequisite list (use += to add some targets)
+```
+
 
 
 - Default: `(empty)`
 
 
     
+
+
 

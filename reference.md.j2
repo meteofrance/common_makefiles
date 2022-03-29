@@ -1,13 +1,17 @@
 {% set CMD = "python makefile_to_json.py dist/" + VAR + "_makefile.mk" %}
 {% set C = CMD|shell()|from_json() %}
 
+{% macro docs_macros(docs) %}
+```
+{% for doc in docs %}{{doc}}
+{% endfor -%}
+```
+{% endmacro %}
+
 {% macro target_macro(name, sep, deps, docs) %}
 ### {{name}}
 
-```
-{% for doc in docs %}{{doc}}
-{% endfor %}
-```
+{{ docs_macros(docs) }}
 
 - Dependencies: `{{deps}}`
 {% endmacro %}
@@ -15,10 +19,11 @@
 {% macro var_macro(name, type, default, docs) %}
 ### {{name}}
 
-```
-{% for doc in docs %}{{doc}}
-{% endfor %}
-```
+{% if type == "overridable_before" %}
+**(note: this variable must be specifically overriden BEFORE incuding any common makefiles)**
+{% endif %}
+
+{{ docs_macros(docs) }}
 
 {% if default == "" %}
 - Default: `(empty)`
@@ -28,6 +33,8 @@
 {% endmacro %}
 
 # Doc
+
+{% if C["has_targets_ready_to_use"] %}
 
 ## Targets ready to use
 
@@ -39,6 +46,10 @@
     {% endif %}
 {% endfor %}
 
+{% endif %}
+
+{% if C["has_targets_overridable"] %}
+
 ## Extendable targets
 
 *Note: you can extend these targets in your own `Makefile` with `target_name::` syntax*
@@ -48,6 +59,10 @@
         {{ target_macro(name, sep, deps, docs) }}
     {% endif %}
 {% endfor %}
+
+{% endif %}
+
+{% if C["has_variables_readonly"] %}
 
 ## Read-only variables
 
@@ -59,13 +74,19 @@
     {% endif %}
 {% endfor %}
 
+{% endif %}
+
+{% if C["has_variables_overridable"] %}
+
 ## Overridable variables
 
 *Note: you can override/extend these variables in your own `Makefile`*
 
 {% for name, type, default, docs in C["variables"] %}
-    {% if type == "overridable" %}
+    {% if type == "overridable" or type == "overridable_before" %}
         {{ var_macro(name, type, default, docs) }}
     {% endif %}
 {% endfor %}
+
+{% endif %}
 

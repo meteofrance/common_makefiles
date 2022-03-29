@@ -7,11 +7,11 @@ EXTRA_PYTHON_FILES=dist/extra/python_forced_requirements_filter.py makefile_to_j
 
 all:: common.md shell.md python.md
 
-common.md: reference.md.j2 
+common.md: reference.md.j2 dist/common_makefile.mk
 	$(ENTER_VENV) && export VAR=common && cat "$<" |envtpl >$@
 
-shell.md: reference.md.j2
+shell.md: reference.md.j2 dist/shell_makefile.mk
 	$(ENTER_VENV) && export VAR=shell && cat "$<" |envtpl >$@
 
-python.md: reference.md.j2
+python.md: reference.md.j2 dist/python_makefile.mk
 	$(ENTER_VENV) && export VAR=python && cat "$<" |envtpl >$@
