@@ -26,12 +26,15 @@ else
 endif
 
 $(ROOT_TOOLS)/shellcheck:
+	$(call header2,Installing shellcheck...)
 	@mkdir -p "$(ROOT_TOOLS)"
 	@mkdir -p "$(ROOT_TMP)"
 	$(WGET) -O "$(ROOT_TMP)/shellcheck-stable.linux.x86_64.tar.xz" "$(SHELLCHECK_URL)"
 	cd "$(ROOT_TMP)" && cat shellcheck-stable.linux.x86_64.tar.xz |tar xfJ - && cp -f shellcheck-stable/shellcheck $(ROOT_TOOLS)/shellcheck && rm -Rf shellcheck-stable shellcheck-stable.linux.x86_64.tar.xz
+	cd "$(ROOT_TMP)" && rm -Rf shellcheck*
+	$(call header2,shellcheck installed)
 
-remove_devenv::
+_remove_devenv::
 	rm -Rf $(ROOT_TOOLS)/shellcheck
 
 .PHONY: lint_shellcheck
@@ -39,7 +42,7 @@ lint_shellcheck:
 	@echo "Linting with shellcheck..."
 	"$(_SHELLCHECK_BIN)" $(SHELLCHECK_ARGS) $(SHELLCHECK_FILES)
 
-lint::
+_lint::
 	@test -n "$(_SHELLCHECK_BIN)" && test -n "$(SHELLCHECK_FILES)" && $(MAKE) lint_shellcheck
 
 _debug::

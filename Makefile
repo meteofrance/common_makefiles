@@ -5,7 +5,7 @@ include .common_makefiles/python_makefile.mk
 REMOVE_DIST=0
 EXTRA_PYTHON_FILES=dist/extra/python_forced_requirements_filter.py makefile_to_json.py
 
-all:: common.md shell.md python.md
+all:: devenv common.md shell.md python.md
 
 common.md: reference.md.j2 dist/common_makefile.mk
 	$(ENTER_VENV) && export VAR=common && cat "$<" |envtpl >$@

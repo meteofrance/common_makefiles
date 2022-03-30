@@ -5,6 +5,26 @@
 .DEFAULT_GOAL: default
 SHELL=/bin/bash
 
+# define standard colors
+ifneq (,$(findstring xterm,${TERM}))
+	BOLD        := $(shell tput -Txterm bold)
+	RED         := $(shell tput -Txterm setaf 1)
+	BLUE         := $(shell tput -Txterm setaf 6)
+	RESET       := $(shell tput -Txterm sgr0)
+else
+	BOLD        := ""
+	RED         := ""
+	BLUE        := ""
+	RESET       := ""
+endif
+
+define header1
+    @CAP=$$(echo $1 |tr '/a-z/' '/A-Z/') ; printf "$(BOLD)***** $${CAP} *****$(RESET)\n"
+endef
+define header2
+	@printf "$(BLUE)*** $1 ***$(RESET)\n"
+endef
+
 #+ Binary to use for git
 GIT?=git
 
@@ -40,9 +60,23 @@ RUNENV_FILE?=$(ROOT_DIR)/.runenv
 
 #+ Devenv prerequisite list (use += to add some targets)
 DEVENV_PREREQ?=
+_DEVENV_PREREQ=
+ifneq ("$(wildcard $(RUNENV_FILE))","")
+    _DEVENV_PREREQ+=remove_runenv
+endif
+ifeq ("$(wildcard $(DEVENV_FILE))","")
+    _DEVENV_PREREQ+=before_devenv
+endif
 
 #+ Runenv prerequisite list (use += to add some targets)
 RUNENV_PREREQ?=
+_RUNENV_PREREQ=
+ifneq ("$(wildcard $(DEVENV_FILE))","")
+    _RUNENV_PREREQ+=remove_devenv _after_remove_devenv
+endif
+ifeq ("$(wildcard $(RUNENV_FILE))","")
+    _RUNENV_PREREQ+=before_runenv
+endif
 
 .PHONY: default
 default:: _make_help_banner all
@@ -58,12 +92,6 @@ ifneq ("$(wildcard $(DEVENV_FILE))","")
 endif
 all:: before_all $(_ALL_PREREQ)
 before_all::
-
-.PHONY: clean before_clean
-clean:: before_clean ## Clean build and temporary files
-	rm -Rf .refresh_makefiles.tmp "$(ROOT_TMP)" "$(ROOT_TOOLS)"
-	rm -f "$(DEVENV_FILE)" "$(RUNENV_FILE)"
-before_clean::
 
 .PHONY: refresh before_refresh
 refresh:: before_refresh refresh_common_makefiles ## Refresh all things
@@ -83,42 +111,100 @@ help::
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' "$(ROOT_DIR)/.tmp/help.txt" | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 	@rm -f "$(ROOT_DIR)/.tmp/help.txt"
 
-.PHONY: devenv before_devenv _devenv remove_devenv
+.PHONY: devenv before_devenv remove_devenv _after_remove_devenv before_remove_devenv custom_remove_devenv _remove_devenv
 devenv: $(DEVENV_FILE) ## Prepare dev environment
-$(DEVENV_FILE): $$(DEVENV_PREREQ)
-	if test -f "$(RUNENV_FILE)"; then $(MAKE) remove_runenv; fi
-	$(MAKE) _devenv
-	touch "$@"
-_devenv:: before_devenv
+$(DEVENV_FILE): $$(_DEVENV_PREREQ) $$(DEVENV_PREREQ)
+	$(call header1,devenv is ready)
+	@touch "$@"
 before_devenv::
-remove_devenv::
-	rm -f $(DEVENV_FILE)
+	$(call header1,Building devenv)
+remove_devenv: before_remove_devenv _remove_devenv custom_remove_devenv _after_remove_devenv
+_remove_devenv::
+before_remove_devenv::
+	$(call header1,Removing devenv)
+custom_remove_devenv::
+	$(call header2,Calling custom_remove_devenv)
+_after_remove_devenv:
+	@rm -f $(DEVENV_FILE)
+	$(call header1,Devenv removed)
 
-.PHONY: runenv before_runenv _runenv remove_runenv
+.PHONY: runenv before_runenv remove_runenv _after_remove_runenv before_remove_runenv custom_remove_runenv _remove_runenv
 runenv: $(RUNENV_FILE) ## Prepare run environment
-$(RUNENV_FILE): $$(RUNENV_PREREQ)
-	if test -f "$(DEVENV_FILE)"; then $(MAKE) remove_devenv; fi
-	$(MAKE) _runenv
-	touch "$@"
-_runenv:: before_runenv
+$(RUNENV_FILE): $$(_RUNENV_PREREQ) $$(RUNENV_PREREQ)
+	$(call header1,runenv is ready)
+	@touch "$@"
 before_runenv::
-remove_runenv::
-	rm -f $(RUNENV_FILE)
+	$(call header1,Building runenv)
+remove_runenv: before_remove_runenv _remove_runenv custom_remove_runenv _after_remove_runenv
+_remove_runenv::
+before_remove_runenv::
+	$(call header1,Removing runenv)
+custom_remove_runenv::
+	$(call header2,Calling custom_remove_runenv)
+_after_remove_runenv:
+	@rm -f $(RUNENV_FILE)
+	$(call header1,Runenv removed)
 
-.PHONY: lint before_lint
-lint:: before_lint ## Lint the code
-
-#+ target executed before lint target
+.PHONY: lint before_lint custom_lint _after_lint _lint
+lint: before_lint _lint custom_lint _after_lint ## Lint the code
+#+ target executed before linting
 before_lint:: devenv
+	$(call header1,Linting)
+	$(call header2,Calling before_lint target)
+_lint::
+	$(call header2,Common linting)
+#+ custom linting target
+custom_lint::
+	$(call header2,Calling custom_lint target)
+_after_lint:
+	$(call header1,Linting OK)
 
-.PHONY: reformat before_reformat
-reformat:: before_reformat ## Reformat sources and tests
+.PHONY: reformat before_reformat custom_reformat _after_reformat _reformat
+reformat: before_reformat _reformat custom_reformat _after_reformat ## Reformat sources and tests
+#+ target executed before reformating
 before_reformat:: devenv
+	$(call header1,Reformating)
+	$(call header2,Calling before_reformat target)
+_reformat::
+	$(call header2,Common reformating)
+#+ custom reformating target
+custom_reformat::
+	$(call header2,Calling custom_lint target)
+_after_reformat:
+	$(call header1,Reformating OK)
 
-.PHONY: check before_check tests
-check:: before_check
+.PHONY: clean before_clean
+clean: before_clean _clean custom_clean _after_clean ## Clean build and temporary files
+#+ target executed before cleaning
+before_clean::
+	$(call header1,Cleaning)
+	$(call header2,Calling before_clean target)
+_clean:: remove_devenv remove_runenv
+	$(call header2,Common cleaning)
+	rm -Rf .refresh_makefiles.tmp "$(ROOT_TMP)" "$(ROOT_TOOLS)"
+	rm -f "$(DEVENV_FILE)" "$(RUNENV_FILE)"
+#+ custom reformating target
+custom_clean::
+	$(call header2,Calling custom_clean target)
+_after_clean:
+	$(call header1,Cleaning OK)
+
+
+.PHONY: check before_check custom_check _after_check _check tests
+check: before_check _check custom_check _after_check ## Execute tests
+#+ target executed before tests
 before_check:: devenv
-tests: check ## Simple alias for "check" target
+	$(call header1,Executing tests)
+	$(call header2,Calling before_check target)
+_check::
+	$(call header2,Common checks)
+#+ custom check target
+custom_check::
+	$(call header2,Calling custom_check target)
+_after_check:
+	$(call header1,Checks OK)
+## Simple alias for "check" target
+tests: check
 
 .PHONY: coverage_console before_coverage_console
 coverage_console:: before_coverage_console ## Execute unit-tests and show coverage in console

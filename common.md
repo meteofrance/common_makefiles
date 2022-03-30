@@ -19,8 +19,6 @@
     
 
     
-
-    
         
 ### devenv
 
@@ -49,6 +47,58 @@ Prepare run environment
     
 
     
+        
+### lint
+
+
+```
+Lint the code
+```
+
+
+- Dependencies: `before_lint _lint custom_lint _after_lint`
+
+    
+
+    
+        
+### reformat
+
+
+```
+Reformat sources and tests
+```
+
+
+- Dependencies: `before_reformat _reformat custom_reformat _after_reformat`
+
+    
+
+    
+        
+### clean
+
+
+```
+Clean build and temporary files
+```
+
+
+- Dependencies: `before_clean _clean custom_clean _after_clean`
+
+    
+
+    
+        
+### check
+
+
+```
+Execute tests
+```
+
+
+- Dependencies: `before_check _check custom_check _after_check`
 
     
 
@@ -78,20 +128,6 @@ Simple alias for "check" target
 
     
         
-### clean
-
-
-```
-Clean build and temporary files
-```
-
-
-- Dependencies: `before_clean`
-
-    
-
-    
-        
 ### refresh
 
 
@@ -109,30 +145,10 @@ Refresh all things
     
 
     
-        
-### lint
-
-
-```
-Lint the code
-```
-
-
-- Dependencies: `before_lint`
 
     
 
     
-        
-### reformat
-
-
-```
-Reformat sources and tests
-```
-
-
-- Dependencies: `before_reformat`
 
     
 

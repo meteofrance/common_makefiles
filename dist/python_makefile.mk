@@ -195,11 +195,13 @@ else
 endif
 
 $(ROOT_TOOLS)/python/bin/python3:
+	$(call header2,Installing python...)
 	@mkdir -p "$(ROOT_TOOLS)"
 	@mkdir -p "$(ROOT_TMP)"
 	@rm -Rf "$(ROOT_TOOLS)/python"
 	$(WGET) -O "$(ROOT_TMP)/python.tar.gz" "$(_PYTHON_URL)"
 	cd "$(ROOT_TOOLS)" && zcat "$(ROOT_TMP)/python.tar.gz" |tar xf -
+	$(call header2,python installed)
 
 $(ROOT_TOOLS)/python/bin/python3.8:
 	@rm -Rf $(ROOT_TOOLS)/python
@@ -217,6 +219,8 @@ $(ROOT_TOOLS)/python/bin/python3.10:
 ########################################
 ##### venv/requirements management #####
 ########################################
+DEVENV_PREREQ+=$(VENV_DIR)/devenv
+RUNENV_PREREQ+=$(VENV_DIR)/runenv
 _PIP=pip3
 _MAKE_VIRTUALENV=$(_PYTHON_BIN) -m venv
 ENTER_TEMP_VENV=. $(VENV_DIR).temp/bin/activate
@@ -292,29 +296,25 @@ _rm_requirements:
 	rm -f $(REQS_DIR)/devrequirements.txt
 	rm -f $(REQS_DIR)/requirements.txt
 
-_devenv:: $(REQS_DIR)/devrequirements.txt
+$(VENV_DIR)/devenv: $(REQS_DIR)/devrequirements.txt
 	rm -Rf "$(VENV_DIR)"
 	$(_MAKE_VIRTUALENV) "$(VENV_DIR)"
 	if test -f "$(REQS_DIR)/predevrequirements.txt"; then $(ENTER_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/predevrequirements.txt"; fi
 	$(ENTER_VENV) && $(_PIP_INSTALL) -r "$<"
 	if test -f setup.py; then $(ENTER_VENV) && $(_PIP_INSTALL) -e .; fi
+	touch "$@"
 
-_runenv:: $(REQS_DIR)/requirements.txt
+$(VENV_DIR)/runenv: $(REQS_DIR)/requirements.txt
 	rm -Rf "$(VENV_DIR)"
 	$(_MAKE_VIRTUALENV) "$(VENV_DIR)"
 	if test -f "$(REQS_DIR)/prerequirements.txt"; then $(ENTER_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/prerequirements.txt"; fi
 	$(ENTER_VENV) && $(_PIP_INSTALL) -r "$<"
+	touch "$@"
 
-#+ target to remove the "dev env"
-#+ you can add some specific things in this target
-#+ (of course by default we remove completly the virtualenv)
-remove_devenv::
+_remove_devenv::
 	rm -Rf "$(VENV_DIR)"
 
-#+ target to remove the "run env"
-#+ you can add some specific things in this target
-#+ (of course by default we remove completly the virtualenv)
-remove_runenv::
+_remove_runenv::
 	rm -Rf "$(VENV_DIR)"
 
 ################
@@ -365,7 +365,7 @@ lint_safety_dev:
 	echo "Linting with safety (dev deps)..."
 	$(ENTER_VENV) && $(SAFETY) $(SAFETY_CHECK_OPTIONS) -r "$(REQS_DIR)/devrequirements.txt"
 
-lint::
+_lint::
 	@test -n "$(BLACK)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(BLACK) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_black
 	@test -n "$(ISORT)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(ISORT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_isort
 	@test -n "$(FLAKE8)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(FLAKE8) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_flake8
@@ -390,7 +390,7 @@ reformat_isort:
 	echo "$(ISORT) $(ISORT_REFORMAT_OPTIONS) $(_APP_AND_TEST_DIRS)"
 	@$(ENTER_VENV) && $(ISORT) $(ISORT_REFORMAT_OPTIONS) $(_APP_AND_TEST_DIRS)
 
-reformat::
+_reformat::
 	@test -n "$(BLACK)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(BLACK) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) reformat_black
 	@test -n "$(ISORT)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(ISORT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) reformat_isort
 
@@ -417,7 +417,7 @@ coverage_sonar_pytest:
 	echo "Coveraging with pytest (sonar)..."
 	$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(PYTEST) $(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_SONAR_OPTIONS) $(TEST_DIRS)
 
-check::
+_check::
 	@test -n "$(PYTEST)" && test -n "$(TEST_DIRS)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) check_pytest
 
 coverage_console::
@@ -458,7 +458,7 @@ _debug::
 	@echo "_PYTHON_URL=$(_PYTHON_URL)"
 	@echo "REQS_DIR=$(REQS_DIR)"
 
-clean:: remove_devenv remove_runenv
+_clean::
 	rm -Rf $(VENV_DIR).temp htmlcov *.egg-info .mypy_cache .pytest_cache coverage.xml .coverage
 	if test "$(REMOVE_DIST)" = "1"; then rm -Rf dist; fi
 	if test "$(REMOVE_BUILD)" = "1"; then rm -Rf build; fi
