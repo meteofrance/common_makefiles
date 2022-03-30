@@ -449,7 +449,7 @@ upload:: clean devenv sdist  ## Upload to Pypi
 ################
 ##### misc #####
 ################
-refresh::
+_refresh::
 	$(MAKE) refresh_venv
 
 _debug::

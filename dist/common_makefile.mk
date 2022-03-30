@@ -93,16 +93,6 @@ endif
 all:: before_all $(_ALL_PREREQ)
 before_all::
 
-.PHONY: refresh before_refresh
-refresh:: before_refresh refresh_common_makefiles ## Refresh all things
-before_refresh::
-
-.PHONY: refresh_common_makefiles
-refresh_common_makefiles: ## Refresh common makefiles from repository
-	rm -Rf .refresh_makefiles.tmp && mkdir -p .refresh_makefiles.tmp
-	cd .refresh_makefiles.tmp && $(_GIT_CLONE_DEPTH_1) $(COMMON_MAKEFILES_GIT_URL) && $(_GIT_CHECKOUT_BRANCH) && rm -Rf ../.common_makefiles && mv common_makefiles/dist ../.common_makefiles
-	rm -Rf .refresh_makefiles.tmp
-
 .PHONY: help
 help::
 	@mkdir -p "$(ROOT_TMP)"
@@ -189,7 +179,6 @@ custom_clean::
 _after_clean:
 	$(call header1,Cleaning OK)
 
-
 .PHONY: check before_check custom_check _after_check _check tests
 check: before_check _check custom_check _after_check ## Execute tests
 #+ target executed before tests
@@ -205,6 +194,25 @@ _after_check:
 	$(call header1,Checks OK)
 ## Simple alias for "check" target
 tests: check
+
+.PHONY: refresh before_refresh custom_refresh _after_refresh _refresh refresh_common_makefiles
+refresh: before_refresh _refresh custom_refresh _after_refresh ## Refresh all things
+before_refresh::
+	$(call header1,Refreshing)
+	$(call header2,Calling before_refresh target)
+_refresh::
+	$(call header2,Common refreshing)
+_refresh:: refresh_common_makefiles
+custom_refresh::
+	$(call header2,Calling custom_refresh target)
+_after_refresh:
+	$(call header1,Refresh OK)
+refresh_common_makefiles: ## Refresh common makefiles from repository
+	$(call header2,Refreshing common makefiles)
+	rm -Rf .refresh_makefiles.tmp && mkdir -p .refresh_makefiles.tmp
+	cd .refresh_makefiles.tmp && $(_GIT_CLONE_DEPTH_1) $(COMMON_MAKEFILES_GIT_URL) && $(_GIT_CHECKOUT_BRANCH) && rm -Rf ../.common_makefiles && mv common_makefiles/dist ../.common_makefiles
+	rm -Rf .refresh_makefiles.tmp
+	$(call header2,common makefiles refreshed)
 
 .PHONY: coverage_console before_coverage_console
 coverage_console:: before_coverage_console ## Execute unit-tests and show coverage in console
