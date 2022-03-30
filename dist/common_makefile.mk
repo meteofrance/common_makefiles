@@ -128,9 +128,12 @@ before_coverage_console:: devenv
 coverage_html:: before_coverage_html ## Execute unit-tests and show coverage in html
 before_coverage_html:: devenv
 
-.PHONY: coverage_sonar before_coverage_sonar
+.PHONY: coverage_sonar before_coverage_sonar coverage_xml
 coverage_sonar:: before_coverage_sonar ## Execute unit-tests and build coverage file for sonarqube
 before_coverage_sonar:: devenv
+
+## simple alias of coverage_sonar target
+coverage_xml: coverage_sonar
 
 .PHONY: _debug
 _debug:: ## Dump common_makefiles configuration
