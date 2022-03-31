@@ -102,7 +102,7 @@ _remove_devenv::
 before_remove_devenv::
 	@$(HEADER2) "Removing devenv"
 custom_remove_devenv::
-	@$(callheader2,Calling custom_remove_devenv)
+	@$(HEADER2) "Calling custom_remove_devenv"
 _after_remove_devenv:
 	@rm -f $(DEVENV_FILE)
 	@$(HEADER2) "Devenv removed"
@@ -119,7 +119,7 @@ _remove_runenv::
 before_remove_runenv::
 	@$(HEADER2) "Removing runenv"
 custom_remove_runenv::
-	@$(callheader2,Calling custom_remove_runenv)
+	@$(HEADER2) "Calling custom_remove_runenv"
 _after_remove_runenv:
 	@rm -f $(RUNENV_FILE)
 	@$(HEADER2) "Runenv removed"
@@ -129,12 +129,12 @@ lint: before_lint _lint custom_lint _after_lint ## Lint the code
 #+ target executed before linting
 before_lint:: devenv
 	@$(HEADER1) "Linting"
-	@$(callheader2,Calling before_lint target)
+	@$(HEADER2) "Calling before_lint target"
 _lint::
-	@$(callheader2,Common linting)
+	@$(HEADER2) "Common linting"
 #+ custom linting target
 custom_lint::
-	@$(callheader2,Calling custom_lint target)
+	@$(HEADER2) "Calling custom_lint target"
 _after_lint:
 	@$(HEADER1) "Linting OK"
 
@@ -143,12 +143,12 @@ reformat: before_reformat _reformat custom_reformat _after_reformat ## Reformat 
 #+ target executed before reformating
 before_reformat:: devenv
 	@$(HEADER1) "Reformating"
-	@$(callheader2,Calling before_reformat target)
+	@$(HEADER2) "Calling before_reformat target"
 _reformat::
-	@$(callheader2,Common reformating)
+	@$(HEADER2) "Common reformating"
 #+ custom reformating target
 custom_reformat::
-	@$(callheader2,Calling custom_lint target)
+	@$(HEADER2) "Calling custom_lint target"
 _after_reformat:
 	@$(HEADER1) "Reformating OK"
 
@@ -157,14 +157,14 @@ clean: before_clean _clean custom_clean _after_clean ## Clean build and temporar
 #+ target executed before cleaning
 before_clean::
 	@$(HEADER1) "Cleaning"
-	@$(callheader2,Calling before_clean target)
+	@$(HEADER2) "Calling before_clean target"
 _clean:: remove_devenv remove_runenv
-	@$(callheader2,Common cleaning)
+	@$(HEADER2) "Common cleaning"
 	rm -Rf .refresh_makefiles.tmp "$(ROOT_TMP)" "$(ROOT_TOOLS)"
 	rm -f "$(DEVENV_FILE)" "$(RUNENV_FILE)"
 #+ custom reformating target
 custom_clean::
-	@$(callheader2,Calling custom_clean target)
+	@$(HEADER2) "Calling custom_clean target"
 _after_clean:
 	@$(HEADER1) "Cleaning OK"
 
@@ -173,12 +173,12 @@ check: before_check _check custom_check _after_check ## Execute tests
 #+ target executed before tests
 before_check:: devenv
 	@$(HEADER1) "Executing checks"
-	@$(callheader2,Calling before_check target)
+	@$(HEADER2) "Calling before_check target"
 _check::
-	@$(callheader2,Common checks)
+	@$(HEADER2) "Common checks"
 #+ custom check target
 custom_check::
-	@$(callheader2,Calling custom_check target)
+	@$(HEADER2) "Calling custom_check target"
 _after_check:
 	@$(HEADER1) "Checks OK"
 ## Simple alias for "check" target
@@ -188,32 +188,32 @@ tests: check
 refresh: before_refresh _refresh custom_refresh _after_refresh ## Refresh all things
 before_refresh::
 	@$(HEADER1) "Refreshing"
-	@$(callheader2,Calling before_refresh target)
+	@$(HEADER2) "Calling before_refresh target"
 _refresh::
-	@$(callheader2,Common refreshing)
+	@$(HEADER2) "Common refreshing"
 _refresh:: refresh_common_makefiles
 custom_refresh::
-	@$(callheader2,Calling custom_refresh target)
+	@$(HEADER2) "Calling custom_refresh target"
 _after_refresh:
 	@$(HEADER1) "Refresh OK"
 refresh_common_makefiles: ## Refresh common makefiles from repository
-	@$(callheader2,Refreshing common makefiles)
+	@$(HEADER2) "Refreshing common makefiles"
 	rm -Rf .refresh_makefiles.tmp && mkdir -p .refresh_makefiles.tmp
 	cd .refresh_makefiles.tmp && $(_GIT_CLONE_DEPTH_1) $(COMMON_MAKEFILES_GIT_URL) && $(_GIT_CHECKOUT_BRANCH) && rm -Rf ../.common_makefiles && mv common_makefiles/dist ../.common_makefiles
 	rm -Rf .refresh_makefiles.tmp
-	@$(callheader2,common makefiles refreshed)
+	@$(HEADER2) "common makefiles refreshed"
 
 .PHONY: coverage_console before_coverage_console _coverage_console custom_coverage_console _after_coverage_console
 coverage_console: before_coverage_console _coverage_console custom_coverage_console _after_coverage_console ## Execute unit-tests and show coverage on console
 #+ target executed before coverage_console
 before_coverage_console:: devenv
 	@$(HEADER1) "Coveraging (console)"
-	@$(callheader2,Calling before_coverage_console target)
+	@$(HEADER2) "Calling before_coverage_console target"
 _coverage_console::
-	@$(callheader2,Common coveraging (console))
+	@$(HEADER2) "Common coveraging (console)"
 #+ custom coverage_console target
 custom_coverage_console::
-	@$(callheader2,Calling custom_coverage_console target)
+	@$(HEADER2) "Calling custom_coverage_console target"
 _after_coverage_console:
 	@$(HEADER1) "Coveraging (console) OK"
 
@@ -226,12 +226,12 @@ coverage_html: before_coverage_html _coverage_html custom_coverage_html _after_c
 #+ target executed before coverage_html
 before_coverage_html:: devenv
 	@$(HEADER1) "Coveraging (html)"
-	@$(callheader2,Calling before_coverage_html target)
+	@$(HEADER2) "Calling before_coverage_html target"
 _coverage_html::
-	@$(callheader2,Common coveraging (html))
+	@$(HEADER2) "Common coveraging (html)"
 #+ custom coverage_html target
 custom_coverage_html::
-	@$(callheader2,Calling custom_coverage_html target)
+	@$(HEADER2) "Calling custom_coverage_html target"
 _after_coverage_html:
 	@$(HEADER1) "Coveraging (html) OK"
 
@@ -240,12 +240,12 @@ coverage_sonar: before_coverage_sonar _coverage_sonar custom_coverage_sonar _aft
 #+ target executed before coverage_sonar
 before_coverage_sonar:: devenv
 	@$(HEADER1) "Coveraging (sonar)"
-	@$(callheader2,Calling before_coverage_sonar target)
+	@$(HEADER2) "Calling before_coverage_sonar target"
 _coverage_sonar::
-	@$(callheader2,Common coveraging (sonar))
+	@$(HEADER2) "Common coveraging (sonar)"
 #+ custom coverage_sonar target
 custom_coverage_sonar::
-	@$(callheader2,Calling custom_coverage_sonar target)
+	@$(HEADER2) "Calling custom_coverage_sonar target"
 _after_coverage_sonar:
 	@$(HEADER1) "Coveraging (sonar) OK"
 
