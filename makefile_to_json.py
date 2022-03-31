@@ -13,8 +13,8 @@ variables: List[Tuple[str, str, str, List[str]]] = []
 targets: List[Tuple[str, str, str, List[str]]] = []
 
 VARIABLE_PATTERN = r"^([A-Z0-9_]+).*=(.*)$"
-TARGET_PATTERN = r"^([a-z0-9]+)(:{1,2})(.*)$"
-WITH_DOC_TARGET_PATTERN = r"^([a-z0-9]+)(:{1,2})(.*)## (.*)$"
+TARGET_PATTERN = r"^([a-z0-9_]+)(:{1,2})(.*)$"
+WITH_DOC_TARGET_PATTERN = r"^([a-z0-9_]+)(:{1,2})(.*)## (.*)$"
 
 for line in lines:
     if line.startswith("\t"):

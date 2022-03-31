@@ -11,6 +11,28 @@
 
 
 
+## Targets ready to use
+
+*Note: you can't override these targets but you can use them!*
+
+
+    
+        
+### lint_shellcheck
+
+
+```
+Lint the code with shellcheck
+```
+
+
+- Dependencies: ``
+
+    
+
+
+
+
 
 
 

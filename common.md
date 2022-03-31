@@ -59,6 +59,10 @@ Lint the code
     
 
     
+
+    
+
+    
         
 ### reformat
 
@@ -69,6 +73,10 @@ Reformat sources and tests
 
 
 - Dependencies: `before_reformat _reformat custom_reformat _after_reformat`
+
+    
+
+    
 
     
 
@@ -87,6 +95,10 @@ Clean build and temporary files
     
 
     
+
+    
+
+    
         
 ### check
 
@@ -97,6 +109,10 @@ Execute tests
 
 
 - Dependencies: `before_check _check custom_check _after_check`
+
+    
+
+    
 
     
 
@@ -130,6 +146,38 @@ Refresh all things
 
     
         
+### refresh_common_makefiles
+
+
+```
+Refresh common makefiles from repository
+```
+
+
+- Dependencies: ``
+
+    
+
+    
+        
+### coverage_console
+
+
+```
+Execute unit-tests and show coverage on console
+```
+
+
+- Dependencies: `before_coverage_console _coverage_console custom_coverage_console _after_coverage_console`
+
+    
+
+    
+
+    
+
+    
+        
 ### coverage
 
 
@@ -142,7 +190,305 @@ simple alias to coverage_console
 
     
 
+    
+        
+### coverage_html
 
+
+```
+Execute unit-tests and show coverage in html
+```
+
+
+- Dependencies: `before_coverage_html _coverage_html custom_coverage_html _after_coverage_html`
+
+    
+
+    
+
+    
+
+    
+        
+### coverage_sonar
+
+
+```
+Execute unit-tests and compute coverage for sonarqube
+```
+
+
+- Dependencies: `before_coverage_sonar _coverage_sonar custom_coverage_sonar _after_coverage_sonar`
+
+    
+
+    
+
+    
+
+    
+        
+### coverage_xml
+
+
+```
+simple alias of coverage_sonar target
+```
+
+
+- Dependencies: `coverage_sonar`
+
+    
+
+    
+
+
+
+
+
+
+## Extendable targets
+
+*Note: you can extend these targets in your own `Makefile` with `target_name::` syntax*
+
+
+    
+
+    
+
+    
+
+    
+        
+### before_lint
+
+
+```
+target executed before linting
+```
+
+
+- Dependencies: `devenv`
+
+    
+
+    
+        
+### custom_lint
+
+
+```
+custom linting target
+```
+
+
+- Dependencies: ``
+
+    
+
+    
+
+    
+        
+### before_reformat
+
+
+```
+target executed before reformating
+```
+
+
+- Dependencies: `devenv`
+
+    
+
+    
+        
+### custom_reformat
+
+
+```
+custom reformating target
+```
+
+
+- Dependencies: ``
+
+    
+
+    
+
+    
+        
+### before_clean
+
+
+```
+target executed before cleaning
+```
+
+
+- Dependencies: ``
+
+    
+
+    
+        
+### custom_clean
+
+
+```
+custom reformating target
+```
+
+
+- Dependencies: ``
+
+    
+
+    
+
+    
+        
+### before_check
+
+
+```
+target executed before tests
+```
+
+
+- Dependencies: `devenv`
+
+    
+
+    
+        
+### custom_check
+
+
+```
+custom check target
+```
+
+
+- Dependencies: ``
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        
+### before_coverage_console
+
+
+```
+target executed before coverage_console
+```
+
+
+- Dependencies: `devenv`
+
+    
+
+    
+        
+### custom_coverage_console
+
+
+```
+custom coverage_console target
+```
+
+
+- Dependencies: ``
+
+    
+
+    
+
+    
+
+    
+        
+### before_coverage_html
+
+
+```
+target executed before coverage_html
+```
+
+
+- Dependencies: `devenv`
+
+    
+
+    
+        
+### custom_coverage_html
+
+
+```
+custom coverage_html target
+```
+
+
+- Dependencies: ``
+
+    
+
+    
+
+    
+        
+### before_coverage_sonar
+
+
+```
+target executed before coverage_sonar
+```
+
+
+- Dependencies: `devenv`
+
+    
+
+    
+        
+### custom_coverage_sonar
+
+
+```
+custom coverage_sonar target
+```
+
+
+- Dependencies: ``
+
+    
+
+    
+
+    
+        
+### _debug
+
+
+```
+Dump common_makefiles configuration
+```
+
+
+- Dependencies: ``
+
+    
 
 
 

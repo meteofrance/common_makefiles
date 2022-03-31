@@ -31,6 +31,104 @@ simple alias of devenv target
     
 
     
+        
+### refresh_venv
+
+
+```
+Update all *requirements.txt files from *requirements-freezed.txt and pip repositories
+```
+
+
+- Dependencies: `remove_devenv remove_runenv _rm_requirements devenv`
+
+    
+
+    
+        
+### reformat_black
+
+
+```
+Reformat sources and tests with black
+```
+
+
+- Dependencies: ``
+
+    
+
+    
+        
+### reformat_isort
+
+
+```
+Reformat sources and tests with isort
+```
+
+
+- Dependencies: ``
+
+    
+
+    
+        
+### check_pytest
+
+
+```
+Check with pytest
+```
+
+
+- Dependencies: ``
+
+    
+
+    
+        
+### coverage_console_pytest
+
+
+```
+Execute unit-tests and show coverage on console (with pytest)
+```
+
+
+- Dependencies: ``
+
+    
+
+    
+        
+### coverage_html_pytest
+
+
+```
+Execute unit-tests and show coverage in html (with pytest)
+```
+
+
+- Dependencies: ``
+
+    
+
+    
+        
+### coverage_sonar_pytest
+
+
+```
+Execute unit-tests and compute coverage for sonarqube (with pytest)
+```
+
+
+- Dependencies: ``
+
+    
+
+    
 
     
 
@@ -45,6 +143,20 @@ simple alias of devenv target
 
 *Note: you can extend these targets in your own `Makefile` with `target_name::` syntax*
 
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 
     
 
