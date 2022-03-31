@@ -27,7 +27,7 @@ BLACK?=black
 BLACK_REFORMAT_OPTIONS?=--line-length=$(_MAX_LINE_LENGTH_MINUS_1)
 
 #+ black lint options
-BLACK_LINT_OPTIONS?=$(BLACK_REFORMAT_OPTIONS) --quiet
+BLACK_LINT_OPTIONS?=$(BLACK_REFORMAT_OPTIONS) --quiet --check
 
 #+ isort binary to use
 #+ (binary name or path) => use this binary name/path (if exists)
@@ -194,26 +194,29 @@ else
 	_PYTHON_BIN=$(shell which $(PYTHON))
 endif
 
-$(ROOT_TOOLS)/python/bin/python3:
-	$(call header2,Installing python...)
-	@mkdir -p "$(ROOT_TOOLS)"
-	@mkdir -p "$(ROOT_TMP)"
-	@rm -Rf "$(ROOT_TOOLS)/python"
+define install_python
+	@$(HEADER2) "Installing python..."
+	mkdir -p "$(ROOT_TOOLS)"
+	mkdir -p "$(ROOT_TMP)"
+	rm -Rf "$(ROOT_TOOLS)/python"
 	$(WGET) -O "$(ROOT_TMP)/python.tar.gz" "$(_PYTHON_URL)"
 	cd "$(ROOT_TOOLS)" && zcat "$(ROOT_TMP)/python.tar.gz" |tar xf -
-	$(call header2,python installed)
+	@$(HEADER2) "python installed"
+endef
+
+$(ROOT_TOOLS)/python/bin/python3:
 
 $(ROOT_TOOLS)/python/bin/python3.8:
 	@rm -Rf $(ROOT_TOOLS)/python
-	@$(MAKE) $(ROOT_TOOLS)/python/bin/python3
+	$(call install_python)
 
 $(ROOT_TOOLS)/python/bin/python3.9:
 	@rm -Rf $(ROOT_TOOLS)/python
-	@$(MAKE) $(ROOT_TOOLS)/python/bin/python3
+	$(call install_python)
 
 $(ROOT_TOOLS)/python/bin/python3.10:
 	@rm -Rf $(ROOT_TOOLS)/python
-	@$(MAKE) $(ROOT_TOOLS)/python/bin/python3
+	$(call install_python)
 
 
 ########################################
@@ -253,34 +256,42 @@ RUNENV_PREREQ+=$(REQS_DIR)/requirements.txt
 devvenv: devenv
 
 $(REQS_DIR)/prerequirements.txt: $(REQS_DIR)/prerequirements-notfreezed.txt
+	@$(HEADER2) "Creating $@ from $^"
 	rm -Rf "$(VENV_DIR).temp"
 	$(_MAKE_VIRTUALENV) "$(VENV_DIR).temp"
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
 	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) >"$@"
 	rm -Rf "$(VENV_DIR).temp"
+	@$(HEADER2) "$@ created"
 
 $(REQS_DIR)/predevrequirements.txt: $(REQS_DIR)/predevrequirements-notfreezed.txt
+	@$(HEADER2) "Creating $@ from $^"
 	rm -Rf "$(VENV_DIR).temp"
 	$(_MAKE_VIRTUALENV) "$(VENV_DIR).temp"
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
 	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) >"$@"
 	rm -Rf "$(VENV_DIR).temp"
+	@$(HEADER2) "$@ created"
 
 $(REQS_DIR)/devrequirements.txt: $(REQS_DIR)/devrequirements-notfreezed.txt $(REQS_DIR)/requirements.txt $(PREDEVREQ)
+	@$(HEADER2) "Creating $@ from $^"
 	rm -Rf "$(VENV_DIR).temp"
 	$(_MAKE_VIRTUALENV) "$(VENV_DIR).temp"
 	if test -f "$(REQS_DIR)/predevrequirements.txt"; then $(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/predevrequirements.txt"; fi
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
 	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(ROOT_COMMON)/extra/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >"$@"
 	rm -Rf "$(VENV_DIR).temp"
+	@$(HEADER2) "$@ created"
 
 $(REQS_DIR)/requirements.txt: $(REQS_DIR)/requirements-notfreezed.txt $(_PREREQ)
+	@$(HEADER2) "Creating $@ from $^"
 	rm -Rf "$(VENV_DIR).temp"
 	$(_MAKE_VIRTUALENV) "$(VENV_DIR).temp"
 	if test -f "$(REQS_DIR)/prerequirements.txt"; then $(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/prerequirements.txt"; fi
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
 	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(ROOT_COMMON)/extra/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >"$@"
 	rm -Rf "$(VENV_DIR).temp"
+	@$(HEADER2) "$@ created"
 
 $(REQS_DIR)/devrequirements-notfreezed.txt:
 	cp -f "$(ROOT_COMMON)/extra/devrequirements-notfreezed.txt" "$@"
@@ -297,19 +308,23 @@ _rm_requirements:
 	rm -f $(REQS_DIR)/requirements.txt
 
 $(VENV_DIR)/devenv: $(REQS_DIR)/devrequirements.txt
+	@$(HEADER2) "Creating $(VENV_DIR) (dev) from $^"
 	rm -Rf "$(VENV_DIR)"
 	$(_MAKE_VIRTUALENV) "$(VENV_DIR)"
 	if test -f "$(REQS_DIR)/predevrequirements.txt"; then $(ENTER_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/predevrequirements.txt"; fi
 	$(ENTER_VENV) && $(_PIP_INSTALL) -r "$<"
 	if test -f setup.py; then $(ENTER_VENV) && $(_PIP_INSTALL) -e .; fi
-	touch "$@"
+	@touch "$@"
+	@$(HEADER2) "$(VENV_DIR) (dev) created"
 
 $(VENV_DIR)/runenv: $(REQS_DIR)/requirements.txt
+	@$(HEADER2) "Creating $(VENV_DIR) (run) from $^"
 	rm -Rf "$(VENV_DIR)"
 	$(_MAKE_VIRTUALENV) "$(VENV_DIR)"
 	if test -f "$(REQS_DIR)/prerequirements.txt"; then $(ENTER_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/prerequirements.txt"; fi
 	$(ENTER_VENV) && $(_PIP_INSTALL) -r "$<"
-	touch "$@"
+	@touch "$@"
+	@$(HEADER2) "$(VENV_DIR) (run) created"
 
 _remove_devenv::
 	rm -Rf "$(VENV_DIR)"
@@ -322,112 +337,73 @@ _remove_runenv::
 ################
 .PHONY: lint_black
 lint_black:
-	echo "Linting with black..."
-	echo "$(BLACK) $(BLACK_LINT_OPTIONS) $(_APP_AND_TEST_DIRS)"
-	@$(ENTER_VENV) && $(BLACK) $(BLACK_LINT_OPTIONS) $(_APP_AND_TEST_DIRS) || ( echo "ERROR: lint errors with black => maybe you can try 'make reformat' to fix this" ; exit 1)
+	@$(ENTER_VENV) && $(LINTER) black "$(BLACK)" "$(_APP_AND_TEST_DIRS)" "$(BLACK) --help" "$(BLACK_LINT_OPTIONS)" "ERROR detected with black reformater => try to execute 'make reformat' to fix this?"
 
 .PHONY: lint_isort
 lint_isort:
-	echo "Linting with isort..."
-	echo "$(ISORT) $(ISORT_LINT_OPTIONS) $(_APP_AND_TEST_DIRS)"
-	@$(ENTER_VENV) && $(ISORT) $(ISORT_LINT_OPTIONS) $(_APP_AND_TEST_DIRS) || ( echo "ERROR: lint errors with isort => maybe you can try 'make reformat' to fix this" ; exit 1)
+	@$(ENTER_VENV) && $(LINTER) isort "$(ISORT)" "$(_APP_AND_TEST_DIRS)" "$(ISORT) --help" "$(ISORT_LINT_OPTIONS)" "ERROR detected with isort reformater => try to execute 'make reformat' to fix this?" 
 
 .PHONY: lint_flake8
 lint_flake8:
-	echo "Linting with flake8..."
-	$(ENTER_VENV) && $(FLAKE8) $(FLAKE8_LINT_OPTIONS) $(_APP_AND_TEST_DIRS)
+	@$(ENTER_VENV) && $(LINTER) flake8 "$(FLAKE8)" "$(_APP_AND_TEST_DIRS)" "$(FLAKE8) --help" "$(FLAKE8_LINT_OPTIONS)"
 
 .PHONY: lint_pylint
 lint_pylint:
-	echo "Linting with pylint..."
-	$(ENTER_VENV) && $(PYLINT) $(PYLINT_LINT_OPTIONS) $(_APP_AND_TEST_DIRS)
+	@$(ENTER_VENV) && $(LINTER) pylint "$(PYLINT)" "$(_APP_AND_TEST_DIRS)" "$(PYLINT) --help" "$(PYLINT_LINT_OPTIONS)"
 
 .PHONY: lint_mypy
 lint_mypy:
-	echo "Linting with mypy..."
-	$(ENTER_VENV) && $(MYPY) $(MYPY_LINT_OPTIONS) $(_APP_AND_TEST_DIRS)
+	@$(ENTER_VENV) && $(LINTER) mypy "$(MYPY)" "$(_APP_AND_TEST_DIRS)" "$(MYPY) --help" "$(MYPY_LINT_OPTIONS)"
 
 .PHONY: lint_bandit
 lint_bandit:
-	echo "Linting with bandit..."
-	$(ENTER_VENV) && $(BANDIT) $(BANDIT_LINT_OPTIONS) $(_APP_AND_TEST_DIRS)
+	@$(ENTER_VENV) && $(LINTER) bandit "$(BANDIT)" "$(_APP_AND_TEST_DIRS)" "$(BANDIT) --help" "$(BANDIT_LINT_OPTIONS)"
 
 .PHONY: lint_imports
 lint_imports:
-	echo "Linting with lint-imports..."
-	$(ENTER_VENV) && $(LINTIMPORTS) --config $(LINTIMPORTS_CONF_FILE)
+	@$(ENTER_VENV) && $(LINTER) lint-imports "$(LINTIMPORTS)" "$(LINTIMPORTS_CONF_FILE)" "$(LINTIMPORTS) --help" "--config $(LINTIMPORTS_CONF_FILE)"
 
 .PHONY: lint_safety_run lint_safety_dev
 lint_safety_run:
-	echo "Linting with safety (runtime deps)..."
-	$(ENTER_VENV) && $(SAFETY) $(SAFETY_CHECK_OPTIONS) -r "$(REQS_DIR)/requirements.txt"
-lint_safety_dev:
-	echo "Linting with safety (dev deps)..."
-	$(ENTER_VENV) && $(SAFETY) $(SAFETY_CHECK_OPTIONS) -r "$(REQS_DIR)/devrequirements.txt"
+	@$(ENTER_VENV) && $(LINTER) "safety (runtime deps)" "$(SAFETY)" "x" "$(SAFETY) --help" "-r $(REQS_DIR)/requirements.txt"
 
-_lint::
-	@test -n "$(BLACK)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(BLACK) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_black
-	@test -n "$(ISORT)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(ISORT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_isort
-	@test -n "$(FLAKE8)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(FLAKE8) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_flake8
-	@test -n "$(PYLINT)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(PYLINT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_pylint
-	@test -n "$(BANDIT)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(BANDIT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_bandit
-	@test -n "$(LINTIMPORTS)" && $(ENTER_VENV) && $(LINTIMPORTS) --help >/dev/null 2>&1 || exit 0 ; if test -f "$(LINTIMPORTS_CONF_FILE)"; then $(MAKE) lint_imports; fi
-	@test -n "$(SAFETY)" && $(ENTER_VENV) && $(SAFETY) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) lint_safety_run
-	@test -n "$(SAFETY)" && $(ENTER_VENV) && $(SAFETY) --help >/dev/null 2>&1 || exit 0 ; if test "$(SAFETY_ON_DEV_DEPS)" = "1"; then $(MAKE) lint_safety_dev; fi
+lint_safety_dev:
+	@$(ENTER_VENV) && $(LINTER) "safety (dev deps)" "$(SAFETY)" "x" "$(SAFETY) --help" "-r $(REQS_DIR)/devrequirements.txt"
+
+_lint:: lint_black lint_isort lint_flake8 lint_pylint lint_mypy lint_bandit lint_imports lint_safety_run lint_safety_dev
 
 ####################
 ##### reformat #####
 ####################
 .PHONY: reformat_black
-reformat_black:
-	echo "Reformat with black..."
-	echo "$(BLACK) $(BLACK_REFORMAT_OPTIONS) $(_APP_AND_TEST_DIRS)"
-	@$(ENTER_VENV) && $(BLACK) $(BLACK_REFORMAT_OPTIONS) $(_APP_AND_TEST_DIRS)
+reformat_black: ## Reformat sources and tests with black
+	@$(ENTER_VENV) && $(REFORMATER) "black" "$(BLACK)" "$(_APP_AND_TEST_DIRS)" "$(BLACK) --help" "$(BLACK_REFORMAT_OPTIONS)" 
 
 .PHONY: reformat_isort
-reformat_isort:
-	echo "Reformat with isort..."
-	echo "$(ISORT) $(ISORT_REFORMAT_OPTIONS) $(_APP_AND_TEST_DIRS)"
-	@$(ENTER_VENV) && $(ISORT) $(ISORT_REFORMAT_OPTIONS) $(_APP_AND_TEST_DIRS)
+reformat_isort: ## Reformat sources and tests with isort
+	@$(ENTER_VENV) && $(REFORMATER) "isort" "$(ISORT)" "$(_APP_AND_TEST_DIRS)" "$(ISORT) --help" "$(ISORT_REFORMAT_OPTIONS)" 
 
-_reformat::
-	@test -n "$(BLACK)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(BLACK) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) reformat_black
-	@test -n "$(ISORT)" && test -n "$(_APP_AND_TEST_DIRS)" && $(ENTER_VENV) && $(ISORT) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) reformat_isort
+_reformat:: reformat_black reformat_isort
 
 ############################
 ##### tests / coverage #####
 ############################
 .PHONY: check_pytest
-check_pytest:
-	echo "Testing with pytest..."
-	$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(PYTEST) $(PYTEST_CHECK_OPTIONS) $(TEST_DIRS)
+check_pytest: ## Check with pytest
+	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_CHECK_OPTIONS)" 
 
-.PHONY: coverage_console_pytest
-coverage_console_pytest:
-	echo "Coveraging with pytest (console)..."
-	$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(PYTEST) $(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_CONSOLE_OPTIONS) $(TEST_DIRS)
+.PHONY: coverage_console_pytest coverage_html_pytest coverage_sonar_pytest
+coverage_console_pytest: ## Execute unit-tests and show coverage on console (with pytest)
+	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_CONSOLE_OPTIONS)" 
+coverage_html_pytest: ## Execute unit-tests and show coverage in html (with pytest)
+	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_HTML_OPTIONS)" 
+coverage_sonar_pytest: ## Execute unit-tests and compute coverage for sonarqube (with pytest)
+	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_SONAR_OPTIONS)" 
 
-.PHONY: coverage_html_pytest
-coverage_html_pytest:
-	echo "Coveraging with pytest (html)..."
-	$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(PYTEST) $(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_HTML_OPTIONS) $(TEST_DIRS)
-
-.PHONY: coverage_sonar_pytest
-coverage_sonar_pytest:
-	echo "Coveraging with pytest (sonar)..."
-	$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(PYTEST) $(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_SONAR_OPTIONS) $(TEST_DIRS)
-
-_check::
-	@test -n "$(PYTEST)" && test -n "$(TEST_DIRS)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) check_pytest
-
-coverage_console::
-	@test -n "$(PYTEST)" && test -n "$(TEST_DIRS)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) coverage_console_pytest
-
-coverage_html::
-	@test -n "$(PYTEST)" && test -n "$(TEST_DIRS)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) coverage_html_pytest
-
-coverage_sonar::
-	@test -n "$(PYTEST)" && test -n "$(TEST_DIRS)" && $(ENTER_VENV) && $(PYTEST) --help >/dev/null 2>&1 || exit 0 ; $(MAKE) coverage_sonar_pytest
+_check:: check_pytest
+_coverage_console:: coverage_console_pytest
+_coverage_html:: coverage_html_pytest
+_coverage_sonar:: coverage_sonar_pytest
 
 #####################
 ##### packaging #####
@@ -449,8 +425,7 @@ upload:: clean devenv sdist  ## Upload to Pypi
 ################
 ##### misc #####
 ################
-_refresh::
-	$(MAKE) refresh_venv
+_refresh:: refresh_venv
 
 _debug::
 	@echo "PYTHON=$(PYTHON)"

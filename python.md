@@ -351,7 +351,7 @@ black lint options
 
 
 
-- Default: `$(BLACK_REFORMAT_OPTIONS) --quiet`
+- Default: `$(BLACK_REFORMAT_OPTIONS) --quiet --check`
 
 
     

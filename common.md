@@ -17,8 +17,6 @@
 
 
     
-
-    
         
 ### devenv
 
@@ -116,16 +114,6 @@ Simple alias for "check" target
 
     
 
-
-
-
-
-
-## Extendable targets
-
-*Note: you can extend these targets in your own `Makefile` with `target_name::` syntax*
-
-
     
         
 ### refresh
@@ -136,23 +124,25 @@ Refresh all things
 ```
 
 
-- Dependencies: `before_refresh refresh_common_makefiles`
+- Dependencies: `before_refresh _refresh custom_refresh _after_refresh`
 
     
 
     
+        
+### coverage
+
+
+```
+simple alias to coverage_console
+```
+
+
+- Dependencies: `coverage_console`
 
     
 
-    
 
-    
-
-    
-
-    
-
-    
 
 
 
