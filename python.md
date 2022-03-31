@@ -26,7 +26,9 @@ simple alias of devenv target
 ```
 
 
+
 - Dependencies: `devenv`
+
 
     
 
@@ -40,7 +42,9 @@ Update all *requirements.txt files from *requirements-freezed.txt and pip reposi
 ```
 
 
+
 - Dependencies: `remove_devenv remove_runenv _rm_requirements devenv`
+
 
     
 
@@ -54,7 +58,7 @@ Reformat sources and tests with black
 ```
 
 
-- Dependencies: ``
+
 
     
 
@@ -68,7 +72,7 @@ Reformat sources and tests with isort
 ```
 
 
-- Dependencies: ``
+
 
     
 
@@ -82,7 +86,7 @@ Check with pytest
 ```
 
 
-- Dependencies: ``
+
 
     
 
@@ -96,7 +100,7 @@ Execute unit-tests and show coverage on console (with pytest)
 ```
 
 
-- Dependencies: ``
+
 
     
 
@@ -110,7 +114,7 @@ Execute unit-tests and show coverage in html (with pytest)
 ```
 
 
-- Dependencies: ``
+
 
     
 
@@ -124,7 +128,7 @@ Execute unit-tests and compute coverage for sonarqube (with pytest)
 ```
 
 
-- Dependencies: ``
+
 
     
 
@@ -170,7 +174,9 @@ Build wheel (packaging)
 ```
 
 
+
 - Dependencies: `devenv before_wheel`
+
 
     
 
@@ -184,7 +190,9 @@ Build sdist (packaging)
 ```
 
 
+
 - Dependencies: `devenv before_sdist`
+
 
     
 
@@ -198,7 +206,9 @@ Upload to Pypi
 ```
 
 
+
 - Dependencies: `clean devenv sdist`
+
 
     
 

@@ -26,7 +26,7 @@ Lint the code with shellcheck
 ```
 
 
-- Dependencies: ``
+
 
     
 

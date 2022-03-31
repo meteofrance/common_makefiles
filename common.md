@@ -26,7 +26,9 @@ Prepare dev environment
 ```
 
 
+
 - Dependencies: `$(DEVENV_FILE)`
+
 
     
 
@@ -40,7 +42,9 @@ Prepare run environment
 ```
 
 
+
 - Dependencies: `$(RUNENV_FILE)`
+
 
     
 
@@ -54,7 +58,9 @@ Lint the code
 ```
 
 
+
 - Dependencies: `before_lint _lint custom_lint _after_lint`
+
 
     
 
@@ -72,7 +78,9 @@ Reformat sources and tests
 ```
 
 
+
 - Dependencies: `before_reformat _reformat custom_reformat _after_reformat`
+
 
     
 
@@ -90,7 +98,9 @@ Clean build and temporary files
 ```
 
 
+
 - Dependencies: `before_clean _clean custom_clean _after_clean`
+
 
     
 
@@ -108,7 +118,9 @@ Execute tests
 ```
 
 
+
 - Dependencies: `before_check _check custom_check _after_check`
+
 
     
 
@@ -126,7 +138,9 @@ Simple alias for "check" target
 ```
 
 
+
 - Dependencies: `check`
+
 
     
 
@@ -140,7 +154,9 @@ Refresh all things
 ```
 
 
+
 - Dependencies: `before_refresh _refresh custom_refresh _after_refresh`
+
 
     
 
@@ -154,7 +170,7 @@ Refresh common makefiles from repository
 ```
 
 
-- Dependencies: ``
+
 
     
 
@@ -168,7 +184,9 @@ Execute unit-tests and show coverage on console
 ```
 
 
+
 - Dependencies: `before_coverage_console _coverage_console custom_coverage_console _after_coverage_console`
+
 
     
 
@@ -186,7 +204,9 @@ simple alias to coverage_console
 ```
 
 
+
 - Dependencies: `coverage_console`
+
 
     
 
@@ -200,7 +220,9 @@ Execute unit-tests and show coverage in html
 ```
 
 
+
 - Dependencies: `before_coverage_html _coverage_html custom_coverage_html _after_coverage_html`
+
 
     
 
@@ -218,7 +240,9 @@ Execute unit-tests and compute coverage for sonarqube
 ```
 
 
+
 - Dependencies: `before_coverage_sonar _coverage_sonar custom_coverage_sonar _after_coverage_sonar`
+
 
     
 
@@ -236,7 +260,9 @@ simple alias of coverage_sonar target
 ```
 
 
+
 - Dependencies: `coverage_sonar`
+
 
     
 
@@ -268,7 +294,9 @@ target executed before linting
 ```
 
 
+
 - Dependencies: `devenv`
+
 
     
 
@@ -282,7 +310,7 @@ custom linting target
 ```
 
 
-- Dependencies: ``
+
 
     
 
@@ -298,7 +326,9 @@ target executed before reformating
 ```
 
 
+
 - Dependencies: `devenv`
+
 
     
 
@@ -312,7 +342,7 @@ custom reformating target
 ```
 
 
-- Dependencies: ``
+
 
     
 
@@ -328,7 +358,7 @@ target executed before cleaning
 ```
 
 
-- Dependencies: ``
+
 
     
 
@@ -342,7 +372,7 @@ custom reformating target
 ```
 
 
-- Dependencies: ``
+
 
     
 
@@ -358,7 +388,9 @@ target executed before tests
 ```
 
 
+
 - Dependencies: `devenv`
+
 
     
 
@@ -372,7 +404,7 @@ custom check target
 ```
 
 
-- Dependencies: ``
+
 
     
 
@@ -394,7 +426,9 @@ target executed before coverage_console
 ```
 
 
+
 - Dependencies: `devenv`
+
 
     
 
@@ -408,7 +442,7 @@ custom coverage_console target
 ```
 
 
-- Dependencies: ``
+
 
     
 
@@ -426,7 +460,9 @@ target executed before coverage_html
 ```
 
 
+
 - Dependencies: `devenv`
+
 
     
 
@@ -440,7 +476,7 @@ custom coverage_html target
 ```
 
 
-- Dependencies: ``
+
 
     
 
@@ -456,7 +492,9 @@ target executed before coverage_sonar
 ```
 
 
+
 - Dependencies: `devenv`
+
 
     
 
@@ -470,7 +508,7 @@ custom coverage_sonar target
 ```
 
 
-- Dependencies: ``
+
 
     
 
@@ -486,7 +524,7 @@ Dump common_makefiles configuration
 ```
 
 
-- Dependencies: ``
+
 
     
 
