@@ -28,4 +28,3 @@ twine <5.0
 safety <2.0
 
 # Of course, you can add here your own dev requirements
--e git+https://github.com/metwork-framework/envtpl.git#egg=envtpl

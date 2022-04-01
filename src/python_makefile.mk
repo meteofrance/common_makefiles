@@ -204,8 +204,6 @@ define install_python
 	@$(HEADER2) "python installed"
 endef
 
-$(ROOT_TOOLS)/python/bin/python3:
-
 $(ROOT_TOOLS)/python/bin/python3.8:
 	@rm -Rf $(ROOT_TOOLS)/python
 	$(call install_python)
@@ -279,7 +277,8 @@ $(REQS_DIR)/devrequirements.txt: $(REQS_DIR)/devrequirements-notfreezed.txt $(RE
 	$(_MAKE_VIRTUALENV) "$(VENV_DIR).temp"
 	if test -f "$(REQS_DIR)/predevrequirements.txt"; then $(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/predevrequirements.txt"; fi
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
-	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(ROOT_COMMON)/extra/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >"$@"
+	cat "$(ROOT_COMMON)/extra/devrequirements.txt" >"$@"
+	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(ROOT_COMMON)/extra/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >>"$@"
 	rm -Rf "$(VENV_DIR).temp"
 	@$(HEADER2) "$@ created"
 
@@ -289,7 +288,8 @@ $(REQS_DIR)/requirements.txt: $(REQS_DIR)/requirements-notfreezed.txt $(_PREREQ)
 	$(_MAKE_VIRTUALENV) "$(VENV_DIR).temp"
 	if test -f "$(REQS_DIR)/prerequirements.txt"; then $(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/prerequirements.txt"; fi
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
-	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(ROOT_COMMON)/extra/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >"$@"
+	cat "$(ROOT_COMMON)/extra/requirements.txt" >"$@"
+	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(ROOT_COMMON)/extra/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >>"$@"
 	rm -Rf "$(VENV_DIR).temp"
 	@$(HEADER2) "$@ created"
 
@@ -341,7 +341,7 @@ lint_black:
 
 .PHONY: lint_isort
 lint_isort:
-	@$(ENTER_VENV) && $(LINTER) isort "$(ISORT)" "$(_APP_AND_TEST_DIRS)" "$(ISORT) --help" "$(ISORT_LINT_OPTIONS)" "ERROR detected with isort reformater => try to execute 'make reformat' to fix this?" 
+	@$(ENTER_VENV) && $(LINTER) isort "$(ISORT)" "$(_APP_AND_TEST_DIRS)" "$(ISORT) --help" "$(ISORT_LINT_OPTIONS)" "ERROR detected with isort reformater => try to execute 'make reformat' to fix this?"
 
 .PHONY: lint_flake8
 lint_flake8:
@@ -377,11 +377,11 @@ _lint:: lint_black lint_isort lint_flake8 lint_pylint lint_mypy lint_bandit lint
 ####################
 .PHONY: reformat_black
 reformat_black: ## Reformat sources and tests with black
-	@$(ENTER_VENV) && $(REFORMATER) "black" "$(BLACK)" "$(_APP_AND_TEST_DIRS)" "$(BLACK) --help" "$(BLACK_REFORMAT_OPTIONS)" 
+	@$(ENTER_VENV) && $(REFORMATER) "black" "$(BLACK)" "$(_APP_AND_TEST_DIRS)" "$(BLACK) --help" "$(BLACK_REFORMAT_OPTIONS)"
 
 .PHONY: reformat_isort
 reformat_isort: ## Reformat sources and tests with isort
-	@$(ENTER_VENV) && $(REFORMATER) "isort" "$(ISORT)" "$(_APP_AND_TEST_DIRS)" "$(ISORT) --help" "$(ISORT_REFORMAT_OPTIONS)" 
+	@$(ENTER_VENV) && $(REFORMATER) "isort" "$(ISORT)" "$(_APP_AND_TEST_DIRS)" "$(ISORT) --help" "$(ISORT_REFORMAT_OPTIONS)"
 
 _reformat:: reformat_black reformat_isort
 
@@ -390,15 +390,15 @@ _reformat:: reformat_black reformat_isort
 ############################
 .PHONY: check_pytest
 check_pytest: ## Check with pytest
-	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_CHECK_OPTIONS)" 
+	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_CHECK_OPTIONS)"
 
 .PHONY: coverage_console_pytest coverage_html_pytest coverage_sonar_pytest
 coverage_console_pytest: ## Execute unit-tests and show coverage on console (with pytest)
-	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_CONSOLE_OPTIONS)" 
+	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_CONSOLE_OPTIONS)"
 coverage_html_pytest: ## Execute unit-tests and show coverage in html (with pytest)
-	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_HTML_OPTIONS)" 
+	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_HTML_OPTIONS)"
 coverage_sonar_pytest: ## Execute unit-tests and compute coverage for sonarqube (with pytest)
-	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_SONAR_OPTIONS)" 
+	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_SONAR_OPTIONS)"
 
 _check:: check_pytest
 _coverage_console:: coverage_console_pytest

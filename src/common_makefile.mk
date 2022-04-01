@@ -6,13 +6,13 @@
 SHELL=/bin/bash
 
 # Utils
-LINTER=$(ROOT_COMMON)/extra/linter.sh
-REFORMATER=$(ROOT_COMMON)/extra/reformater.sh
-CHECKER=$(ROOT_COMMON)/extra/checker.sh
-HEADER1=$(ROOT_COMMON)/extra/header1.sh
-HEADER2=$(ROOT_COMMON)/extra/header2.sh
-HEADER3=$(ROOT_COMMON)/extra/header3.sh
-HEADER4=$(ROOT_COMMON)/extra/header4.sh
+LINTER=$(_EXTRA)/linter.sh
+REFORMATER=$(_EXTRA)/reformater.sh
+CHECKER=$(_EXTRA)/checker.sh
+HEADER1=$(_EXTRA)/header1.sh
+HEADER2=$(_EXTRA)/header2.sh
+HEADER3=$(_EXTRA)/header3.sh
+HEADER4=$(_EXTRA)/header4.sh
 
 #+ Binary to use for git
 GIT?=git
@@ -37,6 +37,8 @@ ROOT_TMP=$(ROOT_DIR)/.tmp
 
 ## Tools directory (local to the project)
 ROOT_TOOLS=$(ROOT_DIR)/.tools
+
+_EXTRA=$(ROOT_TOOLS)/common_makefiles_extra
 
 ## Common makefiles directory
 ROOT_COMMON=$(ROOT_DIR)/.common_makefiles
@@ -80,7 +82,19 @@ ifneq ("$(wildcard $(DEVENV_FILE))","")
     _ALL_PREREQ=devenv
 endif
 all:: before_all $(_ALL_PREREQ)
-before_all::
+before_all:: $(EXTRA_PREREQ)
+
+EXTRA_PREREQ=$(ROOT_TOOLS)/common_makefiles_extra/common.sh
+ifneq ("$(wildcard $(ROOT_COMMON)/extra.tar.gz)","")
+	_EXTRA_PREREQ=$(ROOT_COMMON)/extra.tar.gz
+else
+    _EXTRA_PREREQ=$(ROOT_COMMON)/extra
+endif
+$(ROOT_TOOLS)/common_makefiles_extra/common.sh: $(_EXTRA_PREREQ)
+	@rm -Rf "$(ROOT_TOOLS)/common_makefiles_extra"
+	@mkdir -p "$(ROOT_TOOLS)"
+	@if test -f "$<"; then mkdir -p "$(ROOT_TOOLS)/common_makefiles_extra" && cd "$(ROOT_TOOLS)/common_makefiles_extra" && zcat "$<" |tar xf - && cd extra && mv * .. && cd .. && rm -Rf extra; else ln -s "$<" "$(ROOT_TOOLS)/common_makefiles_extra"; fi
+	@touch "$@"
 
 .PHONY: help
 help::
@@ -91,7 +105,7 @@ help::
 	@rm -f "$(ROOT_DIR)/.tmp/help.txt"
 
 .PHONY: devenv before_devenv remove_devenv _after_remove_devenv before_remove_devenv custom_remove_devenv _remove_devenv
-devenv: $(DEVENV_FILE) ## Prepare dev environment
+devenv: $(EXTRA_PREREQ) $(DEVENV_FILE) ## Prepare dev environment
 $(DEVENV_FILE): $$(_DEVENV_PREREQ) $$(DEVENV_PREREQ)
 	@$(HEADER1) "devenv is ready"
 	@touch "$@"
@@ -108,7 +122,7 @@ _after_remove_devenv:
 	@$(HEADER2) "Devenv removed"
 
 .PHONY: runenv before_runenv remove_runenv _after_remove_runenv before_remove_runenv custom_remove_runenv _remove_runenv
-runenv: $(RUNENV_FILE) ## Prepare run environment
+runenv: $(EXTRA_PREREQ) $(RUNENV_FILE) ## Prepare run environment
 $(RUNENV_FILE): $$(_RUNENV_PREREQ) $$(RUNENV_PREREQ)
 	@$(HEADER1) "runenv is ready"
 	@touch "$@"
@@ -125,7 +139,7 @@ _after_remove_runenv:
 	@$(HEADER2) "Runenv removed"
 
 .PHONY: lint before_lint custom_lint _after_lint _lint
-lint: before_lint _lint custom_lint _after_lint ## Lint the code
+lint: $(EXTRA_PREREQ) before_lint _lint custom_lint _after_lint ## Lint the code
 #+ target executed before linting
 before_lint:: devenv
 	@$(HEADER1) "Linting"
@@ -139,7 +153,7 @@ _after_lint:
 	@$(HEADER1) "Linting OK"
 
 .PHONY: reformat before_reformat custom_reformat _after_reformat _reformat
-reformat: before_reformat _reformat custom_reformat _after_reformat ## Reformat sources and tests
+reformat: $(EXTRA_PREREQ) before_reformat _reformat custom_reformat _after_reformat ## Reformat sources and tests
 #+ target executed before reformating
 before_reformat:: devenv
 	@$(HEADER1) "Reformating"
@@ -152,15 +166,15 @@ custom_reformat::
 _after_reformat:
 	@$(HEADER1) "Reformating OK"
 
-.PHONY: clean before_clean
-clean: before_clean _clean custom_clean _after_clean ## Clean build and temporary files
+.PHONY: clean before_clean _clean _after_clean custom_clean
+clean: $(EXTRA_PREREQ) before_clean _clean custom_clean _after_clean ## Clean build and temporary files
 #+ target executed before cleaning
 before_clean::
 	@$(HEADER1) "Cleaning"
 	@$(HEADER2) "Calling before_clean target"
 _clean:: remove_devenv remove_runenv
 	@$(HEADER2) "Common cleaning"
-	rm -Rf .refresh_makefiles.tmp "$(ROOT_TMP)" "$(ROOT_TOOLS)"
+	rm -Rf .refresh_makefiles.tmp "$(ROOT_TMP)"
 	rm -f "$(DEVENV_FILE)" "$(RUNENV_FILE)"
 #+ custom reformating target
 custom_clean::
@@ -168,8 +182,14 @@ custom_clean::
 _after_clean:
 	@$(HEADER1) "Cleaning OK"
 
+.PHONY: distclean
+distclean: $(EXTRA_PREREQ) clean ## Full clean (including common_makefiles downloaded tools)
+	@$(HEADER1) "Cleaning common_makefiles tools"
+	rm -Rf "$(ROOT_TOOLS)"
+	@$(HEADER1) "Cleaning common_makefiles tools OK"
+
 .PHONY: check before_check custom_check _after_check _check tests
-check: before_check _check custom_check _after_check ## Execute tests
+check: $(EXTRA_PREREQ) before_check _check custom_check _after_check ## Execute tests
 #+ target executed before tests
 before_check:: devenv
 	@$(HEADER1) "Executing checks"
@@ -185,7 +205,7 @@ _after_check:
 tests: check
 
 .PHONY: refresh before_refresh custom_refresh _after_refresh _refresh refresh_common_makefiles
-refresh: before_refresh _refresh custom_refresh _after_refresh ## Refresh all things
+refresh: $(EXTRA_PREREQ) before_refresh _refresh custom_refresh _after_refresh ## Refresh all things
 before_refresh::
 	@$(HEADER1) "Refreshing"
 	@$(HEADER2) "Calling before_refresh target"
@@ -204,7 +224,7 @@ refresh_common_makefiles: ## Refresh common makefiles from repository
 	@$(HEADER2) "common makefiles refreshed"
 
 .PHONY: coverage_console before_coverage_console _coverage_console custom_coverage_console _after_coverage_console
-coverage_console: before_coverage_console _coverage_console custom_coverage_console _after_coverage_console ## Execute unit-tests and show coverage on console
+coverage_console: $(EXTRA_PREREQ) before_coverage_console _coverage_console custom_coverage_console _after_coverage_console ## Execute unit-tests and show coverage on console
 #+ target executed before coverage_console
 before_coverage_console:: devenv
 	@$(HEADER1) "Coveraging (console)"
@@ -222,7 +242,7 @@ _after_coverage_console:
 coverage: coverage_console
 
 .PHONY: coverage_html before_coverage_html _coverage_html custom_coverage_html _after_coverage_html
-coverage_html: before_coverage_html _coverage_html custom_coverage_html _after_coverage_html ## Execute unit-tests and show coverage in html
+coverage_html: $(EXTRA_PREREQ) before_coverage_html _coverage_html custom_coverage_html _after_coverage_html ## Execute unit-tests and show coverage in html
 #+ target executed before coverage_html
 before_coverage_html:: devenv
 	@$(HEADER1) "Coveraging (html)"
@@ -236,7 +256,7 @@ _after_coverage_html:
 	@$(HEADER1) "Coveraging (html) OK"
 
 .PHONY: coverage_sonar before_coverage_sonar _coverage_sonar custom_coverage_sonar _after_coverage_sonar
-coverage_sonar: before_coverage_sonar _coverage_sonar custom_coverage_sonar _after_coverage_sonar ## Execute unit-tests and compute coverage for sonarqube
+coverage_sonar: $(EXTRA_PREREQ) before_coverage_sonar _coverage_sonar custom_coverage_sonar _after_coverage_sonar ## Execute unit-tests and compute coverage for sonarqube
 #+ target executed before coverage_sonar
 before_coverage_sonar:: devenv
 	@$(HEADER1) "Coveraging (sonar)"

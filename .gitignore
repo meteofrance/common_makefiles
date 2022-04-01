@@ -4,3 +4,5 @@
 /.vscode
 /.devenv
 /.runenv
+/dist/extra
+/dist/*.mk

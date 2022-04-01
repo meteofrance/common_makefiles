@@ -27,7 +27,7 @@ Prepare dev environment
 
 
 
-- Dependencies: `$(DEVENV_FILE)`
+- Dependencies: `$(EXTRA_PREREQ) $(DEVENV_FILE)`
 
 
     
@@ -43,7 +43,7 @@ Prepare run environment
 
 
 
-- Dependencies: `$(RUNENV_FILE)`
+- Dependencies: `$(EXTRA_PREREQ) $(RUNENV_FILE)`
 
 
     
@@ -59,7 +59,7 @@ Lint the code
 
 
 
-- Dependencies: `before_lint _lint custom_lint _after_lint`
+- Dependencies: `$(EXTRA_PREREQ) before_lint _lint custom_lint _after_lint`
 
 
     
@@ -79,7 +79,7 @@ Reformat sources and tests
 
 
 
-- Dependencies: `before_reformat _reformat custom_reformat _after_reformat`
+- Dependencies: `$(EXTRA_PREREQ) before_reformat _reformat custom_reformat _after_reformat`
 
 
     
@@ -99,12 +99,28 @@ Clean build and temporary files
 
 
 
-- Dependencies: `before_clean _clean custom_clean _after_clean`
+- Dependencies: `$(EXTRA_PREREQ) before_clean _clean custom_clean _after_clean`
 
 
     
 
     
+
+    
+
+    
+        
+### distclean
+
+
+```
+Full clean (including common_makefiles downloaded tools)
+```
+
+
+
+- Dependencies: `$(EXTRA_PREREQ) clean`
+
 
     
 
@@ -119,7 +135,7 @@ Execute tests
 
 
 
-- Dependencies: `before_check _check custom_check _after_check`
+- Dependencies: `$(EXTRA_PREREQ) before_check _check custom_check _after_check`
 
 
     
@@ -155,7 +171,7 @@ Refresh all things
 
 
 
-- Dependencies: `before_refresh _refresh custom_refresh _after_refresh`
+- Dependencies: `$(EXTRA_PREREQ) before_refresh _refresh custom_refresh _after_refresh`
 
 
     
@@ -185,7 +201,7 @@ Execute unit-tests and show coverage on console
 
 
 
-- Dependencies: `before_coverage_console _coverage_console custom_coverage_console _after_coverage_console`
+- Dependencies: `$(EXTRA_PREREQ) before_coverage_console _coverage_console custom_coverage_console _after_coverage_console`
 
 
     
@@ -221,7 +237,7 @@ Execute unit-tests and show coverage in html
 
 
 
-- Dependencies: `before_coverage_html _coverage_html custom_coverage_html _after_coverage_html`
+- Dependencies: `$(EXTRA_PREREQ) before_coverage_html _coverage_html custom_coverage_html _after_coverage_html`
 
 
     
@@ -241,7 +257,7 @@ Execute unit-tests and compute coverage for sonarqube
 
 
 
-- Dependencies: `before_coverage_sonar _coverage_sonar custom_coverage_sonar _after_coverage_sonar`
+- Dependencies: `$(EXTRA_PREREQ) before_coverage_sonar _coverage_sonar custom_coverage_sonar _after_coverage_sonar`
 
 
     
@@ -373,6 +389,8 @@ custom reformating target
 
 
 
+
+    
 
     
 
