@@ -217,11 +217,11 @@ custom_refresh::
 _after_refresh:
 	@$(HEADER1) "Refresh OK"
 refresh_common_makefiles: ## Refresh common makefiles from repository
-	@$(HEADER2) "Refreshing common makefiles"
+	@$(HEADER2) "Refreshing common makefiles" || true
 	rm -Rf .refresh_makefiles.tmp && mkdir -p .refresh_makefiles.tmp
 	cd .refresh_makefiles.tmp && $(_GIT_CLONE_DEPTH_1) $(COMMON_MAKEFILES_GIT_URL) && $(_GIT_CHECKOUT_BRANCH) && rm -Rf ../.common_makefiles && mv common_makefiles/dist ../.common_makefiles
 	rm -Rf .refresh_makefiles.tmp
-	@$(HEADER2) "common makefiles refreshed"
+	@$(HEADER2) "common makefiles refreshed" || true
 
 .PHONY: coverage_console before_coverage_console _coverage_console custom_coverage_console _after_coverage_console
 coverage_console: $(EXTRA_PREREQ) before_coverage_console _coverage_console custom_coverage_console _after_coverage_console ## Execute unit-tests and show coverage on console
