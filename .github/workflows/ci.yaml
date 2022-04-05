@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  lint:
+  ci:
     runs-on: ubuntu-latest
     container: rockylinux:8
     steps:
@@ -16,15 +16,13 @@ jobs:
     - name: lint
       run: |
         make lint
-  publish_docs:
-    name: Deploy docs
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout master
-        uses: actions/checkout@v1
-      - name: Deploy docs
-        uses: mhausenblas/mkdocs-deploy-gh-pages@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REQUIREMENTS: devrequirements.txt
-          EXTRA_PACKAGES: build-base libffi-dev rust cargo libressl-dev musl-dev
+    - name: publish_docs
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+      run: |
+        make htmldoc
+        remote_repo="https://x-access-token:${GITHUB_TOKEN}@${GITHUB_DOMAIN:-"github.com"}/${GITHUB_REPOSITORY}.git"
+        git config --global user.name "${GITHUB_ACTOR}"
+        git config --global user.email "${GITHUB_ACTOR}@users.noreply.${GITHUB_DOMAIN:-"github.com"}"
+        git remote rm origin
+        git remote add origin "${remote_repo}"
+        mkdocs gh-deploy --config-file mkdocs.yml --force
