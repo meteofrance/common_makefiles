@@ -1,4 +1,4 @@
-{% set CMD = "python docs/reference/makefile_to_json.py dist/" + VAR + "_makefile.mk" %}
+{% set CMD = "python " + REFERENCE + "/makefile_to_json.py dist/" + VAR + "_makefile.mk" %}
 {% set C = CMD|shell()|from_json() %}
 
 {% macro docs_macros(docs) %}
@@ -37,36 +37,6 @@
 
 # {{VAR}}_makefile.mk
 
-{% if C["has_targets_ready_to_use"] %}
-
-## Targets ready to use
-
-!!! note "Note"
-    You can't override these targets but you can use them!
-
-{% for name, sep, deps, docs in C["targets"] %}
-    {% if sep == ":" %}
-        {{ target_macro(name, sep, deps, docs) }}
-    {% endif %}
-{% endfor %}
-
-{% endif %}
-
-{% if C["has_targets_overridable"] %}
-
-## Extendable targets
-
-!!! note "Note"
-    You can extend these targets in your own `Makefile` with `target_name::` syntax.
-
-{% for name, sep, deps, docs in C["targets"] %}
-    {% if sep == "::" %}
-        {{ target_macro(name, sep, deps, docs) }}
-    {% endif %}
-{% endfor %}
-
-{% endif %}
-
 {% if C["has_variables_readonly"] %}
 
 ## Read-only variables
@@ -97,3 +67,32 @@
 
 {% endif %}
 
+{% if C["has_targets_ready_to_use"] %}
+
+## Targets ready to use
+
+!!! note "Note"
+    You can't override these targets but you can use them!
+
+{% for name, sep, deps, docs in C["targets"] %}
+    {% if sep == ":" %}
+        {{ target_macro(name, sep, deps, docs) }}
+    {% endif %}
+{% endfor %}
+
+{% endif %}
+
+{% if C["has_targets_overridable"] %}
+
+## Extendable targets
+
+!!! note "Note"
+    You can extend these targets in your own `Makefile` with `target_name::` syntax.
+
+{% for name, sep, deps, docs in C["targets"] %}
+    {% if sep == "::" %}
+        {{ target_macro(name, sep, deps, docs) }}
+    {% endif %}
+{% endfor %}
+
+{% endif %}

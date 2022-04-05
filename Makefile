@@ -9,7 +9,7 @@ include .common_makefiles/shell_makefile.mk
 include .common_makefiles/python_makefile.mk
 
 REMOVE_DIST=0
-REFERENCE=docs/90-reference
+export REFERENCE=docs/90-reference
 EXTRA_PYTHON_FILES=src/extra/python_forced_requirements_filter.py $(REFERENCE)/makefile_to_json.py
 SRC_MAKEFILES=$(shell ls src/*.mk)
 REF_MAKEFILES=$(subst .mk,.md,$(addprefix $(REFERENCE)/,$(subst src/,,$(SRC_MAKEFILES))))

@@ -1,6 +1,6 @@
 # Shell
 
-Cette page étend les {{USE_COMMON}} en ajoutant notamment un linter : {{SHELLCHECK}} au shell.
+Ce `Makefile` étend les {{USE_COMMON}} en ajoutant notamment un linter : {{SHELLCHECK}} pour le shell.
 
 Exemple de `Makefile` à la racine de votre projet :
 
@@ -14,7 +14,11 @@ Exemple de `Makefile` à la racine de votre projet :
 # [note: cette variable spécifique doit être définie AVANT les includes]
 SHELLCHECK=AUTO
 
+# Toujours inclure le "common_makefile.mk"
 include .common_makefiles/common_makefile.mk
+
+# L'inclusion de ce Makefile "shell_makefile.mk" apporte les 
+# éléments spécifiques décrits sur cette page
 include .common_makefiles/shell_makefile.mk
 
 # Liste des fichiers à passer au linter

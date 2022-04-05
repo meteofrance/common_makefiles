@@ -204,7 +204,8 @@ custom_check::
 	@$(HEADER2) "Calling custom_check target"
 _after_check:
 	@$(HEADER1) "Checks OK"
-## Simple alias for "check" target
+
+# Deprecated alias for "check" target
 tests: check
 
 .PHONY: refresh_common_makefiles
