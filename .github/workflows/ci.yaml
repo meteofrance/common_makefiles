@@ -27,4 +27,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REQUIREMENTS: devrequirements.txt
-          EXTRA_PACKAGES: build-base libffi-dev rust cargo
+          EXTRA_PACKAGES: build-base libffi-dev rust cargo libressl-dev musl-dev
