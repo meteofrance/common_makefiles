@@ -44,10 +44,15 @@ _EXTRA=$(ROOT_TOOLS)/common_makefiles_extra
 ROOT_COMMON=$(ROOT_DIR)/.common_makefiles
 
 #+ Devenv flag file (if it exists, the dev env is set up)
-DEVENV_FILE?=$(ROOT_DIR)/.devenv
+DEVENV_FILE?=$(ROOT_TOOLS)/devenv
 
 #+ Runenv flag file (if it exists, the run env is set up)
-RUNENV_FILE?=$(ROOT_DIR)/.runenv
+RUNENV_FILE?=$(ROOT_TOOLS)/runenv
+
+#+ Display help with all target
+#+ 1 => yes
+#+ 0 => no
+SHOW_HELP_WITH_ALL_TARGET=1
 
 #+ Devenv prerequisite list (use += to add some targets)
 DEVENV_PREREQ?=
@@ -63,7 +68,7 @@ endif
 RUNENV_PREREQ?=
 _RUNENV_PREREQ=
 ifneq ("$(wildcard $(DEVENV_FILE))","")
-    _RUNENV_PREREQ+=remove_devenv _after_remove_devenv
+    _RUNENV_PREREQ+=remove_devenv
 endif
 ifeq ("$(wildcard $(RUNENV_FILE))","")
     _RUNENV_PREREQ+=before_runenv
@@ -74,12 +79,12 @@ default:: _make_help_banner all
 
 .PHONY: _make_help_banner
 _make_help_banner:
-	@echo "Executing default all target (use 'make help' to show other targets/options)"
+	@if test "$(SHOW_HELP_WITH_ALL_TARGET)" = "1"; then echo "Executing default all target (use 'make help' to show other targets/options)"; fi
 
 .PHONY: all before_all
-_ALL_PREREQ=runenv
+_ALL_PREREQ=$(RUNENV_FILE)
 ifneq ("$(wildcard $(DEVENV_FILE))","")
-    _ALL_PREREQ=devenv
+    _ALL_PREREQ=$(DEVENV_FILE)
 endif
 all:: before_all $(_ALL_PREREQ)
 before_all:: $(EXTRA_PREREQ)
@@ -172,18 +177,18 @@ clean: $(EXTRA_PREREQ) before_clean _clean custom_clean _after_clean ## Clean bu
 before_clean::
 	@$(HEADER1) "Cleaning"
 	@$(HEADER2) "Calling before_clean target"
-_clean:: remove_devenv remove_runenv
+_clean::
 	@$(HEADER2) "Common cleaning"
 	rm -Rf .refresh_makefiles.tmp "$(ROOT_TMP)"
-	rm -f "$(DEVENV_FILE)" "$(RUNENV_FILE)"
 #+ custom reformating target
 custom_clean::
 	@$(HEADER2) "Calling custom_clean target"
 _after_clean:
 	@$(HEADER1) "Cleaning OK"
+	@echo "Note: you can clean a little more (tools, venv...) with 'make distclean'"
 
 .PHONY: distclean
-distclean: $(EXTRA_PREREQ) clean ## Full clean (including common_makefiles downloaded tools)
+distclean: $(EXTRA_PREREQ) clean remove_devenv remove_runenv ## Full clean (including common_makefiles downloaded tools/env)
 	rm -Rf "$(ROOT_TOOLS)"
 
 .PHONY: check before_check custom_check _after_check _check tests
@@ -282,3 +287,9 @@ _debug:: ## Dump common_makefiles configuration
 	@echo "ROOL_TOOLS=$(ROOT_TOOLS)"
 	@echo "DEVENV_PREREQ=$(DEVENV_PREREQ)"
 	@echo "RUNENV_PREREQ=$(RUNENV_PREREQ)"
+	@echo "_DEVENV_PREREQ=$(_DEVENV_PREREQ)"
+	@echo "_RUNENV_PREREQ=$(_RUNENV_PREREQ)"
+	@echo "_ALL_PREREQ=$(_ALL_PREREQ)"
+	@echo "EXTRA_PREREQ=$(EXTRA_PREREQ)"
+	@echo "RUNENV_FILE=$(RUNENV_FILE)"
+	@echo "DEVENV_FILE=$(DEVENV_FILE)"

@@ -147,8 +147,14 @@ PIP_EXTRA_INDEX_URL?=
 #+ (override it with += to add some trusted hosts)
 PIP_TRUSTED_HOSTS+=pypi.org files.pythonhosted.org
 
-#+ virtualenv directory
-VENV_DIR?=$(ROOT_DIR)/venv
+## virtualenv directory
+VENV_DIR=$(ROOT_TOOLS)/venv
+TMP_VENV_DIR=$(ROOT_TMP)/venv
+
+#+ add a symlink of this name in the project root
+#+ (targetting the VENV_DIR)
+#+ (if empty => no symlink)
+VENV_SYMLINK=venv
 
 #+ requirements dir
 REQS_DIR?=$(ROOT_DIR)
@@ -185,7 +191,7 @@ else ifeq ($(PYTHON),AUTO_3_9)
 	DEVENV_PREREQ+=$(ROOT_TOOLS)/python/bin/python3.9
 	_PYTHON_BIN=$(ROOT_TOOLS)/python/bin/python3.9
 	_PYTHON_URL=$(PYTHON_3_9_URL)
-else ifeq ($($PYTHON), AUTO_3_10)
+else ifeq ($(PYTHON),AUTO_3_10)
 	RUNENV_PREREQ+=$(ROOT_TOOLS)/python/bin/python3.10
 	DEVENV_PREREQ+=$(ROOT_TOOLS)/python/bin/python3.10
 	_PYTHON_BIN=$(ROOT_TOOLS)/python/bin/python3.10
@@ -201,6 +207,7 @@ define install_python
 	rm -Rf "$(ROOT_TOOLS)/python"
 	$(WGET) -O "$(ROOT_TMP)/python.tar.gz" "$(_PYTHON_URL)"
 	cd "$(ROOT_TOOLS)" && zcat "$(ROOT_TMP)/python.tar.gz" |tar xf -
+	rm -f "$(ROOT_TMP)/python.tar.gz"
 	@$(HEADER2) "python installed"
 endef
 
@@ -224,7 +231,7 @@ DEVENV_PREREQ+=$(VENV_DIR)/devenv
 RUNENV_PREREQ+=$(VENV_DIR)/runenv
 _PIP=pip3
 _MAKE_VIRTUALENV=$(_PYTHON_BIN) -m venv
-ENTER_TEMP_VENV=. $(VENV_DIR).temp/bin/activate
+ENTER_TEMP_VENV=. $(TMP_VENV_DIR)/bin/activate
 ## "enter virtualenv" variable
 ## you can use it in your Makefile scripts, for example:
 ## $(ENTER_VENV) && pip freeze
@@ -255,42 +262,42 @@ devvenv: devenv
 
 $(REQS_DIR)/prerequirements.txt: $(REQS_DIR)/prerequirements-notfreezed.txt
 	@$(HEADER2) "Creating $@ from $^"
-	rm -Rf "$(VENV_DIR).temp"
-	$(_MAKE_VIRTUALENV) "$(VENV_DIR).temp"
+	rm -Rf "$(TMP_VENV_DIR)"
+	$(_MAKE_VIRTUALENV) "$(TMP_VENV_DIR)"
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
 	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) >"$@"
-	rm -Rf "$(VENV_DIR).temp"
+	rm -Rf "$(TMP_VENV_DIR)"
 	@$(HEADER2) "$@ created"
 
 $(REQS_DIR)/predevrequirements.txt: $(REQS_DIR)/predevrequirements-notfreezed.txt
 	@$(HEADER2) "Creating $@ from $^"
-	rm -Rf "$(VENV_DIR).temp"
-	$(_MAKE_VIRTUALENV) "$(VENV_DIR).temp"
+	rm -Rf "$(TMP_VENV_DIR)"
+	$(_MAKE_VIRTUALENV) "$(TMP_VENV_DIR)"
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
 	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) >"$@"
-	rm -Rf "$(VENV_DIR).temp"
+	rm -Rf "$(TMP_VENV_DIR)"
 	@$(HEADER2) "$@ created"
 
 $(REQS_DIR)/devrequirements.txt: $(REQS_DIR)/devrequirements-notfreezed.txt $(REQS_DIR)/requirements.txt $(PREDEVREQ)
 	@$(HEADER2) "Creating $@ from $^"
-	rm -Rf "$(VENV_DIR).temp"
-	$(_MAKE_VIRTUALENV) "$(VENV_DIR).temp"
+	rm -Rf "$(TMP_VENV_DIR)"
+	$(_MAKE_VIRTUALENV) "$(TMP_VENV_DIR)"
 	if test -f "$(REQS_DIR)/predevrequirements.txt"; then $(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/predevrequirements.txt"; fi
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
 	cat "$(ROOT_COMMON)/extra/devrequirements.txt" >"$@"
 	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(ROOT_COMMON)/extra/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >>"$@"
-	rm -Rf "$(VENV_DIR).temp"
+	rm -Rf "$(TMP_VENV_DIR)"
 	@$(HEADER2) "$@ created"
 
 $(REQS_DIR)/requirements.txt: $(REQS_DIR)/requirements-notfreezed.txt $(_PREREQ)
 	@$(HEADER2) "Creating $@ from $^"
-	rm -Rf "$(VENV_DIR).temp"
-	$(_MAKE_VIRTUALENV) "$(VENV_DIR).temp"
+	rm -Rf "$(TMP_VENV_DIR)"
+	$(_MAKE_VIRTUALENV) "$(TMP_VENV_DIR)"
 	if test -f "$(REQS_DIR)/prerequirements.txt"; then $(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/prerequirements.txt"; fi
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
 	cat "$(ROOT_COMMON)/extra/requirements.txt" >"$@"
 	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(ROOT_COMMON)/extra/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >>"$@"
-	rm -Rf "$(VENV_DIR).temp"
+	rm -Rf "$(TMP_VENV_DIR)"
 	@$(HEADER2) "$@ created"
 
 $(REQS_DIR)/devrequirements-notfreezed.txt:
@@ -314,6 +321,7 @@ $(VENV_DIR)/devenv: $(REQS_DIR)/devrequirements.txt
 	if test -f "$(REQS_DIR)/predevrequirements.txt"; then $(ENTER_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/predevrequirements.txt"; fi
 	$(ENTER_VENV) && $(_PIP_INSTALL) -r "$<"
 	if test -f setup.py; then $(ENTER_VENV) && $(_PIP_INSTALL) -e .; fi
+	if test "$(VENV_SYMLINK)" != ""; then rm -f "$(ROOT_DIR)/$(VENV_SYMLINK)" ; ln -s "$(VENV_DIR)" "$(ROOT_DIR)/$(VENV_SYMLINK)"; fi
 	@touch "$@"
 	@$(HEADER2) "$(VENV_DIR) (dev) created"
 
@@ -323,13 +331,16 @@ $(VENV_DIR)/runenv: $(REQS_DIR)/requirements.txt
 	$(_MAKE_VIRTUALENV) "$(VENV_DIR)"
 	if test -f "$(REQS_DIR)/prerequirements.txt"; then $(ENTER_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/prerequirements.txt"; fi
 	$(ENTER_VENV) && $(_PIP_INSTALL) -r "$<"
+	if test "$(VENV_SYMLINK)" != ""; then rm -f "$(ROOT_DIR)/$(VENV_SYMLINK)" ; ln -s "$(VENV_DIR)" "$(ROOT_DIR)/$(VENV_SYMLINK)"; fi
 	@touch "$@"
 	@$(HEADER2) "$(VENV_DIR) (run) created"
 
 _remove_devenv::
+	if test "$(VENV_SYMLINK)" != ""; then rm -f "$(ROOT_DIR)/$(VENV_SYMLINK)"; fi
 	rm -Rf "$(VENV_DIR)"
 
 _remove_runenv::
+	if test "$(VENV_SYMLINK)" != ""; then rm -f "$(ROOT_DIR)/$(VENV_SYMLINK)"; fi
 	rm -Rf "$(VENV_DIR)"
 
 ################
@@ -434,7 +445,7 @@ _debug::
 	@echo "REQS_DIR=$(REQS_DIR)"
 
 _clean::
-	rm -Rf $(VENV_DIR).temp htmlcov *.egg-info .mypy_cache .pytest_cache coverage.xml .coverage
+	rm -Rf "$(TMP_VENV_DIR)" htmlcov *.egg-info .mypy_cache .pytest_cache coverage.xml .coverage
 	if test "$(REMOVE_DIST)" = "1"; then rm -Rf dist; fi
 	if test "$(REMOVE_BUILD)" = "1"; then rm -Rf build; fi
 	find . -type d -name __pycache__ -exec rm -Rf {} \; >/dev/null 2>&1 || true

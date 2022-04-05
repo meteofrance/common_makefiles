@@ -51,6 +51,17 @@ include .common_makefiles/shell_makefile.mk
 include .common_makefiles/common_makefile.mk
 ```
 
+## Pour un projet mixé
+
+Pour un projet qui mélange plusieurs technologies, vous pouvez mixer
+les include de "common makefiles". Exemple pour un projet python/shell :
+
+```Makefile
+include .common_makefiles/common_makefile.mk
+include .common_makefiles/python_makefile.mk
+include .common_makefiles/shell_makefile.mk
+```
+
 ## A ajouter dans votre `.gitignore`
 
 Si vous utilisez `git` dans votre project, ajoutez ces quelques lignes
