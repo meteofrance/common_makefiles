@@ -5,7 +5,7 @@ on:
       - main
 
 jobs:
-  build:
+  publish_docs:
     name: Deploy docs
     runs-on: ubuntu-latest
     steps:
@@ -16,3 +16,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REQUIREMENTS: devrequirements.txt
+          EXTRA_PACKAGES: build-base
