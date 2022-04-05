@@ -5,14 +5,14 @@ on:
   pull_request:
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     container: rockylinux:8
     steps:
     - uses: actions/checkout@v2
     - name: prerequisites
       run: |
-        dnf -y install make wget git
+        dnf -y install make wget git xz
     - name: lint
       run: |
         make lint
