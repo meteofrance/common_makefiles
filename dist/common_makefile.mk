@@ -184,9 +184,7 @@ _after_clean:
 
 .PHONY: distclean
 distclean: $(EXTRA_PREREQ) clean ## Full clean (including common_makefiles downloaded tools)
-	@$(HEADER1) "Cleaning common_makefiles tools"
 	rm -Rf "$(ROOT_TOOLS)"
-	@$(HEADER1) "Cleaning common_makefiles tools OK"
 
 .PHONY: check before_check custom_check _after_check _check tests
 check: $(EXTRA_PREREQ) before_check _check custom_check _after_check ## Execute tests

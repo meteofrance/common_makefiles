@@ -1,0 +1,43 @@
+site_name: Common Makefiles
+theme:
+  name: material
+  language: fr
+  palette:
+    primary: bluegray
+  features:
+    - toc.integrate
+repo_url: https://github.com/meteofrance/common_makefiles
+repo_name: 'GitHub'
+plugins:
+  - exclude:
+      glob:
+        - "_*.md"
+  - awesome-pages
+  - search
+  - macros:
+      module_name: mkdocs_main
+  - mkdocs-add-number-plugin:
+      strict_mode: False
+      order: 2
+      increment_topnav: False
+      increment_pages: False
+
+markdown_extensions:
+  - footnotes
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true 
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - admonition
+  - attr_list

@@ -1,4 +1,4 @@
-{% set CMD = "python makefile_to_json.py dist/" + VAR + "_makefile.mk" %}
+{% set CMD = "python docs/reference/makefile_to_json.py dist/" + VAR + "_makefile.mk" %}
 {% set C = CMD|shell()|from_json() %}
 
 {% macro docs_macros(docs) %}
@@ -22,7 +22,8 @@
 ### {{name}}
 
 {% if type == "overridable_before" %}
-**(note: this variable must be specifically overriden BEFORE incuding any common makefiles)**
+!!! warning ""
+    This variable must be specifically overriden **BEFORE incuding any common makefiles**
 {% endif %}
 
 {{ docs_macros(docs) }}
@@ -34,13 +35,14 @@
 {% endif %}
 {% endmacro %}
 
-# Doc
+# {{VAR}}_makefile.mk
 
 {% if C["has_targets_ready_to_use"] %}
 
 ## Targets ready to use
 
-*Note: you can't override these targets but you can use them!*
+!!! note "Note"
+    You can't override these targets but you can use them!
 
 {% for name, sep, deps, docs in C["targets"] %}
     {% if sep == ":" %}
@@ -54,7 +56,8 @@
 
 ## Extendable targets
 
-*Note: you can extend these targets in your own `Makefile` with `target_name::` syntax*
+!!! note "Note"
+    You can extend these targets in your own `Makefile` with `target_name::` syntax.
 
 {% for name, sep, deps, docs in C["targets"] %}
     {% if sep == "::" %}
@@ -68,7 +71,8 @@
 
 ## Read-only variables
 
-*Note: NEVER try to override these variables*
+!!! danger ""
+    You can use them in your own `Makefile` but **NEVER try to override these variables!**
 
 {% for name, type, default, docs in C["variables"] %}
     {% if type == "readonly" %}
@@ -82,7 +86,8 @@
 
 ## Overridable variables
 
-*Note: you can override/extend these variables in your own `Makefile`*
+!!! note "Note"
+    you can use/override/extend these variables in your own `Makefile`.
 
 {% for name, type, default, docs in C["variables"] %}
     {% if type == "overridable" or type == "overridable_before" %}

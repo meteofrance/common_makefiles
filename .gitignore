@@ -4,3 +4,6 @@
 /.vscode
 /.devenv
 /.runenv
+/__pycache__
+/site
+/docs/reference/*.md
