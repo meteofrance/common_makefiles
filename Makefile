@@ -9,24 +9,25 @@ include .common_makefiles/shell_makefile.mk
 include .common_makefiles/python_makefile.mk
 
 REMOVE_DIST=0
-EXTRA_PYTHON_FILES=src/extra/python_forced_requirements_filter.py docs/reference/makefile_to_json.py
+REFERENCE=docs/90-reference
+EXTRA_PYTHON_FILES=src/extra/python_forced_requirements_filter.py $(REFERENCE)/makefile_to_json.py
 SRC_MAKEFILES=$(shell ls src/*.mk)
-REF_MAKEFILES=$(subst .mk,.md,$(addprefix docs/reference/,$(subst src/,,$(SRC_MAKEFILES))))
+REF_MAKEFILES=$(subst .mk,.md,$(addprefix $(REFERENCE)/,$(subst src/,,$(SRC_MAKEFILES))))
 DIST_MAKEFILES=$(subst src/,dist/,$(SRC_MAKEFILES))
 all:: $(DIST_MAKEFILES) dist/extra.tar.gz
 
-docs/reference/common_makefile.md: docs/reference/reference.md.j2 dist/common_makefile.mk
+$(REFERENCE)/common_makefile.md: $(REFERENCE)/reference.md.j2 dist/common_makefile.mk
 	$(ENTER_VENV) && export VAR=common && cat "$<" |envtpl >$@
 
-docs/reference/shell_makefile.md: docs/reference/reference.md.j2 dist/shell_makefile.mk
+$(REFERENCE)/shell_makefile.md: $(REFERENCE)/reference.md.j2 dist/shell_makefile.mk
 	$(ENTER_VENV) && export VAR=shell && cat "$<" |envtpl >$@
 
-docs/reference/python_makefile.md: docs/reference/reference.md.j2 dist/python_makefile.mk
+$(REFERENCE)/python_makefile.md: $(REFERENCE)/reference.md.j2 dist/python_makefile.mk
 	$(ENTER_VENV) && export VAR=python && cat "$<" |envtpl >$@
 
 custom_clean::
 	rm -Rf dist/*.mk dist/extra*
-	rm -f docs/reference/*.md
+	rm -f $(REFERENCE)/*.md
 
 dist/%.mk: src/%.mk
 	cp -f "$<" "$@"

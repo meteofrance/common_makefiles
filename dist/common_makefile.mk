@@ -207,18 +207,7 @@ _after_check:
 ## Simple alias for "check" target
 tests: check
 
-.PHONY: refresh before_refresh custom_refresh _after_refresh _refresh refresh_common_makefiles
-refresh: $(EXTRA_PREREQ) before_refresh _refresh custom_refresh _after_refresh ## Refresh all things
-before_refresh::
-	@$(HEADER1) "Refreshing"
-	@$(HEADER2) "Calling before_refresh target"
-_refresh::
-	@$(HEADER2) "Common refreshing"
-_refresh:: refresh_common_makefiles
-custom_refresh::
-	@$(HEADER2) "Calling custom_refresh target"
-_after_refresh:
-	@$(HEADER1) "Refresh OK"
+.PHONY: refresh_common_makefiles
 refresh_common_makefiles: ## Refresh common makefiles from repository
 	@$(HEADER2) "Refreshing common makefiles" || true
 	rm -Rf .refresh_makefiles.tmp && mkdir -p .refresh_makefiles.tmp

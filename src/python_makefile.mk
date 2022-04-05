@@ -306,13 +306,15 @@ $(REQS_DIR)/devrequirements-notfreezed.txt:
 $(REQS_DIR)/requirements-notfreezed.txt:
 	cp -f "$(ROOT_COMMON)/extra/requirements-notfreezed.txt" "$@"
 
-.PHONY: refresh_venv _rm_requirements
+.PHONY: refresh_venv _rm_requirements refresh
 refresh_venv: remove_devenv remove_runenv _rm_requirements devenv ## Update all *requirements.txt files from *requirements-freezed.txt and pip repositories
 _rm_requirements:
 	rm -f $(REQS_DIR)/predevrequirements.txt
 	rm -f $(REQS_DIR)/prerequirements.txt
 	rm -f $(REQS_DIR)/devrequirements.txt
 	rm -f $(REQS_DIR)/requirements.txt
+## Deprecated alias of refresh_venv
+refresh:
 
 $(VENV_DIR)/devenv: $(REQS_DIR)/devrequirements.txt
 	@$(HEADER2) "Creating $(VENV_DIR) (dev) from $^"
@@ -436,8 +438,6 @@ upload:: clean devenv sdist  ## Upload to Pypi
 ################
 ##### misc #####
 ################
-_refresh:: refresh_venv
-
 _debug::
 	@echo "PYTHON=$(PYTHON)"
 	@echo "_PYTHON_BIN=$(_PYTHON_BIN)"
