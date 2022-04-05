@@ -3,11 +3,11 @@ include .common_makefiles/shell_makefile.mk
 include .common_makefiles/python_makefile.mk
 
 REMOVE_DIST=0
-EXTRA_PYTHON_FILES=dist/extra/python_forced_requirements_filter.py makefile_to_json.py
+EXTRA_PYTHON_FILES=src/extra/python_forced_requirements_filter.py docs/reference/makefile_to_json.py
 SRC_MAKEFILES=$(shell ls src/*.mk)
 REF_MAKEFILES=$(subst .mk,.md,$(addprefix docs/reference/,$(subst src/,,$(SRC_MAKEFILES))))
 DIST_MAKEFILES=$(subst src/,dist/,$(SRC_MAKEFILES))
-all:: devenv $(DIST_MAKEFILES) dist/extra.tar.gz  
+all:: devenv $(DIST_MAKEFILES) dist/extra.tar.gz
 
 docs/reference/common_makefile.md: docs/reference/reference.md.j2 dist/common_makefile.mk
 	$(ENTER_VENV) && export VAR=common && cat "$<" |envtpl >$@

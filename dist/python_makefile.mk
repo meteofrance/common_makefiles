@@ -365,10 +365,10 @@ lint_imports:
 
 .PHONY: lint_safety_run lint_safety_dev
 lint_safety_run:
-	@$(ENTER_VENV) && $(LINTER) "safety (runtime deps)" "$(SAFETY)" "x" "$(SAFETY) --help" "-r $(REQS_DIR)/requirements.txt"
+	@$(ENTER_VENV) && $(LINTER) "safety (runtime deps)" "$(SAFETY)" "$(REQS_DIR)/requirements.txt" "$(SAFETY) --help" "check -r"
 
 lint_safety_dev:
-	@$(ENTER_VENV) && $(LINTER) "safety (dev deps)" "$(SAFETY)" "x" "$(SAFETY) --help" "-r $(REQS_DIR)/devrequirements.txt"
+	@$(ENTER_VENV) && $(LINTER) "safety (dev deps)" "$(SAFETY)" "$(REQS_DIR)/devrequirements.txt" "$(SAFETY) --help" "check -r"
 
 _lint:: lint_black lint_isort lint_flake8 lint_pylint lint_mypy lint_bandit lint_imports lint_safety_run lint_safety_dev
 

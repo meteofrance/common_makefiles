@@ -5,6 +5,8 @@ Pour utiliser ces Makefiles, vous aurez besoin d'une distribution Linux avec les
 - `make` (évidemment, dans sa version GNU)
 - `wget` (pour télécharger diverses choses)
 - `bash` (car toutes les "targets" sont écrites en `bash`)
+- `xz` (pour décompresser certains outils téléchargés sur internet)
+- `find`, `xargs` (pour chercher des fichiers)
 - les outils standards unix de manipulations de texte: `cat`, `awk`, `sed`, `tr`...
 
 Tous ces outils sont normalement préinstallés sur notre distribution Linux.
@@ -16,13 +18,13 @@ Pour installer ces dépendances :
 === "Pour une CentOS 7"
 
     ```
-    yum -y install make wget
+    yum -y install make wget xz findutils
     ```
 
 === "Pour une CentOS/Rocky 8"
 
     ```
-    dnf -y install make wget
+    dnf -y install make wget xz findutils
     ```
 
 Et en option :
