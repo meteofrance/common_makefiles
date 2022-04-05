@@ -9,10 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     container: rockylinux:8
     steps:
-    - uses: actions/checkout@v2
     - name: prerequisites
       run: |
-        dnf -y install make wget git xz
+        dnf -y install make wget git xz findutils git
+    - uses: actions/checkout@v2
+    - name: devenv
+      run: |
+        make devenv
     - name: lint
       run: |
         make lint
