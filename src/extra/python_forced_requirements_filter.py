@@ -14,7 +14,7 @@ if os.path.isfile(path):
     for line in lines:
         name = ""
         for letter in line:
-            if letter not in ("~", "=", "<", ">", "!"):
+            if letter not in ("~", "=", "<", ">", "!", " "):
                 name = name + letter
             else:
                 break

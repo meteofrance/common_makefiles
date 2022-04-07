@@ -243,11 +243,12 @@ _PIP_INSTALL=$(_PIP) $(PIP_COMMON_OPTIONS) install $(_PIP_INDEX_URL_OPT) $(_PIP_
 _PIP_FREEZE=$(_PIP) $(PIP_COMMON_OPTIONS) freeze
 _PREREQ=
 _PREDEVREQ=
+_FORCEDREQ=
+ifneq ($(wildcard $(REQS_DIR)/forced-requirements.txt),)
+	_FORCEDREQ+=$(REQS_DIR)/forced-requirements.txt
+endif
 ifneq ($(wildcard $(REQS_DIR)/prerequirements-notfreezed.txt),)
 	_PREREQ+=$(REQS_DIR)/prerequirements.txt
-endif
-ifneq ($(wildcard $(REQS_DIR)/forced-requirements.txt),)
-	_PREREQ+=$(REQS_DIR)/forced-requirements.txt
 endif
 ifneq ($(wildcard $(REQS_DIR)/predevrequirements-notfreezed.txt),)
 	_PREDEVREQ+=$(REQS_DIR)/predevrequirements.txt
@@ -260,36 +261,38 @@ RUNENV_PREREQ+=$(REQS_DIR)/requirements.txt
 ## simple alias of devenv target
 devvenv: devenv
 
-$(REQS_DIR)/prerequirements.txt: $(REQS_DIR)/prerequirements-notfreezed.txt
+$(REQS_DIR)/prerequirements.txt: $(REQS_DIR)/prerequirements-notfreezed.txt $(_FORCEDREQ)
 	@$(HEADER2) "Creating $@ from $^"
 	rm -Rf "$(TMP_VENV_DIR)"
 	$(_MAKE_VIRTUALENV) "$(TMP_VENV_DIR)"
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
-	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) >"$@"
+	cat "$(ROOT_COMMON)/extra/prerequirements.txt" >"$@"
+	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(ROOT_COMMON)/extra/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >>"$@"
 	rm -Rf "$(TMP_VENV_DIR)"
 	@$(HEADER2) "$@ created"
 
-$(REQS_DIR)/predevrequirements.txt: $(REQS_DIR)/predevrequirements-notfreezed.txt
+$(REQS_DIR)/predevrequirements.txt: $(REQS_DIR)/predevrequirements-notfreezed.txt $(_FORCEDREQ)
 	@$(HEADER2) "Creating $@ from $^"
 	rm -Rf "$(TMP_VENV_DIR)"
 	$(_MAKE_VIRTUALENV) "$(TMP_VENV_DIR)"
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
-	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) >"$@"
+	cat "$(ROOT_COMMON)/extra/predevrequirements.txt" >"$@"
+	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(ROOT_COMMON)/extra/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >>"$@"
 	rm -Rf "$(TMP_VENV_DIR)"
 	@$(HEADER2) "$@ created"
 
-$(REQS_DIR)/devrequirements.txt: $(REQS_DIR)/devrequirements-notfreezed.txt $(REQS_DIR)/requirements.txt $(PREDEVREQ)
+$(REQS_DIR)/devrequirements.txt: $(REQS_DIR)/devrequirements-notfreezed.txt $(REQS_DIR)/requirements.txt $(_PREDEVREQ) $(_FORCEDREQ)
 	@$(HEADER2) "Creating $@ from $^"
 	rm -Rf "$(TMP_VENV_DIR)"
 	$(_MAKE_VIRTUALENV) "$(TMP_VENV_DIR)"
 	if test -f "$(REQS_DIR)/predevrequirements.txt"; then $(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/predevrequirements.txt"; fi
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
 	cat "$(ROOT_COMMON)/extra/devrequirements.txt" >"$@"
-	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(ROOT_COMMON)/extra/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >>"$@"
+	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(ROOT_COMMON)/extra/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >"$@"
 	rm -Rf "$(TMP_VENV_DIR)"
 	@$(HEADER2) "$@ created"
 
-$(REQS_DIR)/requirements.txt: $(REQS_DIR)/requirements-notfreezed.txt $(_PREREQ)
+$(REQS_DIR)/requirements.txt: $(REQS_DIR)/requirements-notfreezed.txt $(_PREREQ) $(_FORCEDREQ)
 	@$(HEADER2) "Creating $@ from $^"
 	rm -Rf "$(TMP_VENV_DIR)"
 	$(_MAKE_VIRTUALENV) "$(TMP_VENV_DIR)"
