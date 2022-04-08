@@ -70,8 +70,6 @@ Si vous utilisez `git` dans votre project, ajoutez ces quelques lignes
 ```
 /.tools
 /.tmp
-/.devenv
-/.runenv
 /venv
 ```
 

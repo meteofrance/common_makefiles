@@ -5,6 +5,9 @@
 Ce `Makefile` étend les {{USE_COMMON}} en ajoutant notamment :
 
 - une installation automatique (sans droits root et sans perturber le reste du système) de plusieurs versions très recentes de Python grace au projet [python build standalone](https://python-build-standalone.readthedocs.io)
+
+- une gestion des environnements d'exécution et de développements avec une gestion complète des dépendances (figées et non figées)
+
 - des linters :
     - {{FLAKE8}}
     - {{BLACK}}
@@ -22,8 +25,6 @@ Ce `Makefile` étend les {{USE_COMMON}} en ajoutant notamment :
 - un gestion des tests unitaires et de la couverture des tests :
     - [pytest](https://docs.pytest.org/)
     - [pytest-cov](https://github.com/pytest-dev/pytest-cov)
-
-- une gestion des environnements d'exécution et de développements avec une gestion complète des dépendances (figées et non figées)
 
 Exemple de `Makefile` à la racine de votre projet :
 
@@ -171,3 +172,42 @@ Le format et la logique d'un fichier `devrequirements-notfreezed.txt` est donc t
 
     Donc, oui, nous vous conseillons très fortement de les commiter.
 
+!!! question "Comment rentrer dans le `venv` en interactif ou depuis mon `Makefile` ?"
+    **En interactif**, et c'est simplement lié à la manière dont les virtualenv python fonctionnent, vous devez
+    "charger" le `venv` pour en bénéficier (version python, dépendances installées...). Pour le faire, utilisez la
+    commande suivante dans votre terminal :
+
+    ````
+    source venv/bin/activate
+    ```
+    (une fois chargé, `deactivate` permet d'en sortir ou alors relancez simplement votre terminal)
+
+    **Depuis votre `Makefile`**, vous avez un racccourci qui consiste à rajouter `$(ENTER_VENV) && ` devant votre commande. Par ex:
+
+    ```Makefile
+    macible:
+        $(ENTERVENV) && ma_commande
+    ```
+
+## Les linters / reformaters
+
+Par défaut, si le fichier n'existe pas déjà, le Makefile va vous générer un fichier `devrequirements-notfreezed.txt` contenant
+des dépendances à :
+
+- {{FLAKE8}}
+- {{BLACK}}
+- {{ISORT}}
+- {{PYLINT}}
+- {{MYPY}}
+
+De ce fait, un simple `make lint` va les faire passer sur votre code.
+
+Si vous souhaitez retirer des linters, effacez simplement leur nom dans le fichier `devrequirements-notfreezed.txt`.
+
+Vous pouvez également en ajouter. La liste des linters supportés "out of the box" est la suivante : `flake8`, `black`, `isort`, `pylint`, `mypy`, `import-linter`, `safety` et `bandit`.
+
+??? question "Ajouter un linter/reformater non pris en charge ?"
+    Si vous voulez ajouter un linter/reformater non pris en charge, vous pouvez ajouter une cible `custom_lint` et/ou `custom_reformat` qui sera automatiquement exécutée lors du `make lint` et/ou `make reformat`.
+
+Vous pouvez également agir sur plein de paramètres de configuration (pour tuner leur comportement). Consultez la {{REF_PYTHON}}
+pour plus de détails.
