@@ -288,7 +288,7 @@ $(REQS_DIR)/devrequirements.txt: $(REQS_DIR)/devrequirements-notfreezed.txt $(RE
 	if test -f "$(REQS_DIR)/predevrequirements.txt"; then $(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$(REQS_DIR)/predevrequirements.txt"; fi
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
 	cat "$(_EXTRA)/devrequirements.txt" >"$@"
-	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(_EXTRA)/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >"$@"
+	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(_EXTRA)/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >>"$@"
 	rm -Rf "$(TMP_VENV_DIR)"
 	@$(HEADER2) "$@ created"
 
@@ -317,7 +317,7 @@ _rm_requirements:
 	rm -f $(REQS_DIR)/devrequirements.txt
 	rm -f $(REQS_DIR)/requirements.txt
 ## Deprecated alias of refresh_venv
-refresh:
+refresh: refresh_venv
 
 $(VENV_DIR)/devenv: $(REQS_DIR)/devrequirements.txt
 	@$(HEADER2) "Creating $(VENV_DIR) (dev) from $^"
