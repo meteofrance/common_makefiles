@@ -2,7 +2,7 @@
 
 ## Généralités
 
-Ce `Makefile` étend les {{USE_COMMON}} en ajoutant notamment :
+Ce `Makefile` étend les [fonctionnalités communes]({{USE_COMMON_LOC}}) en ajoutant notamment :
 
 - une installation automatique (sans droits root et sans perturber le reste du système) de plusieurs versions très recentes de Python grace au projet [python build standalone](https://python-build-standalone.readthedocs.io)
 
@@ -189,6 +189,14 @@ Le format et la logique d'un fichier `devrequirements-notfreezed.txt` est donc t
         $(ENTERVENV) && ma_commande
     ```
 
+!!! question "Puis je continuer d'utiliser pip avec ce système ?"
+    Une fois le `venv` chargé, vous pouvez bien sûr utiliser `pip` manuellement. Mais à chaque
+    fois que le `venv` sera reconstruit automatiquement à partir des fichiers `*requirements.txt`,
+    vous perdrez le bénéfice des opérations exécutées manuellement. Donc si vous utilisez `pip`
+    manuellement pour tester quelque chose par exemple, n'oubliez pas à la fin de votre test
+    de reporter vos ajouts/modifications/suppressions dans le fichier `*requirements-notfreezed.txt`
+    correspondant.
+
 ## Les linters / reformaters
 
 Par défaut, si le fichier n'existe pas déjà, le Makefile va vous générer un fichier `devrequirements-notfreezed.txt` contenant
@@ -202,6 +210,13 @@ des dépendances à :
 
 De ce fait, un simple `make lint` va les faire passer sur votre code.
 
+!!! question "Qu'est ce qui définit *mon code* ?"
+    Les linters sont exécutés sur les répertoires pointés par les 2 variables suivantes
+    qui devraient être définis dans votre `Makefile` :
+
+    - `APP_DIRS` :  liste de répertoires (séparés par des espaces) contenant le code Python de votre projet
+    - `TEST_DIRS` : liste de répertoires (séparés par des espaces) contenant vos tests unitaires (laissez cette variable vide si vous n'avez pas de tests)
+
 Si vous souhaitez retirer des linters, effacez simplement leur nom dans le fichier `devrequirements-notfreezed.txt`.
 
 Vous pouvez également en ajouter. La liste des linters supportés "out of the box" est la suivante : `flake8`, `black`, `isort`, `pylint`, `mypy`, `import-linter`, `safety` et `bandit`.
@@ -209,5 +224,5 @@ Vous pouvez également en ajouter. La liste des linters supportés "out of the b
 ??? question "Ajouter un linter/reformater non pris en charge ?"
     Si vous voulez ajouter un linter/reformater non pris en charge, vous pouvez ajouter une cible `custom_lint` et/ou `custom_reformat` qui sera automatiquement exécutée lors du `make lint` et/ou `make reformat`.
 
-Vous pouvez également agir sur plein de paramètres de configuration (pour tuner leur comportement). Consultez la {{REF_PYTHON}}
-pour plus de détails.
+Vous pouvez également agir sur plein de paramètres de configuration (pour tuner leur comportement). Consultez la [page de référence python]({{REF_PYTHON_LOC}})
+pour plus de détails et/ou la [page de référence commune]({{REF_COMMON_LOC}}).

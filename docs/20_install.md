@@ -8,6 +8,10 @@ Voici la commande à copier/coller pour installer la dernière version sur votre
 bash -c "$(curl -fsSLk https://raw.githubusercontent.com/meteofrance/common_makefiles/main/install.sh)"
 ```
 
+!!! note "Note"
+    Pour utiliser cette commande, vous devez avoir `git` et `bash` installé et bénéficier d'un accès à internet.
+
+
 Si vous n'avez pas confiance dans cette dernière commande (ou si vous préférez maitriser exactement ce qui est fait),
 vous pouvez simplement cloner ce repository et copier le sous-répertoire `dist` à la racine de votre projet sous le
 nom `.common_makefiles`.

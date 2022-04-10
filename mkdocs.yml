@@ -21,6 +21,7 @@ plugins:
       order: 2
       increment_topnav: False
       increment_pages: False
+  - autolinks
 
 markdown_extensions:
   - footnotes

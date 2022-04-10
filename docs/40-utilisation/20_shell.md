@@ -1,6 +1,6 @@
 # Shell
 
-Ce `Makefile` étend les {{USE_COMMON}} en ajoutant notamment un linter : {{SHELLCHECK}} pour le shell.
+Ce `Makefile` étend les [fonctionnalités communes]({{USE_COMMON_LOC}}) en ajoutant notamment un linter : {{SHELLCHECK}} pour le shell.
 
 Exemple de `Makefile` à la racine de votre projet :
 
@@ -34,4 +34,4 @@ Avec ce type de configuration, l'execution de `make lint` va exécuter {{SHELLCH
 Le chargement de `shell_makefile.mk` va également amener une nouvelle cible : `lint_shellcheck` qui permet de n'exécuter que ce linter
 (si jamais plusieurs autres linters sont configurés sous la cible `lint`).
 
-Plus de détails quant aux possibilités/configurations : {{REF_SHELL}} mais aussi {{REF_COMMON}}.
+Plus de détails quant aux possibilités/configurations : [référence shell]({{REF_SHELL_LOC}}) mais aussi [référence commune]({{REF_COMMON_LOC}}).

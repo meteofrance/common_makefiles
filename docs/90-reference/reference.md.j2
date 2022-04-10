@@ -1,4 +1,4 @@
-{% set CMD = "python " + REFERENCE + "/makefile_to_json.py dist/" + VAR + "_makefile.mk" %}
+{% set CMD = "python " + REFERENCE + "/makefile_to_json.py dist/" + MAKEFILE %}
 {% set C = CMD|shell()|from_json() %}
 
 {% macro docs_macros(docs) %}
@@ -31,11 +31,15 @@
 {% if default == "" %}
 - Default: `(empty)`
 {% else %}
+    {% if type == "readonly" %}
+- Value: `{{default}}`
+    {% else %}
 - Default: `{{default}}`
+    {% endif %}
 {% endif %}
 {% endmacro %}
 
-# {{VAR}}_makefile.mk
+# {{MAKEFILE}}
 
 {% if C["has_variables_readonly"] %}
 
