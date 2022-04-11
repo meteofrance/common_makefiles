@@ -16,7 +16,7 @@ SRC_MAKEFILES=$(shell ls src/*.mk)
 REF_MAKEFILES=$(subst .mk,.md,$(addprefix $(REFERENCE)/,$(subst src/,,$(SRC_MAKEFILES))))
 DIST_MAKEFILES=$(subst src/,dist/,$(SRC_MAKEFILES))
 BOOTSTRAP=dist/extra.tar.gz $(DIST_MAKEFILES)
-all:: $(BOOTSTRAP) $(REF_MAKEFILES) $(REFERENCE)/makefile_to_json.py
+all:: $(BOOTSTRAP) $(REFERENCE)/makefile_to_json.py $(REF_MAKEFILES)
 
 .PHONY: bootstrap
 bootstrap: $(BOOTSTRAP)
@@ -32,6 +32,7 @@ dist/extra.tar.gz: src/extra
 
 $(REFERENCE)/makefile_to_json.py: common_makefiles/makefile_to_json.py
 	cp -f "$<" "$@"
+	chmod +x "$@" 
 
 $(REFERENCE)/%.md: $(REFERENCE)/reference.md.j2 dist/%.mk
 	T=$$(echo $^ |cut -f2 -d' ') && export MAKEFILE=$$(basename "$${T}") && cat "$<" |./tools/envtpl-static >"$@"
@@ -43,7 +44,7 @@ custom_distclean::
 	rm -Rf dist/*
 
 .PHONY: htmldoc serve_htmldoc
-htmldoc: devenv $(REF_MAKEFILES) $(REFERENCE)/makefile_to_json.py
+htmldoc: devenv $(REFERENCE)/makefile_to_json.py $(REF_MAKEFILES)
 	$(ENTER_VENV) && mkdocs build
-serve_htmldoc: $(REF_MAKEFILES) $(REFERENCE)/makefile_to_json.py
+serve_htmldoc: $(REFERENCE)/makefile_to_json.py $(REF_MAKEFILES)
 	$(ENTER_VENV) && mkdocs serve
