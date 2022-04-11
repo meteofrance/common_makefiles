@@ -35,7 +35,7 @@ $(REFERENCE)/makefile_to_json.py: common_makefiles/makefile_to_json.py
 	chmod +x "$@" 
 
 $(REFERENCE)/%.md: $(REFERENCE)/reference.md.j2 dist/%.mk
-	T=$$(echo $^ |cut -f2 -d' ') && export MAKEFILE=$$(basename "$${T}") && cat "$<" |./tools/envtpl-static >"$@"
+	$(ENTER_VENV) && T=$$(echo $^ |cut -f2 -d' ') && export MAKEFILE=$$(basename "$${T}") && cat "$<" |./tools/envtpl-static >"$@"
 
 custom_clean::
 	rm -f $(REFERENCE)/*.md $(REFERENCE)/*.py
