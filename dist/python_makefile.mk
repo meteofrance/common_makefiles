@@ -94,16 +94,7 @@ PYTEST=pytest
 PYTEST_CHECK_OPTIONS?=
 
 #+ pytest options (for coverage)
-PYTEST_COVERAGE_OPTIONS?=--cov=$(APP_DIRS)
-
-#+ pytest options (for coverage html)
-PYTEST_COVERAGE_HTML_OPTIONS?=--cov-report=html
-
-#+ pytest options (for coverage html)
-PYTEST_COVERAGE_CONSOLE_OPTIONS?=
-
-#+ pytest options (for coverage sonarqube)
-PYTEST_COVERAGE_SONAR_OPTIONS?=--cov-report=xml
+PYTEST_COVERAGE_OPTIONS?=--cov=$(APP_DIRS) --cov-report=html --cov-report=xml --cov-report=term
 
 #+ twine binary to use
 #+ (binary name or path) => use this binary name/path (if exists)
@@ -269,7 +260,7 @@ $(REQS_DIR)/prerequirements.txt: $(REQS_DIR)/prerequirements-notfreezed.txt  $(_
 	
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
 	cat "$(_EXTRA)/prerequirements.txt" >"$@"
-	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(ROOT_COMMON)/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >>"$@"
+	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(_EXTRA)/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >>"$@"
 	rm -Rf "$(TMP_VENV_DIR)"
 	@$(HEADER2) "$@ created"
 
@@ -280,7 +271,7 @@ $(REQS_DIR)/predevrequirements.txt: $(REQS_DIR)/predevrequirements-notfreezed.tx
 	
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
 	cat "$(_EXTRA)/predevrequirements.txt" >"$@"
-	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(ROOT_COMMON)/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >>"$@"
+	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(_EXTRA)/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >>"$@"
 	rm -Rf "$(TMP_VENV_DIR)"
 	@$(HEADER2) "$@ created"
 
@@ -293,7 +284,7 @@ $(REQS_DIR)/devrequirements.txt: $(REQS_DIR)/devrequirements-notfreezed.txt $(RE
 	
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
 	cat "$(_EXTRA)/devrequirements.txt" >"$@"
-	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(ROOT_COMMON)/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >>"$@"
+	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(_EXTRA)/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >>"$@"
 	rm -Rf "$(TMP_VENV_DIR)"
 	@$(HEADER2) "$@ created"
 
@@ -306,7 +297,7 @@ $(REQS_DIR)/requirements.txt: $(REQS_DIR)/requirements-notfreezed.txt $(_PREREQ)
 	
 	$(ENTER_TEMP_VENV) && $(_PIP_INSTALL) -r "$<"
 	cat "$(_EXTRA)/requirements.txt" >"$@"
-	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(ROOT_COMMON)/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >>"$@"
+	$(ENTER_TEMP_VENV) && $(_PIP_FREEZE) |$(_PYTHON_BIN) "$(_EXTRA)/python_forced_requirements_filter.py" "$(REQS_DIR)/forced-requirements.txt" >>"$@"
 	rm -Rf "$(TMP_VENV_DIR)"
 	@$(HEADER2) "$@ created"
 
@@ -423,18 +414,12 @@ _reformat:: reformat_black reformat_isort
 check_pytest: ## Check with pytest
 	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_CHECK_OPTIONS)"
 
-.PHONY: coverage_console_pytest coverage_html_pytest coverage_sonar_pytest
-coverage_console_pytest: ## Execute unit-tests and show coverage on console (with pytest)
-	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_CONSOLE_OPTIONS)"
-coverage_html_pytest: ## Execute unit-tests and show coverage in html (with pytest)
-	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_HTML_OPTIONS)"
-coverage_sonar_pytest: ## Execute unit-tests and compute coverage for sonarqube (with pytest)
-	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_COVERAGE_OPTIONS) $(PYTEST_COVERAGE_SONAR_OPTIONS)"
+.PHONY: coverage_pytest
+coverage_pytest: ## Execute unit-tests and show coverage on console (with pytest)
+	@$(ENTER_VENV) && export PYTHONPATH=.:$${PYTHONPATH} && $(CHECKER) "pytest" "$(PYTEST)" "$(TEST_DIRS)" "$(PYTEST) --help" "$(PYTEST_COVERAGE_OPTIONS)"
 
 _check:: check_pytest
-_coverage_console:: coverage_console_pytest
-_coverage_html:: coverage_html_pytest
-_coverage_sonar:: coverage_sonar_pytest
+_coverage:: coverage_pytest
 
 #####################
 ##### packaging #####
@@ -469,4 +454,4 @@ _clean::
 	find . -type d -name __pycache__ -exec rm -Rf {} \; >/dev/null 2>&1 || true
 
 _distclean::
-	rm -Rf $(VENV_DIR)
+	if test "$(VENV_SYMLINK)" != ""; then rm -Rf "$(VENV_SYMLINK)"; fi

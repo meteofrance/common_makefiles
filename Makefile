@@ -10,12 +10,13 @@ PYTHON=AUTO_3_10
 
 REMOVE_DIST=0
 export REFERENCE=docs/90-reference
-EXTRA_PYTHON_FILES=src/extra/python_forced_requirements_filter.py $(REFERENCE)/makefile_to_json.py
+APP_DIRS=common_makefiles
+TEST_DIRS=tests
 SRC_MAKEFILES=$(shell ls src/*.mk)
 REF_MAKEFILES=$(subst .mk,.md,$(addprefix $(REFERENCE)/,$(subst src/,,$(SRC_MAKEFILES))))
 DIST_MAKEFILES=$(subst src/,dist/,$(SRC_MAKEFILES))
 BOOTSTRAP=dist/extra.tar.gz $(DIST_MAKEFILES)
-all:: $(BOOTSTRAP) $(REF_MAKEFILES)
+all:: $(BOOTSTRAP) $(REF_MAKEFILES) $(REFERENCE)/makefile_to_json.py
 
 .PHONY: bootstrap
 bootstrap: $(BOOTSTRAP)
@@ -26,20 +27,23 @@ dist/%.mk: src/%.mk
 dist/extra.tar.gz: src/extra
 	rm -Rf dist/extra*
 	cp -Rf "$<" dist/
-	cd dist && tar -cf extra.tar extra && gzip -f extra.tar
+	cd dist && tar --dereference -cf extra.tar extra && gzip -f extra.tar
 	rm -Rf dist/extra
+
+$(REFERENCE)/makefile_to_json.py: common_makefiles/makefile_to_json.py
+	cp -f "$<" "$@"
 
 $(REFERENCE)/%.md: $(REFERENCE)/reference.md.j2 dist/%.mk
 	T=$$(echo $^ |cut -f2 -d' ') && export MAKEFILE=$$(basename "$${T}") && cat "$<" |./tools/envtpl-static >"$@"
 
 custom_clean::
-	rm -f $(REFERENCE)/*.md
+	rm -f $(REFERENCE)/*.md $(REFERENCE)/*.py
 
 custom_distclean::
 	rm -Rf dist/*
 
 .PHONY: htmldoc serve_htmldoc
-htmldoc: devenv $(REF_MAKEFILES)
+htmldoc: devenv $(REF_MAKEFILES) $(REFERENCE)/makefile_to_json.py
 	$(ENTER_VENV) && mkdocs build
-serve_htmldoc: $(REF_MAKEFILES)
+serve_htmldoc: $(REF_MAKEFILES) $(REFERENCE)/makefile_to_json.py
 	$(ENTER_VENV) && mkdocs serve

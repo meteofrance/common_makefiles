@@ -227,52 +227,20 @@ _after_check:
 	@$(HEADER1) "Checking OK" 2>/dev/null || true
 	
 
-.PHONY: coverage_console before_coverage_console custom_coverage_console _after_coverage_console _coverage_console
-coverage_console: $(EXTRA_PREREQ) before_coverage_console _coverage_console custom_coverage_console _after_coverage_console ## Coverage_console the code
-#+ target executed before coverage_console target
-before_coverage_console:: devenv
-	@$(HEADER1) "Coverage_consoleing" 2>/dev/null || true
-	@$(HEADER2) "Calling before_coverage_console target" 2>/dev/null || true
-_coverage_console::
-	@$(HEADER2) "Common coverage_consoleing" 2>/dev/null || true
+.PHONY: coverage before_coverage custom_coverage _after_coverage _coverage
+coverage: $(EXTRA_PREREQ) before_coverage _coverage custom_coverage _after_coverage ## Coverage the code
+#+ target executed before coverage target
+before_coverage:: devenv
+	@$(HEADER1) "Coverageing" 2>/dev/null || true
+	@$(HEADER2) "Calling before_coverage target" 2>/dev/null || true
+_coverage::
+	@$(HEADER2) "Common coverageing" 2>/dev/null || true
 	
-#+ custom coverage_consoleing target
-custom_coverage_console::
-	@$(HEADER2) "Calling custom_coverage_console target" 2>/dev/null || true
-_after_coverage_console:
-	@$(HEADER1) "Coverage_consoleing OK" 2>/dev/null || true
-	
-
-.PHONY: coverage_html before_coverage_html custom_coverage_html _after_coverage_html _coverage_html
-coverage_html: $(EXTRA_PREREQ) before_coverage_html _coverage_html custom_coverage_html _after_coverage_html ## Coverage_html the code
-#+ target executed before coverage_html target
-before_coverage_html:: devenv
-	@$(HEADER1) "Coverage_htmling" 2>/dev/null || true
-	@$(HEADER2) "Calling before_coverage_html target" 2>/dev/null || true
-_coverage_html::
-	@$(HEADER2) "Common coverage_htmling" 2>/dev/null || true
-	
-#+ custom coverage_htmling target
-custom_coverage_html::
-	@$(HEADER2) "Calling custom_coverage_html target" 2>/dev/null || true
-_after_coverage_html:
-	@$(HEADER1) "Coverage_htmling OK" 2>/dev/null || true
-	
-
-.PHONY: coverage_sonar before_coverage_sonar custom_coverage_sonar _after_coverage_sonar _coverage_sonar
-coverage_sonar: $(EXTRA_PREREQ) before_coverage_sonar _coverage_sonar custom_coverage_sonar _after_coverage_sonar ## Coverage_sonar the code
-#+ target executed before coverage_sonar target
-before_coverage_sonar:: devenv
-	@$(HEADER1) "Coverage_sonaring" 2>/dev/null || true
-	@$(HEADER2) "Calling before_coverage_sonar target" 2>/dev/null || true
-_coverage_sonar::
-	@$(HEADER2) "Common coverage_sonaring" 2>/dev/null || true
-	
-#+ custom coverage_sonaring target
-custom_coverage_sonar::
-	@$(HEADER2) "Calling custom_coverage_sonar target" 2>/dev/null || true
-_after_coverage_sonar:
-	@$(HEADER1) "Coverage_sonaring OK" 2>/dev/null || true
+#+ custom coverageing target
+custom_coverage::
+	@$(HEADER2) "Calling custom_coverage target" 2>/dev/null || true
+_after_coverage:
+	@$(HEADER1) "Coverageing OK" 2>/dev/null || true
 	
 
 
@@ -284,11 +252,7 @@ refresh_common_makefiles: ## Refresh common makefiles from repository
 	rm -Rf .refresh_makefiles.tmp
 	@$(HEADER2) "common makefiles refreshed" || true
 
-.PHONY: coverage coverage_xml tests
-## simple alias to coverage_console target
-coverage: coverage_console
-## simple alias of coverage_sonar target
-coverage_xml: coverage_sonar
+.PHONY: tests
 ## simple alias of check target
 tests: check
 

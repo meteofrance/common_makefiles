@@ -5,3 +5,6 @@
 /__pycache__
 /site
 /docs/90-reference/*.md
+/docs/90-reference/*.py
+/.coverage
+/coverage.xml

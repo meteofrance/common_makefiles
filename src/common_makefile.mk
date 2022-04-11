@@ -123,7 +123,7 @@ _after_remove_{{target}}:
 	@$(HEADER2) "{{target|capitalize}} removed"
 {% endfor %}
 
-{% for target in ["lint", "reformat", "clean", "distclean", "check", "coverage_console", "coverage_html", "coverage_sonar"] %}
+{% for target in ["lint", "reformat", "clean", "distclean", "check", "coverage"] %}
 .PHONY: {{target}} before_{{target}} custom_{{target}} _after_{{target}} _{{target}}
 {{target}}: $(EXTRA_PREREQ) before_{{target}} _{{target}} custom_{{target}} _after_{{target}} ## {{target|capitalize}} the code
 #+ target executed before {{target}} target
@@ -155,11 +155,7 @@ refresh_common_makefiles: ## Refresh common makefiles from repository
 	rm -Rf .refresh_makefiles.tmp
 	@$(HEADER2) "common makefiles refreshed" || true
 
-.PHONY: coverage coverage_xml tests
-## simple alias to coverage_console target
-coverage: coverage_console
-## simple alias of coverage_sonar target
-coverage_xml: coverage_sonar
+.PHONY: tests
 ## simple alias of check target
 tests: check
 
