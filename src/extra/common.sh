@@ -1,11 +1,21 @@
 #!/bin/bash
 
-BOLD=$(tput -Txterm bold)
-RED=$(tput -Txterm setaf 1)
-BLUE=$(tput -Txterm setaf 6)
-YELLOW=$(tput -Txterm setaf 3)
-DIM=$(tput -Txterm dim)
-RESET=$(tput -Txterm sgr0)
+tput -V >/dev/null 2>&1
+if test $? -eq 0; then
+  BOLD=$(tput -Txterm bold)
+  RED=$(tput -Txterm setaf 1)
+  BLUE=$(tput -Txterm setaf 6)
+  YELLOW=$(tput -Txterm setaf 3)
+  DIM=$(tput -Txterm dim)
+  RESET=$(tput -Txterm sgr0)
+else
+  BOLD=""
+  RED=""
+  BLUE=""
+  YELLOW=""
+  DIM=""
+  RESET=""
+fi
 export BOLD
 export RED
 export BLUE

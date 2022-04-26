@@ -43,10 +43,10 @@ _EXTRA=$(ROOT_TOOLS)/common_makefiles_extra
 ## Common makefiles directory
 ROOT_COMMON=$(ROOT_DIR)/.common_makefiles
 
-#+ Devenv flag file (if it exists, the dev env is set up)
+## Devenv flag file (if it exists, the dev env is set up)
 DEVENV_FILE?=$(ROOT_TOOLS)/devenv
 
-#+ Runenv flag file (if it exists, the run env is set up)
+## Runenv flag file (if it exists, the run env is set up)
 RUNENV_FILE?=$(ROOT_TOOLS)/runenv
 
 #+ Display help with all target
@@ -194,7 +194,7 @@ _after_clean:
 	
 
 .PHONY: distclean before_distclean custom_distclean _after_distclean _distclean
-distclean: $(EXTRA_PREREQ) before_distclean _distclean custom_distclean _after_distclean ## Distclean the code
+distclean: $(EXTRA_PREREQ) clean before_distclean _distclean custom_distclean _after_distclean ## Distclean the code
 #+ target executed before distclean target
 before_distclean:: 
 	@$(HEADER1) "Distcleaning" 2>/dev/null || true

@@ -43,10 +43,10 @@ _EXTRA=$(ROOT_TOOLS)/common_makefiles_extra
 ## Common makefiles directory
 ROOT_COMMON=$(ROOT_DIR)/.common_makefiles
 
-#+ Devenv flag file (if it exists, the dev env is set up)
+## Devenv flag file (if it exists, the dev env is set up)
 DEVENV_FILE?=$(ROOT_TOOLS)/devenv
 
-#+ Runenv flag file (if it exists, the run env is set up)
+## Runenv flag file (if it exists, the run env is set up)
 RUNENV_FILE?=$(ROOT_TOOLS)/runenv
 
 #+ Display help with all target
@@ -125,7 +125,7 @@ _after_remove_{{target}}:
 
 {% for target in ["lint", "reformat", "clean", "distclean", "check", "coverage"] %}
 .PHONY: {{target}} before_{{target}} custom_{{target}} _after_{{target}} _{{target}}
-{{target}}: $(EXTRA_PREREQ) before_{{target}} _{{target}} custom_{{target}} _after_{{target}} ## {{target|capitalize}} the code
+{{target}}: $(EXTRA_PREREQ) {% if target == "distclean" %}clean {% endif %}before_{{target}} _{{target}} custom_{{target}} _after_{{target}} ## {{target|capitalize}} the code
 #+ target executed before {{target}} target
 before_{{target}}:: {% if target not in ["clean", "distclean"] %}devenv{% endif %}
 	@$(HEADER1) "{{target|capitalize}}ing" 2>/dev/null || true
