@@ -383,7 +383,7 @@ lint_bandit:
 
 .PHONY: lint_imports
 lint_imports:
-	@$(ENTER_VENV) && $(LINTER) lint-imports "$(LINTIMPORTS)" "$(LINTIMPORTS_CONF_FILE)" "$(LINTIMPORTS) --help" "--config $(LINTIMPORTS_CONF_FILE)"
+	@$(ENTER_VENV) && $(LINTER) lint-imports "$(LINTIMPORTS)" "--config $(LINTIMPORTS_CONF_FILE)" "$(LINTIMPORTS) --help" ""
 
 .PHONY: lint_safety_run lint_safety_dev
 lint_safety_run:
