@@ -26,7 +26,7 @@ COMMON_MAKEFILES_GIT_URL?=http://github.com/meteofrance/common_makefiles.git
 #+ Common makefiles git branch (for refresh_makefiles target)
 COMMON_MAKEFILES_GIT_BRANCH?=main
 
-_GIT_CLONE_DEPTH_1=$(GIT) clone --depth 1
+_GIT_CLONE=$(GIT) clone
 _GIT_CHECKOUT_BRANCH=if test "$(COMMON_MAKEFILES_GIT_BRANCH)" != "main"; then $(GIT) checkout $(COMMON_MAKEFILES_GIT_BRANCH); fi
 
 ## Directory containing the "Makefile" (probably the root directory of the project)
@@ -151,9 +151,9 @@ _after_{{target}}:
 refresh_common_makefiles: ## Refresh common makefiles from repository
 	@$(HEADER2) "Refreshing common makefiles" || true
 	rm -Rf .refresh_makefiles.tmp && mkdir -p .refresh_makefiles.tmp
-	cd .refresh_makefiles.tmp && $(_GIT_CLONE_DEPTH_1) $(COMMON_MAKEFILES_GIT_URL) && $(_GIT_CHECKOUT_BRANCH) && rm -Rf ../.common_makefiles && mv common_makefiles/dist ../.common_makefiles
+	cd .refresh_makefiles.tmp && $(_GIT_CLONE) $(COMMON_MAKEFILES_GIT_URL) && cd common_makefiles && $(_GIT_CHECKOUT_BRANCH) && cd .. && rm -Rf ../.common_makefiles && mv common_makefiles/dist ../.common_makefiles
 	rm -Rf .refresh_makefiles.tmp
-	@$(HEADER2) "common makefiles refreshed" || true
+	@$(HEADER2) "common makefiles refreshed" 2>/dev/null || true
 
 .PHONY: tests
 ## simple alias of check target
