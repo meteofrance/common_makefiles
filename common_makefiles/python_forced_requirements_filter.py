@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 
 
@@ -16,7 +17,7 @@ def main(path):
                 else:
                     break
             if name.strip() != "":
-                forced[name.strip()] = line.strip()
+                forced[name.strip()] = re.sub(r"\${[A-Z0-9_]*}", "", line).strip()
 
     for line in sys.stdin:
         package = line.split("=")[0].strip()
