@@ -387,11 +387,11 @@ wheel:: devenv before_wheel ## Build wheel (packaging)
 	$(ENTER_VENV) && python setup.py bdist_wheel
 sdist:: devenv before_sdist ## Build sdist (packaging)
 	$(ENTER_VENV) && python setup.py sdist
-upload:: clean devenv sdist  ## Upload to Pypi
+upload:: devenv sdist  ## Upload to Pypi
 	@if test "$(TWINE_USERNAME)" = ""; then echo "TWINE_USERNAME is empty"; exit 1; fi
 	@if test "$(TWINE_PASSWORD)" = ""; then echo "TWINE_PASSWORD is empty"; exit 1; fi
 	@if test "$(TWINE_REPOSITORY)" = ""; then echo "TWINE_REPOSITORY is empty"; exit 1; fi
-	$(ENTER_VENV) && $(TWINE) --help || ( echo "ERROR: twine is not installed" ; exit 1 )
+	@$(ENTER_VENV) && $(TWINE) --help || ( echo "ERROR: twine is not installed" ; exit 1 )
 	$(ENTER_VENV) && $(TWINE) upload $(TWINE_UPLOAD_EXTRA_OPTIONS) --repository-url "$(TWINE_REPOSITORY)" --username "$(TWINE_USERNAME)" --password "$(TWINE_PASSWORD)" dist/*
 
 ################
