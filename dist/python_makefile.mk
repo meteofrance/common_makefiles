@@ -134,6 +134,9 @@ PIP_INDEX_URL?=
 #+ pip extra index url
 PIP_EXTRA_INDEX_URL?=
 
+#+ pip install extra options
+PIP_INSTALL_OPTIONS?=
+
 #+ pip trusted hosts
 #+ (override it with += to add some trusted hosts)
 PIP_TRUSTED_HOSTS+=pypi.org files.pythonhosted.org
@@ -230,7 +233,7 @@ ENTER_VENV=. $(VENV_DIR)/bin/activate
 _PIP_INDEX_URL_OPT=$(if $(PIP_INDEX_URL),--index-url $(PIP_INDEX_URL),)
 _PIP_EXTRA_INDEX_URL_OPT=$(if $(PIP_EXTRA_INDEX_URL),--extra-index-url $(PIP_EXTRA_INDEX_URL),)
 _PIP_TRUSTED_OPT=$(addprefix --trusted-host ,$(PIP_TRUSTED_HOSTS))
-_PIP_INSTALL=$(_PIP) $(PIP_COMMON_OPTIONS) install $(_PIP_INDEX_URL_OPT) $(_PIP_EXTRA_INDEX_URL_OPT) $(_PIP_TRUSTED_OPT)
+_PIP_INSTALL=$(_PIP) $(PIP_COMMON_OPTIONS) install $(_PIP_INDEX_URL_OPT) $(_PIP_EXTRA_INDEX_URL_OPT) $(_PIP_TRUSTED_OPT) $(PIP_INSTALL_OPTIONS)
 _PIP_FREEZE=$(_PIP) $(PIP_COMMON_OPTIONS) freeze --all --exclude setuptools --exclude distribute --exclude pip
 _PREREQ=
 _PREDEVREQ=
