@@ -384,6 +384,7 @@ _coverage:: coverage_pytest
 before_sdist::
 before_wheel::
 wheel:: devenv before_wheel ## Build wheel (packaging)
+	@$(ENTER_VENV) && pip show wheel >/dev/null 2>/dev/null || ( echo "ERROR: you have to add 'wheel' (without quotes) at the end of your devrequirements-notfreezed.txt file (than try again)"; exit 1 )
 	$(ENTER_VENV) && python setup.py bdist_wheel
 sdist:: devenv before_sdist ## Build sdist (packaging)
 	$(ENTER_VENV) && python setup.py sdist
