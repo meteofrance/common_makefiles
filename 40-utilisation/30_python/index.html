@@ -1,0 +1,806 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.5">
+    
+    
+      
+        <title>Python - Common Makefiles</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.4a0965b7.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cbb835fc.min.css">
+        
+          
+          
+          <meta name="theme-color" content="">
+        
+      
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="bluegray" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#python" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../.." title="Common Makefiles" class="md-header__button md-logo" aria-label="Common Makefiles" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Common Makefiles
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Python
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Effacer" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/meteofrance/common_makefiles" title="Aller au dépôt" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Common Makefiles" class="md-nav__button md-logo" aria-label="Common Makefiles" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Common Makefiles
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/meteofrance/common_makefiles" title="Aller au dépôt" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Accueil
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10_prerequisites/" class="md-nav__link">
+        Pré-requis
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../20_install/" class="md-nav__link">
+        Comment les installer dans votre repository ?
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../30_update/" class="md-nav__link">
+        Comment les mettre à jour ?
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Utilisation / Configuration
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Utilisation / Configuration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Utilisation / Configuration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10_common/" class="md-nav__link">
+        Basique
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20_shell/" class="md-nav__link">
+        Shell
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Python
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Python
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-generalites" class="md-nav__link">
+    1. Généralités
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-gestion-des-dependances-venv" class="md-nav__link">
+    2. Gestion des dépendances (venv)
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Gestion des dépendances (venv)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-modele" class="md-nav__link">
+    2.1 Modèle
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-devenv" class="md-nav__link">
+    2.2 devenv
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-faq" class="md-nav__link">
+    2.3 FAQ
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-les-linters-reformaters" class="md-nav__link">
+    3. Les linters / reformaters
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Référence
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Référence" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Référence
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../90-reference/common_makefile/" class="md-nav__link">
+        common_makefile.mk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../90-reference/python_makefile/" class="md-nav__link">
+        python_makefile.mk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../90-reference/shell_makefile/" class="md-nav__link">
+        shell_makefile.mk
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/meteofrance/common_makefiles/edit/master/docs/40-utilisation/30_python.md" title="Editer cette page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="python">Python</h1>
+<h2 id="1-generalites">1. Généralités</h2>
+<p>Ce <code>Makefile</code> étend les <a href="../10_common/">fonctionnalités communes</a> en ajoutant notamment :</p>
+<ul>
+<li>
+<p>une installation automatique (sans droits root et sans perturber le reste du système) de plusieurs versions très recentes de Python grace au projet <a href="https://python-build-standalone.readthedocs.io">python build standalone</a></p>
+</li>
+<li>
+<p>une gestion des environnements d'exécution et de développements avec une gestion complète des dépendances (figées et non figées)</p>
+</li>
+<li>
+<p>des linters :</p>
+<ul>
+<li><a href="https://flake8.pycqa.org/">flake8</a></li>
+<li><a href="https://black.readthedocs.io/">black</a></li>
+<li><a href="https://pycqa.github.io/isort/">isort</a></li>
+<li><a href="https://pylint.pycqa.org/">pylint</a></li>
+<li><a href="https://mypy.readthedocs.io/">mypy</a></li>
+<li><a href="https://github.com/seddonym/import-linter/">import-linter</a></li>
+<li><a href="https://github.com/PyCQA/bandit">bandit</a></li>
+<li><a href="https://github.com/pyupio/safety">safety</a></li>
+</ul>
+</li>
+<li>
+<p>des reformaters :</p>
+<ul>
+<li><a href="https://black.readthedocs.io/">black</a></li>
+<li><a href="https://pycqa.github.io/isort/">isort</a></li>
+</ul>
+</li>
+<li>
+<p>un gestion des tests unitaires et de la couverture des tests :</p>
+<ul>
+<li><a href="https://docs.pytest.org/">pytest</a></li>
+<li><a href="https://github.com/pytest-dev/pytest-cov">pytest-cov</a></li>
+</ul>
+</li>
+</ul>
+<p>Exemple de <code>Makefile</code> à la racine de votre projet :</p>
+<div class="highlight"><pre><span></span><code><span class="c"># Configuration de l&#39;interpréteur Python</span>
+<span class="c">#</span>
+<span class="c"># AUTO_3_8  =&gt; auto-downloade python 3.8</span>
+<span class="c"># AUTO_3_9  =&gt; auto-downloade python 3.9 (defaut)</span>
+<span class="c"># AUTO_3_10 =&gt; auto-downloade python 3.10</span>
+<span class="c"># python3   =&gt; utilise le binaire python3 du système (doit être présent dans le PATH système)</span>
+<span class="c">#</span>
+<span class="c"># [note: cette variable spécifique doit être définie AVANT les includes]</span>
+<span class="nv">PYTHON</span><span class="o">=</span>AUTO_3_9
+
+<span class="c"># Toujours inclure le &quot;common_makefile.mk&quot;</span>
+<span class="cp">include .common_makefiles/common_makefile.mk</span>
+
+<span class="c"># L&#39;inclusion de ce Makefile &quot;python_makefile.mk&quot; apporte les</span>
+<span class="c"># éléments spécifiques décrits sur cette page</span>
+<span class="cp">include .common_makefiles/python_makefile.mk</span>
+
+<span class="nv">APP_DIRS</span><span class="o">=</span>myapp
+<span class="nv">TEST_DIRS</span><span class="o">=</span>tests
+</code></pre></div>
+<p>Pour une arborescence classique Python du type :</p>
+<div class="highlight"><pre><span></span><code>/myproject/
+    .common_makefiles/
+        common_makefile.mk
+        python_makefile.mk
+        extra.tar
+        [...]
+    myapp/
+        __init__.py
+        mymodule.py
+    tests/
+        __init__.py
+        test_basic.py
+    Makefile
+    setup.py
+</code></pre></div>
+<h2 id="2-gestion-des-dependances-venv">2. Gestion des dépendances (venv)</h2>
+<h3 id="21-modele">2.1 Modèle</h3>
+<p>Ce <code>Makefile</code> introduit une gestion complète des dépendances et de leur cycle de vie sur le modèle suivant :</p>
+<pre class="mermaid"><code>graph LR
+  subgraph "Utilisés à l'exécution"
+  VENV["venv (en mode runenv)"]
+  end
+  subgraph "Automatiquement générés"
+  R[requirements.txt] -- "génère précisément et&lt;br&gt; de façon reproductible" --&gt; VENV
+  end
+  subgraph "Renseignés par le développeur"
+  RNOT[requirements-notfreezed.txt] -- "génère en interrogeant&lt;br&gt;les versions disponibles" --&gt; R
+  F[forced-requirements.txt] -. "peut forcer certaines lignes" .-&gt; R
+  end
+  style F stroke-dasharray: 5 5</code></pre>
+<p>Des dépendances sont exprimées de façon relativement laches dans le fichier <code>requirements-notfreezed.txt</code>.
+Dans l'esprit, vous ne devez y lister que les dépendances explicites de votre projet sous une forme relativement lache et flexible. Par exemple : <code>django &gt;=3.2,&lt;4.0</code>.</p>
+<p>A partir de ce fichier, les "common makefiles" vont fabriquer automatiquement le fichier <code>requirements.txt</code>
+en interrogeant <a href="https://pypi.org">PyPi</a> (et/ou d'autres repositories configurables) pour déterminer les versions exactes actuellement applicables ainsi que les dépendances de niveau supérieur (les dépendances de vos dépendances et ... récursivement). La liste complète ainsi obtenue (nom du package et version exacte) est alors consignée dans le fichier <code>requirements.txt</code>.</p>
+<p>C'est ce fichier (et uniquement celui là) qui fabriquera <a href="https://realpython.com/python-virtual-environments-a-primer/">l'environnement d'exécution virtuel (venv)</a>.</p>
+<p>Le format a utiliser pour exprimer vos dépendances dans le fichier <code>requirements-notfreezed.txt</code> est le format standard des "requirements pip" :</p>
+<ul>
+<li><a href="https://pip.pypa.io/en/stable/reference/requirements-file-format/">https://pip.pypa.io/en/stable/reference/requirements-file-format/</a></li>
+<li><a href="https://pip.pypa.io/en/stable/cli/pip_install/#requirement-specifiers">https://pip.pypa.io/en/stable/cli/pip_install/#requirement-specifiers</a>  (plus précisément pour exprimer des contraintes de versions)</li>
+</ul>
+<details class="question">
+<summary>C'est quoi ce <code>forced-requirements.txt</code> optionnel ?</summary>
+<p>C'est une fonctionnalité avancée utile dans assez peu de cas.</p>
+<p>Dans certains cas, on peut souhaiter influencer la génération du <code>requirements.txt</code> et notamment le rendre un peu moins
+strict en terme de numéro de version.</p>
+<p>L'exemple type c'est quand parmi les dépendances, on a une dépendance qui est gérée par nous même et dont on ne veutcl
+pas préciser le numéro de version précis dans <code>requirements.txt</code> (pour, par exemple, toujours prendre la dernière). Dans ce cas, il suffit de créer un fichier <code>forced-requirements.txt</code> en utilisant le même format que <code>requirements-notfreezed.txt</code>
+contenant uniquements les lignes qu'on veut forcer. Par exemple : <code>malib</code>. De ce fait, le ligne concernant le package <code>malib</code>
+dans <code>requirements.txt</code> qui était probablement qqch du type <code>malib==1.2.3</code> sera transformée en <code>malib</code>.</p>
+</details>
+<h3 id="22-devenv">2.2 devenv</h3>
+<p>Le principe est exactement le même si le schéma est en fait un petit peu plus compliqué dans la mesure où il y a une distinction entre l'environnement d'exécution simple (<code>runenv</code>) et l'environnement de développement complet (<code>devenv</code>) qui ajoute des dépendances <strong>en plus</strong> requises uniquement pendant la phase de développement (des linters par exemple).</p>
+<p>L'environnement de dev est conçu comme un simple override de l'environnement d'exécution. Donc les prérequis (noms et versions exactes) de l'environnement d'exécution forcent les dépendances de développements (qui viennent donc uniquement se rajouter).</p>
+<p>On obtient le schéma suivant :</p>
+<pre class="mermaid"><code>graph LR
+  subgraph "Utilisés à l'exécution"
+  VENV["venv (en mode devenv)"]
+  end
+  subgraph "Automatiquement générés"
+  R[requirements.txt] -- "force" --&gt; D
+  D[devrequirements.txt] -- "génère précisément et&lt;br&gt; de façon reproductible" --&gt; VENV
+  end
+  subgraph "Renseignés par le développeur"
+  RNOT[requirements-notfreezed.txt] -- "génère en interrogeant&lt;br&gt;les versions disponibles" --&gt; R
+  DNOT[devrequirements-notfreezed.txt] -- "génère en interrogeant&lt;br&gt;les versions disponibles" --&gt; D
+  F[forced-requirements.txt] -. "peut forcer certaines lignes" .-&gt; R
+  F[forced-requirements.txt] -. "peut forcer certaines lignes" .-&gt; D
+  end
+  style F stroke-dasharray: 5 5</code></pre>
+<p>Le format et la logique d'un fichier <code>devrequirements-notfreezed.txt</code> est donc tout à fait similaire au fichier <code>requirements-notfreezed.txt</code> mais pour les dépendances spécifiques au développement. Le fichier devrait également commencer par la ligne <code>-r requirements.txt</code> pour lui dire de prendre en dépendance les versions exactes retenues pour l'environnement d'exécution.</p>
+<h3 id="23-faq">2.3 FAQ</h3>
+<div class="admonition question">
+<p class="admonition-title">Je dois rajouter une dépendance <code>foo &gt;= 1.0,&lt;2.0</code> à mon projet, j'utilise quel fichier ?</p>
+<p>Si c'est une dépendance qui n'est requise pour la phase de développement, ajoutez la ligne <code>foo &gt;=1.0,&lt;2.0</code>
+dans le fichier <code>devrequirements-notfreezed.txt</code>.</p>
+<p>Si c'est une dépendance qui doit être présente dans tous les cas (runtime ou devtime), ajoutez la ligne <code>foo &gt;=1.0,&lt;2.0</code>
+dans <code>requirementst-notfreezed.txt</code>.</p>
+</div>
+<div class="admonition question">
+<p class="admonition-title">Comment je génère automatiquement les fichiers intermédiaires ou mon virtualenv ?</p>
+<ul>
+<li><code>make runenv</code> pour environnement d'exécution</li>
+<li><code>make devenv</code> pour un environnement de développement</li>
+<li><code>make</code> tout court suffit également si vous avez déjà fait votre choix une première fois (runenv ou devenv)</li>
+</ul>
+</div>
+<div class="admonition question">
+<p class="admonition-title">Comment les "common makefiles" savent s'il faut recréer les fichiers intermédiaires et/ou le virtualenv ?</p>
+<p>C'est la date de modification des fichiers qui permet de déterminer ce qui est plus vieux et donc ce qui nécessite
+d'être reconstruit.</p>
+</div>
+<div class="admonition question">
+<p class="admonition-title">Comment forcer une mise à jour de tous les fichiers intermédiaires et de mon virtualenv ?</p>
+<p>Un <code>touch *requirements-notfreezed.txt</code> suivi d'un <code>make</code> suffit. Si vous préférez, un alias <code>make refresh_venv</code> est également
+disponible.</p>
+</div>
+<div class="admonition question">
+<p class="admonition-title">Dois je commiter mes fichiers *requirements.txt ?</p>
+<p>Si vous ne les commitez pas, ils seront reconstruits à chaque fois après chaque <code>git clone</code> mais ils seront reconstruits
+en tenant compte des versions disponibles (sur les repositories configurés) au moment de la reconstruction. Du coup, vous
+n'aurez pas un comportement parfaitement reproductible (votre application peut fonctionner à l'instant T1 et ne plus fonctionner
+car une dépendance incompatible aura été publiée sur internet à l'instant T2).</p>
+<p>Donc, oui, nous vous conseillons très fortement de les commiter.</p>
+</div>
+<div class="admonition question">
+<p class="admonition-title">Comment rentrer dans le <code>venv</code> en interactif ou depuis mon <code>Makefile</code> ?</p>
+<p><strong>En interactif</strong>, et c'est simplement lié à la manière dont les virtualenv python fonctionnent, vous devez
+"charger" le <code>venv</code> pour en bénéficier (version python, dépendances installées...). Pour le faire, utilisez la
+commande suivante dans votre terminal :</p>
+<p><code>`
+source venv/bin/activate</code>
+(une fois chargé, <code>deactivate</code> permet d'en sortir ou alors relancez simplement votre terminal)</p>
+<p><strong>Depuis votre <code>Makefile</code></strong>, vous avez un racccourci qui consiste à rajouter <code>$(ENTER_VENV) &amp;&amp;</code> devant votre commande. Par ex:</p>
+<p><code>Makefile
+macible:
+    $(ENTERVENV) &amp;&amp; ma_commande</code></p>
+</div>
+<div class="admonition question">
+<p class="admonition-title">Puis je continuer d'utiliser pip avec ce système ?</p>
+<p>Une fois le <code>venv</code> chargé, vous pouvez bien sûr utiliser <code>pip</code> manuellement. Mais à chaque
+fois que le <code>venv</code> sera reconstruit automatiquement à partir des fichiers <code>*requirements.txt</code>,
+vous perdrez le bénéfice des opérations exécutées manuellement. Donc si vous utilisez <code>pip</code>
+manuellement pour tester quelque chose par exemple, n'oubliez pas à la fin de votre test
+de reporter vos ajouts/modifications/suppressions dans le fichier <code>*requirements-notfreezed.txt</code>
+correspondant.</p>
+</div>
+<h2 id="3-les-linters-reformaters">3. Les linters / reformaters</h2>
+<p>Par défaut, si le fichier n'existe pas déjà, le Makefile va vous générer un fichier <code>devrequirements-notfreezed.txt</code> contenant
+des dépendances à :</p>
+<ul>
+<li><a href="https://flake8.pycqa.org/">flake8</a></li>
+<li><a href="https://black.readthedocs.io/">black</a></li>
+<li><a href="https://pycqa.github.io/isort/">isort</a></li>
+<li><a href="https://pylint.pycqa.org/">pylint</a></li>
+<li><a href="https://mypy.readthedocs.io/">mypy</a></li>
+</ul>
+<p>De ce fait, un simple <code>make lint</code> va les faire passer sur votre code.</p>
+<div class="admonition question">
+<p class="admonition-title">Qu'est ce qui définit <em>mon code</em> ?</p>
+<p>Les linters sont exécutés sur les répertoires pointés par les 2 variables suivantes
+qui devraient être définis dans votre <code>Makefile</code> :</p>
+<ul>
+<li><code>APP_DIRS</code> :  liste de répertoires (séparés par des espaces) contenant le code Python de votre projet</li>
+<li><code>TEST_DIRS</code> : liste de répertoires (séparés par des espaces) contenant vos tests unitaires (laissez cette variable vide si vous n'avez pas de tests)</li>
+</ul>
+</div>
+<p>Si vous souhaitez retirer des linters, effacez simplement leur nom dans le fichier <code>devrequirements-notfreezed.txt</code>.</p>
+<p>Vous pouvez également en ajouter. La liste des linters supportés "out of the box" est la suivante : <code>flake8</code>, <code>black</code>, <code>isort</code>, <code>pylint</code>, <code>mypy</code>, <code>import-linter</code>, <code>safety</code> et <code>bandit</code>.</p>
+<details class="question">
+<summary>Ajouter un linter/reformater non pris en charge ?</summary>
+<p>Si vous voulez ajouter un linter/reformater non pris en charge, vous pouvez ajouter une cible <code>custom_lint</code> et/ou <code>custom_reformat</code> qui sera automatiquement exécutée lors du <code>make lint</code> et/ou <code>make reformat</code>.</p>
+</details>
+<p>Vous pouvez également agir sur plein de paramètres de configuration (pour tuner leur comportement). Consultez la <a href="../../90-reference/python_makefile/">page de référence python</a>
+pour plus de détails et/ou la <a href="../../90-reference/common_makefile/">page de référence commune</a>.</p>
+
+              
+            </article>
+            
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Pied de page" >
+      
+        
+        <a href="../20_shell/" class="md-footer__link md-footer__link--prev" aria-label="Précédent: Shell" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Précédent
+              </span>
+              Shell
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../90-reference/common_makefile/" class="md-footer__link md-footer__link--next" aria-label="Suivant: common_makefile.mk" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Suivant
+              </span>
+              common_makefile.mk
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["toc.integrate"], "search": "../../assets/javascripts/workers/search.85cb4492.min.js", "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.config.lang": "fr", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Rechercher", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version.title": "S\u00e9lectionner la version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.431f3d41.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,102 @@
+{% set CMD = "python " + REFERENCE + "/makefile_to_json.py dist/" + MAKEFILE %}
+{% set C = CMD|shell()|from_json() %}
+
+{% macro docs_macros(docs) %}
+```
+{% for doc in docs %}{{doc}}
+{% endfor -%}
+```
+{% endmacro %}
+
+{% macro target_macro(name, sep, deps, docs) %}
+### {{name}}
+
+{{ docs_macros(docs) }}
+
+{% if deps %}
+- Dependencies: `{{deps}}`
+{% endif %}
+{% endmacro %}
+
+{% macro var_macro(name, type, default, docs) %}
+### {{name}}
+
+{% if type == "overridable_before" %}
+!!! warning ""
+    This variable must be specifically overriden **BEFORE incuding any common makefiles**
+{% endif %}
+
+{{ docs_macros(docs) }}
+
+{% if default == "" %}
+- Default: `(empty)`
+{% else %}
+    {% if type == "readonly" %}
+- Value: `{{default}}`
+    {% else %}
+- Default: `{{default}}`
+    {% endif %}
+{% endif %}
+{% endmacro %}
+
+# {{MAKEFILE}}
+
+{% if C["has_variables_readonly"] %}
+
+## Read-only variables
+
+!!! danger ""
+    You can use them in your own `Makefile` but **NEVER try to override these variables!**
+
+{% for name, type, default, docs in C["variables"] %}
+    {% if type == "readonly" %}
+        {{ var_macro(name, type, default, docs) }}
+    {% endif %}
+{% endfor %}
+
+{% endif %}
+
+{% if C["has_variables_overridable"] %}
+
+## Overridable variables
+
+!!! note "Note"
+    you can use/override/extend these variables in your own `Makefile`.
+
+{% for name, type, default, docs in C["variables"] %}
+    {% if type == "overridable" or type == "overridable_before" %}
+        {{ var_macro(name, type, default, docs) }}
+    {% endif %}
+{% endfor %}
+
+{% endif %}
+
+{% if C["has_targets_ready_to_use"] %}
+
+## Targets ready to use
+
+!!! note "Note"
+    You can't override these targets but you can use them!
+
+{% for name, sep, deps, docs in C["targets"] %}
+    {% if sep == ":" %}
+        {{ target_macro(name, sep, deps, docs) }}
+    {% endif %}
+{% endfor %}
+
+{% endif %}
+
+{% if C["has_targets_overridable"] %}
+
+## Extendable targets
+
+!!! note "Note"
+    You can extend these targets in your own `Makefile` with `target_name::` syntax.
+
+{% for name, sep, deps, docs in C["targets"] %}
+    {% if sep == "::" %}
+        {{ target_macro(name, sep, deps, docs) }}
+    {% endif %}
+{% endfor %}
+
+{% endif %}

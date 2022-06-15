@@ -1,0 +1,1367 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.5">
+    
+    
+      
+        <title>python_makefile.mk - Common Makefiles</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.4a0965b7.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cbb835fc.min.css">
+        
+          
+          
+          <meta name="theme-color" content="">
+        
+      
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="bluegray" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#python_makefilemk" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../.." title="Common Makefiles" class="md-header__button md-logo" aria-label="Common Makefiles" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Common Makefiles
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              python_makefile.mk
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Effacer" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/meteofrance/common_makefiles" title="Aller au dépôt" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Common Makefiles" class="md-nav__button md-logo" aria-label="Common Makefiles" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Common Makefiles
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/meteofrance/common_makefiles" title="Aller au dépôt" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Accueil
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10_prerequisites/" class="md-nav__link">
+        Pré-requis
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../20_install/" class="md-nav__link">
+        Comment les installer dans votre repository ?
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../30_update/" class="md-nav__link">
+        Comment les mettre à jour ?
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Utilisation / Configuration
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Utilisation / Configuration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Utilisation / Configuration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../40-utilisation/10_common/" class="md-nav__link">
+        Basique
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../40-utilisation/20_shell/" class="md-nav__link">
+        Shell
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../40-utilisation/30_python/" class="md-nav__link">
+        Python
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Référence
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Référence" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Référence
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common_makefile/" class="md-nav__link">
+        common_makefile.mk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          python_makefile.mk
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        python_makefile.mk
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-read-only-variables" class="md-nav__link">
+    1. Read-only variables
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Read-only variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-venv_dir" class="md-nav__link">
+    1.1 VENV_DIR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-enter_venv" class="md-nav__link">
+    1.2 ENTER_VENV
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-overridable-variables" class="md-nav__link">
+    2. Overridable variables
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Overridable variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-python" class="md-nav__link">
+    2.1 PYTHON
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-python_3_8_url" class="md-nav__link">
+    2.2 PYTHON_3_8_URL
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-python_3_9_url" class="md-nav__link">
+    2.3 PYTHON_3_9_URL
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-python_3_10_url" class="md-nav__link">
+    2.4 PYTHON_3_10_URL
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-black" class="md-nav__link">
+    2.5 BLACK
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-black_reformat_options" class="md-nav__link">
+    2.6 BLACK_REFORMAT_OPTIONS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-black_lint_options" class="md-nav__link">
+    2.7 BLACK_LINT_OPTIONS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28-isort" class="md-nav__link">
+    2.8 ISORT
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29-isort_reformat_options" class="md-nav__link">
+    2.9 ISORT_REFORMAT_OPTIONS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#210-isort_lint_options" class="md-nav__link">
+    2.10 ISORT_LINT_OPTIONS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#211-max_line_length" class="md-nav__link">
+    2.11 MAX_LINE_LENGTH
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#212-flake8" class="md-nav__link">
+    2.12 FLAKE8
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#213-flake8_lint_options" class="md-nav__link">
+    2.13 FLAKE8_LINT_OPTIONS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#214-pylint" class="md-nav__link">
+    2.14 PYLINT
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#215-pylint_lint_options" class="md-nav__link">
+    2.15 PYLINT_LINT_OPTIONS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#216-mypy" class="md-nav__link">
+    2.16 MYPY
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#217-mypy_lint_options" class="md-nav__link">
+    2.17 MYPY_LINT_OPTIONS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#218-bandit" class="md-nav__link">
+    2.18 BANDIT
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#219-bandit_lint_options" class="md-nav__link">
+    2.19 BANDIT_LINT_OPTIONS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#220-lintimports" class="md-nav__link">
+    2.20 LINTIMPORTS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#221-lintimports_conf_file" class="md-nav__link">
+    2.21 LINTIMPORTS_CONF_FILE
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#222-pytest" class="md-nav__link">
+    2.22 PYTEST
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#223-pytest_check_options" class="md-nav__link">
+    2.23 PYTEST_CHECK_OPTIONS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#224-pytest_coverage_options" class="md-nav__link">
+    2.24 PYTEST_COVERAGE_OPTIONS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#225-twine" class="md-nav__link">
+    2.25 TWINE
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#226-twine_repository" class="md-nav__link">
+    2.26 TWINE_REPOSITORY
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#227-twine_username" class="md-nav__link">
+    2.27 TWINE_USERNAME
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#228-twine_password" class="md-nav__link">
+    2.28 TWINE_PASSWORD
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#229-twine_upload_extra_options" class="md-nav__link">
+    2.29 TWINE_UPLOAD_EXTRA_OPTIONS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#230-safety" class="md-nav__link">
+    2.30 SAFETY
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#231-safety_on_dev_deps" class="md-nav__link">
+    2.31 SAFETY_ON_DEV_DEPS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#232-safety_check_options" class="md-nav__link">
+    2.32 SAFETY_CHECK_OPTIONS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#233-pip_common_options" class="md-nav__link">
+    2.33 PIP_COMMON_OPTIONS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#234-pip_index_url" class="md-nav__link">
+    2.34 PIP_INDEX_URL
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#235-pip_extra_index_url" class="md-nav__link">
+    2.35 PIP_EXTRA_INDEX_URL
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#236-pip_install_options" class="md-nav__link">
+    2.36 PIP_INSTALL_OPTIONS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#237-pip_trusted_hosts" class="md-nav__link">
+    2.37 PIP_TRUSTED_HOSTS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#238-venv_symlink" class="md-nav__link">
+    2.38 VENV_SYMLINK
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#239-reqs_dir" class="md-nav__link">
+    2.39 REQS_DIR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#240-remove_dist" class="md-nav__link">
+    2.40 REMOVE_DIST
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#241-remove_build" class="md-nav__link">
+    2.41 REMOVE_BUILD
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#242-app_dirs" class="md-nav__link">
+    2.42 APP_DIRS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#243-test_dirs" class="md-nav__link">
+    2.43 TEST_DIRS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#244-extra_python_files" class="md-nav__link">
+    2.44 EXTRA_PYTHON_FILES
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-targets-ready-to-use" class="md-nav__link">
+    3. Targets ready to use
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Targets ready to use">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-devvenv" class="md-nav__link">
+    3.1 devvenv
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-refresh_venv" class="md-nav__link">
+    3.2 refresh_venv
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-refresh" class="md-nav__link">
+    3.3 refresh
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-reformat_black" class="md-nav__link">
+    3.4 reformat_black
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-reformat_isort" class="md-nav__link">
+    3.5 reformat_isort
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#36-check_pytest" class="md-nav__link">
+    3.6 check_pytest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#37-coverage_pytest" class="md-nav__link">
+    3.7 coverage_pytest
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-extendable-targets" class="md-nav__link">
+    4. Extendable targets
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Extendable targets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-wheel" class="md-nav__link">
+    4.1 wheel
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-sdist" class="md-nav__link">
+    4.2 sdist
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-upload" class="md-nav__link">
+    4.3 upload
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../shell_makefile/" class="md-nav__link">
+        shell_makefile.mk
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/meteofrance/common_makefiles/edit/master/docs/90-reference/python_makefile.md" title="Editer cette page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="python_makefilemk">python_makefile.mk</h1>
+<h2 id="1-read-only-variables">1. Read-only variables</h2>
+<div class="admonition danger">
+<p>You can use them in your own <code>Makefile</code> but <strong>NEVER try to override these variables!</strong></p>
+</div>
+<h3 id="11-venv_dir">1.1 VENV_DIR</h3>
+<div class="highlight"><pre><span></span><code>virtualenv directory
+</code></pre></div>
+<ul>
+<li>Value: <code>$(ROOT_TOOLS)/venv</code></li>
+</ul>
+<h3 id="12-enter_venv">1.2 ENTER_VENV</h3>
+<div class="highlight"><pre><span></span><code>&quot;enter virtualenv&quot; variable
+you can use it in your Makefile scripts, for example:
+$(ENTER_VENV) &amp;&amp; pip freeze
+</code></pre></div>
+<ul>
+<li>Value: <code>. $(VENV_DIR)/bin/activate</code></li>
+</ul>
+<h2 id="2-overridable-variables">2. Overridable variables</h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>you can use/override/extend these variables in your own <code>Makefile</code>.</p>
+</div>
+<h3 id="21-python">2.1 PYTHON</h3>
+<div class="admonition warning">
+<p>This variable must be specifically overriden <strong>BEFORE incuding any common makefiles</strong></p>
+</div>
+<div class="highlight"><pre><span></span><code>python interpreter configuration:
+AUTO_3_8    =&gt; auto-download python 3.8
+AUTO_3_9    =&gt; auto-download python 3.9
+AUTO_3_10   =&gt; auto-download python 3.10
+(path)      =&gt; use this binary
+</code></pre></div>
+<ul>
+<li>Default: <code>AUTO_3_9</code></li>
+</ul>
+<h3 id="22-python_3_8_url">2.2 PYTHON_3_8_URL</h3>
+<div class="highlight"><pre><span></span><code>python 3.8 download url
+</code></pre></div>
+<ul>
+<li>Default: <code>https://github.com/indygreg/python-build-standalone/releases/download/20220318/cpython-3.8.13+20220318-x86_64-unknown-linux-gnu-install_only.tar.gz</code></li>
+</ul>
+<h3 id="23-python_3_9_url">2.3 PYTHON_3_9_URL</h3>
+<div class="highlight"><pre><span></span><code>python 3.9 download url
+</code></pre></div>
+<ul>
+<li>Default: <code>https://github.com/indygreg/python-build-standalone/releases/download/20220318/cpython-3.9.11+20220318-x86_64-unknown-linux-gnu-install_only.tar.gz</code></li>
+</ul>
+<h3 id="24-python_3_10_url">2.4 PYTHON_3_10_URL</h3>
+<div class="highlight"><pre><span></span><code>python 3.10 download url
+</code></pre></div>
+<ul>
+<li>Default: <code>https://github.com/indygreg/python-build-standalone/releases/download/20220318/cpython-3.10.3+20220318-x86_64-unknown-linux-gnu-install_only.tar.gz</code></li>
+</ul>
+<h3 id="25-black">2.5 BLACK</h3>
+<div class="highlight"><pre><span></span><code>black binary to use
+(binary name or path) =&gt; use this binary name/path (if exists)
+(empty)               =&gt; disable usage
+</code></pre></div>
+<ul>
+<li>Default: <code>black</code></li>
+</ul>
+<h3 id="26-black_reformat_options">2.6 BLACK_REFORMAT_OPTIONS</h3>
+<div class="highlight"><pre><span></span><code>black reformat options
+</code></pre></div>
+<ul>
+<li>Default: <code>$(_MAX_LINE_LENGTH_MINUS_1)</code></li>
+</ul>
+<h3 id="27-black_lint_options">2.7 BLACK_LINT_OPTIONS</h3>
+<div class="highlight"><pre><span></span><code>black lint options
+</code></pre></div>
+<ul>
+<li>Default: <code>$(BLACK_REFORMAT_OPTIONS) --quiet --check</code></li>
+</ul>
+<h3 id="28-isort">2.8 ISORT</h3>
+<div class="highlight"><pre><span></span><code>isort binary to use
+(binary name or path) =&gt; use this binary name/path (if exists)
+(empty)               =&gt; disable usage
+</code></pre></div>
+<ul>
+<li>Default: <code>isort</code></li>
+</ul>
+<h3 id="29-isort_reformat_options">2.9 ISORT_REFORMAT_OPTIONS</h3>
+<div class="highlight"><pre><span></span><code>isort reformat options
+</code></pre></div>
+<ul>
+<li>Default: <code>$(VENV_DIR)</code></li>
+</ul>
+<h3 id="210-isort_lint_options">2.10 ISORT_LINT_OPTIONS</h3>
+<div class="highlight"><pre><span></span><code>isort lint options
+</code></pre></div>
+<ul>
+<li>Default: <code>$(ISORT_REFORMAT_OPTIONS) --check-only</code></li>
+</ul>
+<h3 id="211-max_line_length">2.11 MAX_LINE_LENGTH</h3>
+<div class="highlight"><pre><span></span><code>max line length (for linting/reformating)
+</code></pre></div>
+<ul>
+<li>Default: <code>89</code></li>
+</ul>
+<h3 id="212-flake8">2.12 FLAKE8</h3>
+<div class="highlight"><pre><span></span><code>flake8 binary to use
+(binary name or path) =&gt; use this binary name/path (if exists)
+(empty)               =&gt; disable usage
+</code></pre></div>
+<ul>
+<li>Default: <code>flake8</code></li>
+</ul>
+<h3 id="213-flake8_lint_options">2.13 FLAKE8_LINT_OPTIONS</h3>
+<div class="highlight"><pre><span></span><code>flake8 lint options
+</code></pre></div>
+<ul>
+<li>Default: <code>$(MAX_LINE_LENGTH)</code></li>
+</ul>
+<h3 id="214-pylint">2.14 PYLINT</h3>
+<div class="highlight"><pre><span></span><code>pylint binary to use
+(binary name or path) =&gt; use this binary name/path (if exists)
+(empty)               =&gt; disable usage
+</code></pre></div>
+<ul>
+<li>Default: <code>pylint</code></li>
+</ul>
+<h3 id="215-pylint_lint_options">2.15 PYLINT_LINT_OPTIONS</h3>
+<div class="highlight"><pre><span></span><code>pylint lint options
+</code></pre></div>
+<ul>
+<li>Default: <code>pydantic,_ldap</code></li>
+</ul>
+<h3 id="216-mypy">2.16 MYPY</h3>
+<div class="highlight"><pre><span></span><code>mypy binary to use
+(binary name or path) =&gt; use this binary name/path (if exists)
+(empty)               =&gt; disable usage
+</code></pre></div>
+<ul>
+<li>Default: <code>mypy</code></li>
+</ul>
+<h3 id="217-mypy_lint_options">2.17 MYPY_LINT_OPTIONS</h3>
+<div class="highlight"><pre><span></span><code>mypy lint options
+</code></pre></div>
+<ul>
+<li>Default: <code>--ignore-missing-imports</code></li>
+</ul>
+<h3 id="218-bandit">2.18 BANDIT</h3>
+<div class="highlight"><pre><span></span><code>bandit binary to use
+(binary name or path) =&gt; use this binary name/path (if exists)
+(empty)               =&gt; disable usage
+</code></pre></div>
+<ul>
+<li>Default: <code>bandit</code></li>
+</ul>
+<h3 id="219-bandit_lint_options">2.19 BANDIT_LINT_OPTIONS</h3>
+<div class="highlight"><pre><span></span><code>bandit lint options
+</code></pre></div>
+<ul>
+<li>Default: <code>-ll -r</code></li>
+</ul>
+<h3 id="220-lintimports">2.20 LINTIMPORTS</h3>
+<div class="highlight"><pre><span></span><code>lint-imports binary to use
+(binary name or path) =&gt; use this binary name/path (if exists)
+(empty)               =&gt; disable usage
+</code></pre></div>
+<ul>
+<li>Default: <code>lint-imports</code></li>
+</ul>
+<h3 id="221-lintimports_conf_file">2.21 LINTIMPORTS_CONF_FILE</h3>
+<div class="highlight"><pre><span></span><code>lint-imports configuration file
+</code></pre></div>
+<ul>
+<li>Default: <code>$(ROOT_DIR)/.importlinter</code></li>
+</ul>
+<h3 id="222-pytest">2.22 PYTEST</h3>
+<div class="highlight"><pre><span></span><code>pytest binary to use
+(binary name or path) =&gt; use this binary name/path (if exists)
+(empty)               =&gt; disable usage
+</code></pre></div>
+<ul>
+<li>Default: <code>pytest</code></li>
+</ul>
+<h3 id="223-pytest_check_options">2.23 PYTEST_CHECK_OPTIONS</h3>
+<div class="highlight"><pre><span></span><code>pytest options (for unit testing)
+</code></pre></div>
+<ul>
+<li>Default: <code>(empty)</code></li>
+</ul>
+<h3 id="224-pytest_coverage_options">2.24 PYTEST_COVERAGE_OPTIONS</h3>
+<div class="highlight"><pre><span></span><code>pytest options (for coverage)
+</code></pre></div>
+<ul>
+<li>Default: <code>term</code></li>
+</ul>
+<h3 id="225-twine">2.25 TWINE</h3>
+<div class="highlight"><pre><span></span><code>twine binary to use
+(binary name or path) =&gt; use this binary name/path (if exists)
+(empty)               =&gt; disable usage
+</code></pre></div>
+<ul>
+<li>Default: <code>twine</code></li>
+</ul>
+<h3 id="226-twine_repository">2.26 TWINE_REPOSITORY</h3>
+<div class="highlight"><pre><span></span><code>twine repository
+</code></pre></div>
+<ul>
+<li>Default: <code>(empty)</code></li>
+</ul>
+<h3 id="227-twine_username">2.27 TWINE_USERNAME</h3>
+<div class="highlight"><pre><span></span><code>twine username
+</code></pre></div>
+<ul>
+<li>Default: <code>(empty)</code></li>
+</ul>
+<h3 id="228-twine_password">2.28 TWINE_PASSWORD</h3>
+<div class="highlight"><pre><span></span><code>twine password
+</code></pre></div>
+<ul>
+<li>Default: <code>(empty)</code></li>
+</ul>
+<h3 id="229-twine_upload_extra_options">2.29 TWINE_UPLOAD_EXTRA_OPTIONS</h3>
+<div class="highlight"><pre><span></span><code>twine extra options
+</code></pre></div>
+<ul>
+<li>Default: <code>(empty)</code></li>
+</ul>
+<h3 id="230-safety">2.30 SAFETY</h3>
+<div class="highlight"><pre><span></span><code>safety binary to use
+(binary name or path) =&gt; use this binary name/path (if exists)
+(empty)               =&gt; disable usage
+</code></pre></div>
+<ul>
+<li>Default: <code>safety</code></li>
+</ul>
+<h3 id="231-safety_on_dev_deps">2.31 SAFETY_ON_DEV_DEPS</h3>
+<div class="highlight"><pre><span></span><code>if set to 1, run also safety on dev dependencies
+if set to 0 (default), safety will be run only on runtime dependencies
+</code></pre></div>
+<ul>
+<li>Default: <code>0</code></li>
+</ul>
+<h3 id="232-safety_check_options">2.32 SAFETY_CHECK_OPTIONS</h3>
+<div class="highlight"><pre><span></span><code>safety check options
+</code></pre></div>
+<ul>
+<li>Default: <code>(empty)</code></li>
+</ul>
+<h3 id="233-pip_common_options">2.33 PIP_COMMON_OPTIONS</h3>
+<div class="highlight"><pre><span></span><code>pip common options
+</code></pre></div>
+<ul>
+<li>Default: <code>--disable-pip-version-check</code></li>
+</ul>
+<h3 id="234-pip_index_url">2.34 PIP_INDEX_URL</h3>
+<div class="highlight"><pre><span></span><code>pip index url
+</code></pre></div>
+<ul>
+<li>Default: <code>(empty)</code></li>
+</ul>
+<h3 id="235-pip_extra_index_url">2.35 PIP_EXTRA_INDEX_URL</h3>
+<div class="highlight"><pre><span></span><code>pip extra index url
+</code></pre></div>
+<ul>
+<li>Default: <code>(empty)</code></li>
+</ul>
+<h3 id="236-pip_install_options">2.36 PIP_INSTALL_OPTIONS</h3>
+<div class="highlight"><pre><span></span><code>pip install extra options
+</code></pre></div>
+<ul>
+<li>Default: <code>(empty)</code></li>
+</ul>
+<h3 id="237-pip_trusted_hosts">2.37 PIP_TRUSTED_HOSTS</h3>
+<div class="highlight"><pre><span></span><code>pip trusted hosts
+(override it with += to add some trusted hosts)
+</code></pre></div>
+<ul>
+<li>Default: <code>pypi.org files.pythonhosted.org</code></li>
+</ul>
+<h3 id="238-venv_symlink">2.38 VENV_SYMLINK</h3>
+<div class="highlight"><pre><span></span><code>add a symlink of this name in the project root
+(targetting the VENV_DIR)
+(if empty =&gt; no symlink)
+</code></pre></div>
+<ul>
+<li>Default: <code>venv</code></li>
+</ul>
+<h3 id="239-reqs_dir">2.39 REQS_DIR</h3>
+<div class="highlight"><pre><span></span><code>requirements dir
+</code></pre></div>
+<ul>
+<li>Default: <code>$(ROOT_DIR)</code></li>
+</ul>
+<h3 id="240-remove_dist">2.40 REMOVE_DIST</h3>
+<div class="highlight"><pre><span></span><code>remove &quot;dist&quot; directory during clean
+</code></pre></div>
+<ul>
+<li>Default: <code>1</code></li>
+</ul>
+<h3 id="241-remove_build">2.41 REMOVE_BUILD</h3>
+<div class="highlight"><pre><span></span><code>remove &quot;build&quot; directory during clean
+</code></pre></div>
+<ul>
+<li>Default: <code>1</code></li>
+</ul>
+<h3 id="242-app_dirs">2.42 APP_DIRS</h3>
+<div class="highlight"><pre><span></span><code>python application dirs (space separated)
+</code></pre></div>
+<ul>
+<li>Default: <code>(empty)</code></li>
+</ul>
+<h3 id="243-test_dirs">2.43 TEST_DIRS</h3>
+<div class="highlight"><pre><span></span><code>tests application dirs (space separated)
+</code></pre></div>
+<ul>
+<li>Default: <code>(empty)</code></li>
+</ul>
+<h3 id="244-extra_python_files">2.44 EXTRA_PYTHON_FILES</h3>
+<div class="highlight"><pre><span></span><code>extra python files to lint/reformat
+(if they are outside of APP_DIRS/TEST_DIRS)
+(space separated paths)
+</code></pre></div>
+<ul>
+<li>Default: <code>(empty)</code></li>
+</ul>
+<h2 id="3-targets-ready-to-use">3. Targets ready to use</h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can't override these targets but you can use them!</p>
+</div>
+<h3 id="31-devvenv">3.1 devvenv</h3>
+<div class="highlight"><pre><span></span><code>simple alias of devenv target
+</code></pre></div>
+<ul>
+<li>Dependencies: <code>devenv</code></li>
+</ul>
+<h3 id="32-refresh_venv">3.2 refresh_venv</h3>
+<div class="highlight"><pre><span></span><code>Update all *requirements.txt files from *requirements-freezed.txt and pip repositories
+</code></pre></div>
+<ul>
+<li>Dependencies: <code>remove_devenv remove_runenv _rm_requirements devenv</code></li>
+</ul>
+<h3 id="33-refresh">3.3 refresh</h3>
+<div class="highlight"><pre><span></span><code>Deprecated alias of refresh_venv
+</code></pre></div>
+<ul>
+<li>Dependencies: <code>refresh_venv</code></li>
+</ul>
+<h3 id="34-reformat_black">3.4 reformat_black</h3>
+<div class="highlight"><pre><span></span><code>Reformat sources and tests with black
+</code></pre></div>
+<h3 id="35-reformat_isort">3.5 reformat_isort</h3>
+<div class="highlight"><pre><span></span><code>Reformat sources and tests with isort
+</code></pre></div>
+<h3 id="36-check_pytest">3.6 check_pytest</h3>
+<div class="highlight"><pre><span></span><code>Check with pytest
+</code></pre></div>
+<h3 id="37-coverage_pytest">3.7 coverage_pytest</h3>
+<div class="highlight"><pre><span></span><code>Execute unit-tests and show coverage on console (with pytest)
+</code></pre></div>
+<h2 id="4-extendable-targets">4. Extendable targets</h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can extend these targets in your own <code>Makefile</code> with <code>target_name::</code> syntax.</p>
+</div>
+<h3 id="41-wheel">4.1 wheel</h3>
+<div class="highlight"><pre><span></span><code>Build wheel (packaging)
+</code></pre></div>
+<ul>
+<li>Dependencies: <code>devenv before_wheel</code></li>
+</ul>
+<h3 id="42-sdist">4.2 sdist</h3>
+<div class="highlight"><pre><span></span><code>Build sdist (packaging)
+</code></pre></div>
+<ul>
+<li>Dependencies: <code>devenv before_sdist</code></li>
+</ul>
+<h3 id="43-upload">4.3 upload</h3>
+<div class="highlight"><pre><span></span><code>Upload to Pypi
+</code></pre></div>
+<ul>
+<li>Dependencies: <code>devenv sdist</code></li>
+</ul>
+
+              
+            </article>
+            
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Pied de page" >
+      
+        
+        <a href="../common_makefile/" class="md-footer__link md-footer__link--prev" aria-label="Précédent: common_makefile.mk" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Précédent
+              </span>
+              common_makefile.mk
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../shell_makefile/" class="md-footer__link md-footer__link--next" aria-label="Suivant: shell_makefile.mk" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Suivant
+              </span>
+              shell_makefile.mk
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["toc.integrate"], "search": "../../assets/javascripts/workers/search.85cb4492.min.js", "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.config.lang": "fr", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Rechercher", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version.title": "S\u00e9lectionner la version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.431f3d41.min.js"></script>
+      
+    
+  </body>
+</html>

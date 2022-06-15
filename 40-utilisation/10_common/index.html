@@ -1,0 +1,801 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.5">
+    
+    
+      
+        <title>Basique - Common Makefiles</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.4a0965b7.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cbb835fc.min.css">
+        
+          
+          
+          <meta name="theme-color" content="">
+        
+      
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="bluegray" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#basique" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../.." title="Common Makefiles" class="md-header__button md-logo" aria-label="Common Makefiles" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Common Makefiles
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Basique
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Effacer" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/meteofrance/common_makefiles" title="Aller au dépôt" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Common Makefiles" class="md-nav__button md-logo" aria-label="Common Makefiles" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Common Makefiles
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/meteofrance/common_makefiles" title="Aller au dépôt" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Accueil
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10_prerequisites/" class="md-nav__link">
+        Pré-requis
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../20_install/" class="md-nav__link">
+        Comment les installer dans votre repository ?
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../30_update/" class="md-nav__link">
+        Comment les mettre à jour ?
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Utilisation / Configuration
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Utilisation / Configuration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Utilisation / Configuration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Basique
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Basique
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-make-help" class="md-nav__link">
+    1. make help
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-make" class="md-nav__link">
+    2. make
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-make-all" class="md-nav__link">
+    3. make all
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-make-devenv" class="md-nav__link">
+    4. make devenv
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-make-runenv" class="md-nav__link">
+    5. make runenv
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-make-lint" class="md-nav__link">
+    6. make lint
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-make-reformat" class="md-nav__link">
+    7. make reformat
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-make-check" class="md-nav__link">
+    8. make check
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-make-clean" class="md-nav__link">
+    9. make clean
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-make-distclean" class="md-nav__link">
+    10. make distclean
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-make-coverage_console" class="md-nav__link">
+    11. make coverage_console
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-make-coverage_html" class="md-nav__link">
+    12. make coverage_html
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-make-coverage_sonar" class="md-nav__link">
+    13. make coverage_sonar
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-make-refresh_common_makefiles" class="md-nav__link">
+    14. make refresh_common_makefiles
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20_shell/" class="md-nav__link">
+        Shell
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../30_python/" class="md-nav__link">
+        Python
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Référence
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Référence" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Référence
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../90-reference/common_makefile/" class="md-nav__link">
+        common_makefile.mk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../90-reference/python_makefile/" class="md-nav__link">
+        python_makefile.mk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../90-reference/shell_makefile/" class="md-nav__link">
+        shell_makefile.mk
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/meteofrance/common_makefiles/edit/master/docs/40-utilisation/10_common.md" title="Editer cette page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="basique">Basique</h1>
+<p>Indépendamment du type du projet (python, bash...), voici les quelques "targets" (cibles) toujours disponibles implémentés par l'inclusion de <code>common_makefile.mk</code> dans votre <code>Makefile</code>.</p>
+<h2 id="1-make-help">1. make help</h2>
+<p>Affiche la liste des "targets" (cibles) disponibles et une aide succinte.</p>
+<h2 id="2-make">2. make</h2>
+<p>La target par défaut est positionnée à <code>all</code>.</p>
+<h2 id="3-make-all">3. make all</h2>
+<p>Cette cible peut être overridée (avec la syntaxe <code>all::</code>) :</p>
+<ul>
+<li>soit par un "common makefile" particulier (python par exemple)</li>
+<li>soit par votre propre `Makefile``</li>
+</ul>
+<p>Dans son comportement par défaut, elle est responsable de déployer des scripts utiles au fonctionnement des "common makefiles" en général et d'instancier un environnement d'exécution
+(appelé <code>runenv</code>) ou un environnement de développement (appelé <code>devenv</code>). Par défaut, c'est un
+environnement d'exécution qui est créé/mis à jour dans ce cas. <code>make devenv</code> permet de basculer
+sur un environnement de développement.</p>
+<p>Vous pouvez également définir des commandes qui seront exécutées avant le comportement par défaut des "common makefiles" en définissant une cible <code>before_all::</code> dans votre <code>Makefile</code>.</p>
+<h2 id="4-make-devenv">4. make devenv</h2>
+<p>Instancie un environnement de développement (<code>devenv</code>) par rapport à un environement de simple exécution (<code>runenv</code>). La différence n'a pas vraiment de sens au niveau du <code>commmon_makefile.mk</code> mais par exemple si vous avez également chargé <code>python_makefile.mk</code>, vous aurez la possibilité d'exprimer (et donc d'installer) des dépendances spécifiques à l'environnement de développement.</p>
+<p>Cette cible <code>devenv</code> est automatiquement en prérequis de la plupart des autres, notamment : <code>lint</code>, <code>reformat</code>, <code>coverage_*</code>, <code>check</code>. Dans la plupart des cas, il n'est donc pas réellement nécessaire de
+l'invoquer explicitement.</p>
+<details class="question">
+<summary>Comment overrider ce processus ?</summary>
+<p>Vous avez plusieurs points d'extension :</p>
+<ul>
+<li><code>before_devenv::</code> : permet d'exécuter des commandes  <strong>AVANT</strong> l'instanciation du <code>devenv</code></li>
+<li><code>before_remove_devenv::</code> : permet d'exécuter des commandes <strong>AVANT</strong> la suppression du <code>devenv</code></li>
+<li><code>custom_remove_devenv::</code> : permet d'exécuter des commandes <strong>APRES</strong> la suppression du <code>devenv</code></li>
+</ul>
+<p>Vous pouvez également ajouter des pré-requis via la variable <code>DEVENV_PREREQ</code> (utilisez <code>+=</code> pour ajouter des pré-requis).</p>
+</details>
+<h2 id="5-make-runenv">5. make runenv</h2>
+<p>Instancie un environnement d'exécution (<code>runenv</code>) par rapport à un environement de développement  (<code>devenv</code>). Voir la cible <code>make devenv</code> pour plus de détails.</p>
+<details class="question">
+<summary>ça sert à quoi un environnement d'exécution dans un Makefile ?</summary>
+<p>Le <code>Makefile</code> étant un outil de développement, la présence d'une distinction entre un environnement
+d'exécution simple et un environnement de développement peut sembler inutile mais cela permet différentes choses comme par exemple tester simplement le fonctionnement de son projet sans toutes
+les dépendances de développement.</p>
+</details>
+<details class="question">
+<summary>Comment overrider ce processus ?</summary>
+<p>Vous avez plusieurs points d'extension :</p>
+<ul>
+<li><code>before_runenv::</code> : permet d'exécuter des commandes  <strong>AVANT</strong> l'instanciation du <code>runenv</code></li>
+<li><code>before_remove_runenv::</code> : permet d'exécuter des commandes <strong>AVANT</strong> la suppression du <code>runenv</code></li>
+<li><code>custom_remove_runenv::</code> : permet d'exécuter des commandes <strong>APRES</strong> la suppression du <code>runenv</code></li>
+</ul>
+<p>Vous pouvez également ajouter des pré-requis via la variable <code>RUNENV_PREREQ</code> (utilisez <code>+=</code> pour ajouter des pré-requis).</p>
+</details>
+<h2 id="6-make-lint">6. make lint</h2>
+<p>Execute les "linters" configurés sur le projet.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Selon les cas, cette cible peut ne rien faire du tout (aucun linter configuré).</p>
+</div>
+<details class="question">
+<summary>Comment overrider ce processus ?</summary>
+<p>Vous avez plusieurs points d'extension :</p>
+<ul>
+<li><code>before_lint::</code> : permet d'exécuter des commandes  <strong>AVANT</strong> l'appel réel des linters.</li>
+<li><code>custom_lint::</code> : permet de définir et exécuter vos propres linters (qui seront exécutées automatiquement <strong>APRES</strong> les linters standards).</li>
+</ul>
+</details>
+<h2 id="7-make-reformat">7. make reformat</h2>
+<p>Reformate le projet avec les reformaters configurés.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Selon les cas, cette cible peut ne rien faire du tout (aucun reformater configuré).</p>
+</div>
+<details class="question">
+<summary>Comment overrider ce processus ?</summary>
+<p>Vous avez plusieurs points d'extension :</p>
+<ul>
+<li><code>before_reformat::</code> : permet d'exécuter des commandes  <strong>AVANT</strong> l'appel réel des reformaters.</li>
+<li><code>custom_reformat::</code> : permet de définir et exécuter vos propres reformaters (qui seront exécutées automatiquement <strong>APRES</strong> les reformaters standards).</li>
+</ul>
+</details>
+<h2 id="8-make-check">8. make check</h2>
+<p>Execute les tests configurés.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Selon les cas, cette cible peut ne rien faire du tout (aucun outil de test configuré).</p>
+</div>
+<details class="question">
+<summary>Comment overrider ce processus ?</summary>
+<p>Vous avez plusieurs points d'extension :</p>
+<ul>
+<li><code>before_check::</code> : permet d'exécuter des commandes  <strong>AVANT</strong> l'appel réel des checkers.</li>
+<li><code>custom_check::</code> : permet de définir et exécuter vos propres checkers (qui seront exécutées automatiquement <strong>APRES</strong> les checkers standards).</li>
+</ul>
+</details>
+<h2 id="9-make-clean">9. make clean</h2>
+<p>Nettoie des fichiers temporaires.</p>
+<details class="question">
+<summary>Comment overrider ce processus ?</summary>
+<p>Vous avez plusieurs points d'extension :</p>
+<ul>
+<li><code>before_clean::</code> : permet d'exécuter des commandes  <strong>AVANT</strong> l'appel réel des nettoyages.</li>
+<li><code>custom_clean::</code> : permet de définir et exécuter vos propres nettoyages (qui seront exécutées automatiquement <strong>APRES</strong> les nettoyages standards).</li>
+</ul>
+</details>
+<h2 id="10-make-distclean">10. make distclean</h2>
+<p>Nettoie des fichiers temporaires de manière plus agressive, notamment les outils automatiquement téléchargés,
+les environnements virtuels constitués...</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>La cible "distclean" invoque en dépendance la cible "clean".</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Attention</p>
+<p>Cette cible n'est pas overridable.</p>
+</div>
+<h2 id="11-make-coverage_console">11. make coverage_console</h2>
+<p>Calcule une couverture du code par les tests et affiche le résultat dans la console.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Selon les cas, cette cible peut ne rien faire du tout (aucun outil de test/coverage configuré).</p>
+</div>
+<details class="question">
+<summary>Comment overrider ce processus ?</summary>
+<p>Vous avez plusieurs points d'extension :</p>
+<ul>
+<li><code>before_coverage_console::</code> : permet d'exécuter des commandes  <strong>AVANT</strong> l'appel réel des tests de couverture.</li>
+<li><code>custom_coverage_console::</code> : permet de définir et exécuter vos propres tests de couverture (qui seront exécutées automatiquement <strong>APRES</strong> les tests de couverture standards).</li>
+</ul>
+</details>
+<h2 id="12-make-coverage_html">12. make coverage_html</h2>
+<p>Calcule une couverture du code par les tests et fabrique un site statique HTML avec les détails.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Selon les cas, cette cible peut ne rien faire du tout (aucun outil de test/coverage configuré).</p>
+</div>
+<details class="question">
+<summary>Comment overrider ce processus ?</summary>
+<p>Vous avez plusieurs points d'extension :</p>
+<ul>
+<li><code>before_coverage_html::</code> : permet d'exécuter des commandes  <strong>AVANT</strong> l'appel réel des tests de couverture.</li>
+<li><code>custom_coverage_html::</code> : permet de définir et exécuter vos propres tests de couverture (qui seront exécutées automatiquement <strong>APRES</strong> les tests de couverture standards).</li>
+</ul>
+</details>
+<h2 id="13-make-coverage_sonar">13. make coverage_sonar</h2>
+<p>Calcule une couverture du code par les tests et fabrique un livrable pour intégration dans <a href="https://www.sonarqube.org/">SonarQube</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Selon les cas, cette cible peut ne rien faire du tout (aucun outil de test/coverage configuré).</p>
+</div>
+<details class="question">
+<summary>Comment overrider ce processus ?</summary>
+<p>Vous avez plusieurs points d'extension :</p>
+<ul>
+<li><code>before_coverage_sonar::</code> : permet d'exécuter des commandes  <strong>AVANT</strong> l'appel réel des tests de couverture.</li>
+<li><code>custom_coverage_sonar::</code> : permet de définir et exécuter vos propres tests de couverture (qui seront exécutées automatiquement <strong>APRES</strong> les tests de couverture standards).</li>
+</ul>
+</details>
+<h2 id="14-make-refresh_common_makefiles">14. make refresh_common_makefiles</h2>
+<p>Met à jour le répertoire <code>.common_makefiles</code> par rapport à la version disponible
+sur le site de référence (sur github.com).</p>
+<p>L'URL de référence est donné par la variable : <code>COMMON_MAKEFILES_GIT_URL</code> (url git)
+et la branche utilisée par la variable <code>COMMON_MAKEFILES_GIT_BRANCH</code>.</p>
+
+              
+            </article>
+            
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Pied de page" >
+      
+        
+        <a href="../../30_update/" class="md-footer__link md-footer__link--prev" aria-label="Précédent: Comment les mettre à jour ?" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Précédent
+              </span>
+              Comment les mettre à jour ?
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../20_shell/" class="md-footer__link md-footer__link--next" aria-label="Suivant: Shell" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Suivant
+              </span>
+              Shell
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["toc.integrate"], "search": "../../assets/javascripts/workers/search.85cb4492.min.js", "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.config.lang": "fr", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Rechercher", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version.title": "S\u00e9lectionner la version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.431f3d41.min.js"></script>
+      
+    
+  </body>
+</html>
